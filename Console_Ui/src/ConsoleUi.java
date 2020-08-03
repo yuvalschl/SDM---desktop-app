@@ -1,4 +1,14 @@
 public class ConsoleUi {
-    public static void main(String[] args) {
+
+    private Menu menu = new Menu();
+    public enum Echoice{
+        Yaron ,
+        Dvir
     }
+    Echoice n =0;
+    public void stam(){
+
+        System.out.println(Echoice.Dvir+" "+Echoice.Yaron.);
+    }
+
 }
