@@ -5,7 +5,7 @@ public class ConsoleUi {
         Yaron ,
         Dvir
     }
-    Echoice n =0;
+
     public void stam(){
 
         System.out.println(Echoice.Dvir+" "+Echoice.Yaron.);
