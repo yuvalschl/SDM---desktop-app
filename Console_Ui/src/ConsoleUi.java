@@ -8,7 +8,7 @@ public class ConsoleUi {
 
     public void stam(){
 
-        System.out.println(Echoice.Dvir+" "+Echoice.Yaron.);
+        System.out.println(Echoice.Dvir+" "+Echoice.Yaron.ordinal());
     }
 
 }
