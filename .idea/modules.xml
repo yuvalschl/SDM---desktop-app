@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Console_Ui/Console_Ui.iml" filepath="$PROJECT_DIR$/Console_Ui/Console_Ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Engine/Engine.iml" filepath="$PROJECT_DIR$/Engine/Engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Super Duper Market.iml" filepath="$PROJECT_DIR$/Super Duper Market.iml" />
+    </modules>
+  </component>
+</project>
