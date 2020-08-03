@@ -5,15 +5,17 @@ import java.util.Scanner;
 public class ConsoleUi {
 
     private Menu menu = new Menu();
+    private StoreManager storeEngine = new StoreManager();
     public enum Echoice{
         readFile,
         ShowStores,
         ShowItems,
         PlaceOrder,
-        ShowHistory
+        ShowHistory,
+        Exit
     }
 
-    public int getAndValidateChoice(int largestChoiceNumber){
+    private int getAndValidateChoice(int largestChoiceNumber){
         System.out.println("Please enter choose number of a commands above(must be between 1 and " + largestChoiceNumber+"):\n");
         Scanner input = new Scanner(System.in);
         int choice = -1;
@@ -40,5 +42,50 @@ public class ConsoleUi {
         return choice;
     }
 
+    public void runUI(){
+        System.out.println(menu.getMenuOption());
+        Echoice[] eChoices =  Echoice.values();
+        Echoice choice = eChoices[getAndValidateChoice(6)-1];
+        while (true){
+            switch (choice){
+                case readFile: {
+                    readFile();
+                }
+                case ShowItems: {
+                    showItems();
+                }
+                case PlaceOrder: {
+                    placeOrder();
+                }
+                case ShowStores: {
+                    showStores();
+                }
+                case ShowHistory:{
+                    ShowHistory();
+                }
+                case Exit:{
+                    System.exit(0);
+                }
+            }
+        }
 
+    }
+
+    private void ShowHistory() {
+    }
+
+    private void showStores() {
+    }
+
+    private void placeOrder() {
+    }
+
+    private void showItems() {
+    }
+
+    private void readFile(){
+
+    }
+    
 }
+

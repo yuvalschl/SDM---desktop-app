@@ -1,7 +1,7 @@
 import java.util.List;
 
 public class Menu {
-    private String menuOption = "<<Super Duper Market>>\n" +
+    private String menuOption = "<<Super Duper Market by Dani and Yuval (Yayyy the crowd cheers!!!)>>\n" +
             "1.Read from file\n" +
             "2.Show stores\n" +
             "3.Show items\n" +
