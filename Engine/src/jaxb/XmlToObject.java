@@ -15,7 +15,7 @@ public class XmlToObject {
         fromXmlFileToObject();
     }
 
-    private static SuperDuperMarketDescriptor fromXmlFileToObject() {
+    public static SuperDuperMarketDescriptor fromXmlFileToObject() {
         System.out.println("\nFrom File to Object");
 
         try {
