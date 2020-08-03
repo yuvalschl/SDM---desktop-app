@@ -1,5 +1,5 @@
 
-package JaxbClasses;
+package jaxb.JaxbClasses;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{}SDM-store" maxOccurs="unbounded"/>
+ *         &lt;element ref="{}SDM-item" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,41 +31,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "sdmStore"
+    "sdmItem"
 })
-@XmlRootElement(name = "SDM-stores")
-public class SDMStores {
+@XmlRootElement(name = "SDM-items")
+public class SDMItems {
 
-    @XmlElement(name = "SDM-store", required = true)
-    protected List<SDMStore> sdmStore;
+    @XmlElement(name = "SDM-item", required = true)
+    protected List<SDMItem> sdmItem;
 
     /**
-     * Gets the value of the sdmStore property.
+     * Gets the value of the sdmItem property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the sdmStore property.
+     * This is why there is not a <CODE>set</CODE> method for the sdmItem property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getSDMStore().add(newItem);
+     *    getSDMItem().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link SDMStore }
+     * {@link SDMItem }
      * 
      * 
      */
-    public List<SDMStore> getSDMStore() {
-        if (sdmStore == null) {
-            sdmStore = new ArrayList<SDMStore>();
+    public List<SDMItem> getSDMItem() {
+        if (sdmItem == null) {
+            sdmItem = new ArrayList<SDMItem>();
         }
-        return this.sdmStore;
+        return this.sdmItem;
     }
 
 }

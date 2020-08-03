@@ -1,7 +1,6 @@
 package jaxb;
 
-import JaxbClasses.SDMItem;
-import JaxbClasses.SuperDuperMarketDescriptor;
+import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,21 +15,18 @@ public class XmlToObject {
         fromXmlFileToObject();
     }
 
-    private static void fromXmlFileToObject() {
+    private static SuperDuperMarketDescriptor fromXmlFileToObject() {
         System.out.println("\nFrom File to Object");
 
         try {
-
             File file = new File(FILE_NAME);
             JAXBContext jaxbContext = JAXBContext.newInstance(SuperDuperMarketDescriptor.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            SuperDuperMarketDescriptor item = (SuperDuperMarketDescriptor) jaxbUnmarshaller.unmarshal(file);
-            System.out.println(SuperDuperMarketDescriptor.class);
-
+            return  (SuperDuperMarketDescriptor) jaxbUnmarshaller.unmarshal(file);
         } catch (JAXBException e) {
             e.printStackTrace();
+            return null;
         }
-
     }
 }

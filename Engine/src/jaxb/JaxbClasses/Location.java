@@ -1,5 +1,5 @@
 
-package JaxbClasses;
+package jaxb.JaxbClasses;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
