@@ -1,12 +1,11 @@
-import com.sun.xml.internal.ws.util.StringUtils;
-
 import java.util.Scanner;
 
 public class ConsoleUi {
 
     private Menu menu = new Menu();
-    private StoreManager storeEngine = new StoreManager();
-    public enum Echoice{
+    private StoreManager storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
+
+    public enum Echoic {
         readFile,
         ShowStores,
         ShowItems,
@@ -44,8 +43,8 @@ public class ConsoleUi {
 
     public void runUI(){
         System.out.println(menu.getMenuOption());
-        Echoice[] eChoices =  Echoice.values();
-        Echoice choice = eChoices[getAndValidateChoice(6)-1];
+        Echoic[] eChoices =  Echoic.values();
+        Echoic choice = eChoices[getAndValidateChoice(6)-1];
         while (true){
             switch (choice){
                 case readFile: {

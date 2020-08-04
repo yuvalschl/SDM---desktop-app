@@ -13,6 +13,11 @@ public abstract class Item {
         this.price = price;
     }
 
+    public Item(int serialNumber, String name) {
+        this.serialNumber = serialNumber;
+        this.name = name;
+    }
+
     public int getSerialNumber() {
         return serialNumber;
     }

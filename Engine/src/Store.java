@@ -1,5 +1,5 @@
-import Item.Item;
 
+import Item.Item;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Store {
     private String name;
     private int serialNumber;
-    private Map<String, Item> inventory;
+    private Map<Integer, Item> inventory;
     private List<Order> allOrders;
     private Point location;
 
@@ -20,6 +20,14 @@ public class Store {
     }
     public String getName() {
         return name;
+    }
+
+    public Store(String name, int serialNumber, Map<Integer, Item> inventory, List<Order> allOrders, Point location) {
+        this.name = name;
+        this.serialNumber = serialNumber;
+        this.inventory = inventory;
+        this.allOrders = allOrders;
+        this.location = location;
     }
 
     public void setName(String name) {
@@ -34,11 +42,11 @@ public class Store {
         this.serialNumber = serialNumber;
     }
 
-    public Map<String, Item> getInventory() {
+    public Map<Integer, Item> getInventory() {
         return inventory;
     }
 
-    public void setInventory(Map<String, Item> inventory) {
+    public void setInventory(Map<Integer, Item> inventory) {
         this.inventory = inventory;
     }
 

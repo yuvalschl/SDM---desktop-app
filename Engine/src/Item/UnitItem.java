@@ -2,10 +2,18 @@ package Item;
 
 import java.util.Objects;
 
-public class UnitItem {
+public class UnitItem extends Item {
     private float amountSold;
 
-    public UnitItem() {
+    //constructor for store specific item
+    public UnitItem(int serialNumber, String name, float price) {
+        super(serialNumber, name, price);
+        this.amountSold = 0;
+    }
+
+    //constructor for general items list
+    public UnitItem(int serialNumber, String name) {
+        super(serialNumber, name);
         this.amountSold = 0;
     }
 
