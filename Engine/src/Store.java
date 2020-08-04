@@ -1,4 +1,6 @@
 import Item.Item;
+
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -8,7 +10,14 @@ public class Store {
     private int serialNumber;
     private Map<String, Item> inventory;
     private List<Order> allOrders;
+    private Point location;
 
+    public Point getLocation() {
+        return location;
+    }
+    public void setLocation(Point location) {
+        this.location = location;
+    }
     public String getName() {
         return name;
     }
