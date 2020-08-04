@@ -6,8 +6,8 @@ public class WeightItem extends Item {
     private float amountSold;
 
     //constructor for store specific item
-    public WeightItem(int serialNumber, String name, float price, float amountSold) {
-        super(serialNumber, name, price);
+    public WeightItem(Item item, float price) {
+        super(item.getSerialNumber(), item.getName(), price);
         this.amountSold = 0;
     }
 

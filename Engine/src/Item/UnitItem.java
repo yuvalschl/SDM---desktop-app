@@ -6,8 +6,8 @@ public class UnitItem extends Item {
     private float amountSold;
 
     //constructor for store specific item
-    public UnitItem(int serialNumber, String name, float price) {
-        super(serialNumber, name, price);
+    public UnitItem(Item item, float price) {
+        super(item.getSerialNumber(), item.getName(), price);
         this.amountSold = 0;
     }
 

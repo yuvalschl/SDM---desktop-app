@@ -3,7 +3,6 @@ import Item.WeightItem;
 import Item.UnitItem;
 import jaxb.JaxbClasses.*;
 import jaxb.XmlToObject;
-
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +49,12 @@ public class JaxbClassToSdmClass {
         Map<Integer, Item> currentInventory = new HashMap<Integer, Item>();
         for(SDMSell item : sdmSellList){
             Item itemToAdd = allItems.get(item.getItemId());
+            if(itemToAdd instanceof UnitItem){
+                itemToAdd = new UnitItem(itemToAdd, item.getPrice());
+            }
+            else {
+                itemToAdd = new WeightItem(itemToAdd, item.getPrice());
+            }
             currentInventory.put(itemToAdd.getSerialNumber(), itemToAdd);
         }
 
