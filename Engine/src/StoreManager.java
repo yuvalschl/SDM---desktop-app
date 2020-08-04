@@ -21,7 +21,7 @@ public class StoreManager {
         for (SDMStore store:storeList) {
             Store newStore = new Store();
             newStore.setSerialNumber(store.getId());
-            newStore.setInventory(stor);
+           // newStore.setInventory(stor);
         }
     }
 }
