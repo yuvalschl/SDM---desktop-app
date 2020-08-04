@@ -1,4 +1,10 @@
 import Item.*;
+
+import java.awt.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -44,6 +50,7 @@ public class ConsoleUi {
     }
 
     public void runUI(){
+        getCustomerLocation();
         System.out.println(menu.getMenuOption());
         Echoic[] eChoices =  Echoic.values();
         Echoic choice = eChoices[getAndValidateChoice(6)-1];
@@ -55,7 +62,7 @@ public class ConsoleUi {
                 }
                 case ShowStores: {
                     //TODO check if a file is loaded to the system
-                    showAllStores();
+                    showAllStoresInTheSystem();
                     break;
                 }
                 case ShowItems: {
@@ -85,7 +92,7 @@ public class ConsoleUi {
     private void ShowHistory() {
     }
 
-    private void showAllStores() {
+    private void showAllStoresInTheSystem() {
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
         for(Integer storeId : storeEngine.getAllStores().keySet()){
@@ -131,6 +138,86 @@ public class ConsoleUi {
         //TODO fill this method
     }
     private void placeOrder() {
+        showAllStoresInOrderMenu();
+        int storeId = getStoreToBuyFrom();
+        Date orderDate = getDateOfOrder();
+        Point customerLocation = getCustomerLocation();
+
+    }
+
+    private Point getCustomerLocation() {
+        System.out.println("Please enter your x coordinate");
+        int x = readCoordinate();
+        System.out.println("Please enter your x coordinate");
+        int y = readCoordinate();
+        return new Point(x,y);
+    }
+
+    private int readCoordinate(){
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            try {
+                int coordinate = scanner.nextInt();
+                if (coordinate >= 0 && coordinate <= 50) {
+                    return coordinate;
+                }
+                else {
+                    System.out.println("coordinate is not in range of 0 - 50");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter an int");
+                scanner.next();
+            }
+        }
+    }
+
+    private Date getDateOfOrder() {
+        Scanner scanner = new Scanner(System.in);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm-hh:mm");
+        Date dateOfOrder;
+
+        System.out.println("Please enter the date of the order in dd/mm-hh:mm format");
+        while (true){
+            String dateString = scanner.next();
+            try{
+                dateOfOrder = dateFormat.parse(dateString);
+                return dateOfOrder;
+            } catch (ParseException e) {
+                System.out.println("Invalid date format, try again");
+            }
+        }
+    }
+
+    private int getStoreToBuyFrom() {
+        Scanner scanner = new Scanner(System.in);
+        int userSelection;
+        do{
+            try{
+                String userSelectionString = scanner.next();
+                userSelection = Integer.parseInt(userSelectionString);
+                if(storeEngine.getAllStores().containsKey(userSelection)){
+                    return userSelection;
+                }
+                else {
+                    System.out.println("The store you selected is not available");
+                }
+            }catch (NumberFormatException e){
+                System.out.println("Please enter a number");
+            }
+        }while (true);
+    }
+
+    private void showAllStoresInOrderMenu() {
+        Map<Integer, Store> allStores = storeEngine.getAllStores();
+        for (Integer storeId : allStores.keySet()) {
+            showStoreInPurchaseMenu(allStores.get(storeId));
+        }
+    }
+
+    private void showStoreInPurchaseMenu(Store store){
+        System.out.println("Store ID:" + store.getSerialNumber());
+        System.out.println("Store name:" + store.getName());
+        System.out.println("Store PPK:" + store.getPPK());
     }
 
     private void showAllItemsInSystem() {
