@@ -30,4 +30,27 @@ public class StoreManager {
     public void setAllItems(Map<Integer, Item> allItems) {
         this.allItems = allItems;
     }
+
+    public int NumberOfStoresSellingItem(Item item){
+        int numberOfStoresSellingTheItem = 0;
+        for(Integer storeId : allStores.keySet()){
+            if(allStores.get(storeId).getInventory().containsKey(item.getSerialNumber())){
+                numberOfStoresSellingTheItem++;
+            }
+        }
+
+        return numberOfStoresSellingTheItem;
+    }
+
+    public float getAveragePrice(Item item){
+        int priceAccumulator = 0;
+        for(Integer storeId : allStores.keySet()){
+            Map<Integer, Item> currentStoreInventory = allStores.get(storeId).getInventory();
+            if(currentStoreInventory.containsKey(item.getSerialNumber())){
+                priceAccumulator += currentStoreInventory.get(item.getSerialNumber()).getPrice();
+            }
+        }
+
+        return priceAccumulator / (float)NumberOfStoresSellingItem(item);
+    }
 }

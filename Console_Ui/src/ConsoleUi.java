@@ -60,7 +60,7 @@ public class ConsoleUi {
                 }
                 case ShowItems: {
                     //TODO check if a file is loaded to the system
-                    showItems();
+                    showAllItemsInSystem();
                     break;
                 }
                 case PlaceOrder: {
@@ -107,12 +107,12 @@ public class ConsoleUi {
         Map<Integer, Item> currentInventory = store.getInventory();
         System.out.println(store.getName() + " Items are:");
         for(Integer itemId : currentInventory.keySet()){
-            showItem(currentInventory.get(itemId));
+            showItemInStore(currentInventory.get(itemId));
             System.out.println();
         }
     }
 
-    private void showItem(Item item){
+    private void showItemInStore(Item item){
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
         if(item instanceof UnitItem){
@@ -133,7 +133,30 @@ public class ConsoleUi {
     private void placeOrder() {
     }
 
-    private void showItems() {
+    private void showAllItemsInSystem() {
+        Map<Integer, Item> allItems = storeEngine.getAllItems();
+        System.out.println("Showing all the items in the system");
+        System.out.println("====================================");
+        for (Integer itemId : allItems.keySet()){
+            showItemInSystem(allItems.get(itemId));
+            System.out.println("====================================");
+        }
+    }
+
+    private void showItemInSystem(Item item){
+        System.out.println("*   Item ID: " + item.getSerialNumber());
+        System.out.println("\tItem name: " + item.getName());
+        if(item instanceof UnitItem){
+            System.out.println("\tItem sell by: unit");
+            System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
+        }
+        else {
+            System.out.println("\tItem sell by: weight");
+            System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
+        }
+
+        System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
+        System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
     private void readFile(){
