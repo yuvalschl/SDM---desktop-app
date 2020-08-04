@@ -1,9 +1,11 @@
+import Item.*;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleUi {
 
     private Menu menu = new Menu();
-    private StoreManager storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
+    private StoreManager storeEngine;
 
     public enum Echoic {
         readFile,
@@ -19,7 +21,7 @@ public class ConsoleUi {
         Scanner input = new Scanner(System.in);
         int choice = -1;
         boolean isValid = false;
-        while (isValid == false){
+        do {
             String choiceString = input.next();
             if (!choiceString.isEmpty()) {
                 try {
@@ -37,7 +39,7 @@ public class ConsoleUi {
             else   {
                 System.out.println("Answer cannot be empty!");
             }
-        }
+        }while(isValid == false);
         return choice;
     }
 
@@ -49,23 +51,29 @@ public class ConsoleUi {
             switch (choice){
                 case readFile: {
                     readFile();
+                    break;
+                }
+                case ShowStores: {
+                    showAllStores();
+                    break;
                 }
                 case ShowItems: {
                     showItems();
+                    break;
                 }
                 case PlaceOrder: {
                     placeOrder();
-                }
-                case ShowStores: {
-                    showStores();
+                    break;
                 }
                 case ShowHistory:{
                     ShowHistory();
+                    break;
                 }
                 case Exit:{
                     System.exit(0);
                 }
             }
+            choice = eChoices[getAndValidateChoice(6)-1];
         }
 
     }
@@ -73,9 +81,51 @@ public class ConsoleUi {
     private void ShowHistory() {
     }
 
-    private void showStores() {
+    private void showAllStores() {
+        System.out.println("Showing all the stores in the system");
+        System.out.println("====================================");
+        for(Integer storeId : storeEngine.getAllStores().keySet()){
+            showStore(storeEngine.getAllStores().get(storeId));
+            System.out.println("===================================");
+        }
     }
 
+    private void showStore(Store store){
+        System.out.println("Store ID:" + store.getSerialNumber());
+        System.out.println("Store name:" + store.getName());
+        showStoreInventory(store);
+        showStoreOrdersHistory(store);
+        System.out.println("Store PPK:" + store.getPPK());
+        System.out.println("Total payment to the store:" + store.getTotalPayment());
+    }
+
+    private void showStoreInventory(Store store){
+        Map<Integer, Item> currentInventory = store.getInventory();
+        System.out.println(store.getName() + " Items are:");
+        for(Integer itemId : currentInventory.keySet()){
+            showItem(currentInventory.get(itemId));
+            System.out.println();
+        }
+    }
+
+    private void showItem(Item item){
+        System.out.println("*   Item ID: " + item.getSerialNumber());
+        System.out.println("\tItem name: " + item.getName());
+        if(item instanceof UnitItem){
+            System.out.println("\tItem sell by: unit");
+            System.out.println("\tPrice per unit: " + item.getPrice());
+        }
+        else {
+            System.out.println("\tItem sell by: weight");
+            System.out.println("\tPrice per kilo: " + item.getPrice());
+        }
+
+        System.out.println("\tTotal amount sold: " + item.getAmountSold());
+    }
+
+    private void showStoreOrdersHistory(Store store){
+        //TODO fill this method
+    }
     private void placeOrder() {
     }
 
@@ -83,8 +133,7 @@ public class ConsoleUi {
     }
 
     private void readFile(){
-
+        this.storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
     }
-    
 }
 

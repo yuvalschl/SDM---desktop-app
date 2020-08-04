@@ -23,10 +23,10 @@ public class JaxbClassToSdmClass {
         for(SDMItem item : sdmItems){
             switch (item.getPurchaseCategory()){
                 case "Quantity":
-                    allItems.put(item.getId(), new WeightItem(item.getId() ,item.getName()));
+                    allItems.put(item.getId(), new UnitItem(item.getId() ,item.getName()));
                     break;
                 case "Weight":
-                    allItems.put(item.getId(), new UnitItem(item.getId() ,item.getName()));
+                    allItems.put(item.getId(), new WeightItem(item.getId() ,item.getName()));
                     break;
                 //TODO add invalid category test
             }
@@ -40,6 +40,7 @@ public class JaxbClassToSdmClass {
             Map<Integer, Item> currentStoreInventory = createCurrentStoreInventory(allItems, store);
             Point currentStoreLocation = new Point(store.getLocation().getX(), store.getLocation().getY());
             Store currentStore = new Store(store.getName(), store.getId(), currentStoreInventory, null, currentStoreLocation);
+            //TODO add PPK to store maker
             allStores.put(store.getId(), currentStore);
         }
         return allStores;

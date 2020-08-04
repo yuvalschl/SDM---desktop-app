@@ -14,4 +14,20 @@ public class StoreManager {
         this.allStores = allStores;
         this.allItems = allItems;
     }
+
+    public Map<Integer, Store> getAllStores() {
+        return allStores;
+    }
+
+    public void setAllStores(Map<Integer, Store> allStores) {
+        this.allStores = allStores;
+    }
+
+    public Map<Integer, Item> getAllItems() {
+        return allItems;
+    }
+
+    public void setAllItems(Map<Integer, Item> allItems) {
+        this.allItems = allItems;
+    }
 }

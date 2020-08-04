@@ -11,16 +11,11 @@ public class Store {
     private Map<Integer, Item> inventory;
     private List<Order> allOrders;
     private Point location;
+    private float PPK;
+    private float totalPayment;
 
-    public Point getLocation() {
-        return location;
-    }
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-    public String getName() {
-        return name;
-    }
+
+
 
     public Store(String name, int serialNumber, Map<Integer, Item> inventory, List<Order> allOrders, Point location) {
         this.name = name;
@@ -28,6 +23,19 @@ public class Store {
         this.inventory = inventory;
         this.allOrders = allOrders;
         this.location = location;
+        totalPayment = 0;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
@@ -56,6 +64,22 @@ public class Store {
 
     public void setAllOrders(List<Order> allOrders) {
         this.allOrders = allOrders;
+    }
+
+    public float getPPK() {
+        return PPK;
+    }
+
+    public void setPPK(float PPK) {
+        this.PPK = PPK;
+    }
+
+    public float getTotalPayment() {
+        return totalPayment;
+    }
+
+    public void setTotalPayment(float totalPayment) {
+        this.totalPayment = totalPayment;
     }
 
     @Override

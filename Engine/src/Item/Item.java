@@ -6,16 +6,26 @@ public abstract class Item {
     private int serialNumber;
     private String name;
     private float price;
+    private int amountSold;
 
     public Item(int serialNumber, String name, float price) {
         this.serialNumber = serialNumber;
         this.name = name;
         this.price = price;
+        this.amountSold = 0;
     }
 
     public Item(int serialNumber, String name) {
         this.serialNumber = serialNumber;
         this.name = name;
+    }
+
+    public int getAmountSold() {
+        return amountSold;
+    }
+
+    public void setAmountSold(int amountSold) {
+        this.amountSold = amountSold;
     }
 
     public int getSerialNumber() {
@@ -49,11 +59,12 @@ public abstract class Item {
         Item item = (Item) o;
         return getSerialNumber() == item.getSerialNumber() &&
                 Float.compare(item.getPrice(), getPrice()) == 0 &&
+                getAmountSold() == item.getAmountSold() &&
                 getName().equals(item.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getSerialNumber(), getName(), getPrice());
+        return Objects.hash(getSerialNumber(), getName(), getPrice(), getAmountSold());
     }
 }
