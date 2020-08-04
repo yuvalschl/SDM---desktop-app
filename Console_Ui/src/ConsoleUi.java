@@ -54,18 +54,22 @@ public class ConsoleUi {
                     break;
                 }
                 case ShowStores: {
+                    //TODO check if a file is loaded to the system
                     showAllStores();
                     break;
                 }
                 case ShowItems: {
+                    //TODO check if a file is loaded to the system
                     showItems();
                     break;
                 }
                 case PlaceOrder: {
+                    //TODO check if a file is loaded to the system
                     placeOrder();
                     break;
                 }
                 case ShowHistory:{
+                    //TODO check if a file is loaded to the system
                     ShowHistory();
                     break;
                 }

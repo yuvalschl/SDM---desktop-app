@@ -39,8 +39,7 @@ public class JaxbClassToSdmClass {
         for(SDMStore store : sdmStores){
             Map<Integer, Item> currentStoreInventory = createCurrentStoreInventory(allItems, store);
             Point currentStoreLocation = new Point(store.getLocation().getX(), store.getLocation().getY());
-            Store currentStore = new Store(store.getName(), store.getId(), currentStoreInventory, null, currentStoreLocation);
-            //TODO add PPK to store maker
+            Store currentStore = new Store(store.getName(), store.getId(), currentStoreInventory, null, currentStoreLocation, store.getDeliveryPpk());
             allStores.put(store.getId(), currentStore);
         }
         return allStores;

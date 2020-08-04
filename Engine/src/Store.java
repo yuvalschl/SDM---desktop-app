@@ -17,13 +17,14 @@ public class Store {
 
 
 
-    public Store(String name, int serialNumber, Map<Integer, Item> inventory, List<Order> allOrders, Point location) {
+    public Store(String name, int serialNumber, Map<Integer, Item> inventory, List<Order> allOrders, Point location, float PPK) {
         this.name = name;
         this.serialNumber = serialNumber;
         this.inventory = inventory;
         this.allOrders = allOrders;
         this.location = location;
-        totalPayment = 0;
+        this.totalPayment = 0;
+        this.PPK = PPK;
     }
 
     public Point getLocation() {
