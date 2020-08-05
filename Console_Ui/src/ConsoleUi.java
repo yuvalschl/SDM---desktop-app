@@ -50,7 +50,6 @@ public class ConsoleUi {
     }
 
     public void runUI(){
-        getCustomerLocation();
         System.out.println(menu.getMenuOption());
         Echoic[] eChoices =  Echoic.values();
         Echoic choice = eChoices[getAndValidateChoice(6)-1];
