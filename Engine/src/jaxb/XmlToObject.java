@@ -12,8 +12,6 @@ public class XmlToObject {
     public static final String FILE_NAME = "ex1-small.xml";
 
     public static SuperDuperMarketDescriptor fromXmlFileToObject() {
-        System.out.println("\nFrom File to Object");
-
         try {
             File file = new File(FILE_NAME);
             JAXBContext jaxbContext = JAXBContext.newInstance(SuperDuperMarketDescriptor.class);

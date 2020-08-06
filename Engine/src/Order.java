@@ -1,5 +1,6 @@
-import java.util.Date;
-import java.util.Objects;
+import Item.Item;
+
+import java.util.*;
 
 public class Order {
     private Date dateOfOrder;
@@ -7,6 +8,29 @@ public class Order {
     private float totalPriceOfItems;
     private float shippingCost;
     private float totalCost;
+    private float distance;
+    private ArrayList<ItemPair> items;
+
+
+
+
+
+    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, ArrayList<ItemPair> items, float distance) {
+        this.dateOfOrder = dateOfOrder;
+        this.amountOfItems = amountOfItems;
+        this.totalPriceOfItems = totalPriceOfItems;
+        this.shippingCost = shippingCost;
+        this.totalCost = totalCost;
+        this.items = items;
+        this.distance = distance;
+    }
+    public float getDistance() {
+        return distance;
+    }
+
+    public ArrayList<ItemPair> getItems() {
+        return items;
+    }
 
     public Date getDateOfOrder() {
         return dateOfOrder;

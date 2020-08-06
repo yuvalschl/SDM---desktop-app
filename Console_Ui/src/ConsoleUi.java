@@ -1,19 +1,20 @@
 import Item.*;
+import javafx.util.Pair;
 
 import java.awt.*;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.List;
 
 public class ConsoleUi {
 
     private Menu menu = new Menu();
     private StoreManager storeEngine;
+    private boolean fileInSystem = false;
 
-    public enum Echoic {
+    public enum Echoice {
         readFile,
         ShowStores,
         ShowItems,
@@ -22,21 +23,21 @@ public class ConsoleUi {
         Exit
     }
 
-    private int getAndValidateChoice(int largestChoiceNumber){
-        System.out.println("Please enter choose number of a commands above(must be between 1 and " + largestChoiceNumber+"):\n");
+    private int getAndValidateChoice(int smallestChoice ,int largestChoice){
         Scanner input = new Scanner(System.in);
         int choice = -1;
         boolean isValid = false;
         do {
+            System.out.println("Please enter a number between "+smallestChoice+" and " + largestChoice+":\n");
             String choiceString = input.next();
             if (!choiceString.isEmpty()) {
                 try {
                     choice = Integer.parseInt(choiceString);
-                    if(choice > 0 && choice <= largestChoiceNumber) {
+                    if(choice >= smallestChoice && choice <= largestChoice) {
                         isValid = true;
                     }
                     else {
-                        System.out.println("Please enter a number between 1 and " + largestChoiceNumber);
+                        System.out.println("Please enter a number between "+smallestChoice+" and " + largestChoice);
                     }
                 } catch (Exception e) {
                     System.out.println("Please enter a number!");
@@ -49,42 +50,46 @@ public class ConsoleUi {
         return choice;
     }
 
-    public void runUI(){
-        getCustomerLocation();
-        System.out.println(menu.getMenuOption());
-        Echoic[] eChoices =  Echoic.values();
-        Echoic choice = eChoices[getAndValidateChoice(6)-1];
+    public void runUI() throws ParseException {
+       // getCustomerLocation(); TODO: unmark this
+        Echoice[] eChoices =  Echoice.values();
         while (true){
-            switch (choice){
-                case readFile: {
-                    readFile();
-                    break;
-                }
-                case ShowStores: {
-                    //TODO check if a file is loaded to the system
-                    showAllStoresInTheSystem();
-                    break;
-                }
-                case ShowItems: {
-                    //TODO check if a file is loaded to the system
-                    showAllItemsInSystem();
-                    break;
-                }
-                case PlaceOrder: {
-                    //TODO check if a file is loaded to the system
-                    placeOrder();
-                    break;
-                }
-                case ShowHistory:{
-                    //TODO check if a file is loaded to the system
-                    ShowHistory();
-                    break;
-                }
-                case Exit:{
-                    System.exit(0);
+            System.out.println(menu.getMenuOption());
+            Echoice choice = eChoices[getAndValidateChoice(1,6)-1];
+            if (choice == Echoice.readFile){
+                readFile();
+            }
+            else if (fileInSystem) {
+                switch (choice) {
+                    case ShowStores: {
+                        showAllStoresInTheSystem();
+                        break;
+                    }
+                    case ShowItems: {
+                        showAllItemsInSystem();
+                        break;
+                    }
+                    case PlaceOrder: {
+                        placeOrder();
+                        break;
+                    }
+                    case ShowHistory: {
+                        ShowHistory();
+                        break;
+                    }
                 }
             }
-            choice = eChoices[getAndValidateChoice(6)-1];
+            else if (choice == Echoice.Exit)
+            {
+                System.out.println("Exiting program, cheereo and godspeed!");
+                System.exit(0);
+            }
+            else{
+                System.out.println("=========================================================================");
+                System.out.println("There are no files in the system, please choose option one to load a file");
+                System.out.println("=========================================================================");
+
+            }
         }
 
     }
@@ -93,6 +98,7 @@ public class ConsoleUi {
     }
 
     private void showAllStoresInTheSystem() {
+
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
         for(Integer storeId : storeEngine.getAllStores().keySet()){
@@ -137,45 +143,101 @@ public class ConsoleUi {
     private void showStoreOrdersHistory(Store store){
         //TODO fill this method
     }
-    private void placeOrder() {
+    private void placeOrder() throws ParseException {
+        Order order = null;
         showAllStoresInOrderMenu();
-        int storeId = getStoreToBuyFrom();
-        Date orderDate = getDateOfOrder();
-        Point customerLocation = getCustomerLocation();
-
+        System.out.println("Please choose a store by its ID from the list above:");
+        int storeID = getStoreToBuyFrom("store");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");//TODO:delete this, its for the test
+       Date orderDate = dateFormat.parse("12/12-12:12");
+       // Date orderDate = //getDateOfOrder();
+        Point customerLocation = new Point(1,3);//getCustomerLocation();
+        showAllItemsInSystem();
+        System.out.println("Please choose items by its ID from the list above or enter q to end order:");
+        int itemID = getStoreToBuyFrom("item");
+        if (itemID != -1 )
+            order = order(customerLocation,storeID,itemID, orderDate);
+            if (order!= null)
+                showItemsInOrder(order,storeID);
     }
 
+    private Order order(Point customerLocation, int storeID,int itemID, Date date) {
+       ArrayList<ItemPair> items = (ArrayList<ItemPair>) getItemsFromUser(storeID, itemID);
+       Order order = null;
+            if(items.size() != 0)
+               order = storeEngine.createOrder(customerLocation, storeID ,date, items);
+       return order;
+    }
+
+    private List getItemsFromUser(int storeID, int itemID) {
+        List items = new ArrayList<ItemPair>();
+        double amount;
+        while (true){
+            Store store= storeEngine.getAllStores().get(storeID);
+            if(store.getInventory().containsKey(itemID)){
+                amount = getItemAmount(store.getInventory().get(itemID));
+                ItemPair pair = new ItemPair(store.getInventory().get(itemID), amount);
+                items.add(pair);
+            }
+            else {
+                System.out.println("The store "+ storeEngine.getAllStores().get(storeID).getName()+
+                    " does not have the item "+ storeEngine.getAllItems().get(itemID).getName()+".\n");
+            }
+            System.out.println("Please enter another item ID or q to end order");
+            itemID = getStoreToBuyFrom("item");
+            if (itemID == -1)
+                return  items;
+        }
+    }
+
+    private double getItemAmount(Item item){
+        Scanner input = new Scanner(System.in);
+        double amount;
+        String stringAmount;
+        if (item.getClass() == UnitItem.class){
+            System.out.println("Please enter how many units of "+ item.getName()+ " would you like");
+           while (true){
+               try {
+                   stringAmount = input.next();
+                   amount = Integer.parseInt(stringAmount);
+                   return amount;
+               }catch (Exception e){
+                   System.out.println("Please enter a hole number!");
+               }
+           }
+        }
+        else{
+            System.out.println("Please enter how many KG's of "+ item+ " would you like");
+        }
+        while (true)
+        {
+            try {
+                stringAmount = input.next();
+                amount = Double.parseDouble(stringAmount);
+                return amount;
+            }catch (Exception e){
+                System.out.println("Please enter a number!");
+            }
+        }
+    }
     private Point getCustomerLocation() {
         System.out.println("Please enter your x coordinate");
         int x = readCoordinate();
-        System.out.println("Please enter your x coordinate");
+        System.out.println("Please enter your y coordinate");
         int y = readCoordinate();
         return new Point(x,y);
     }
 
     private int readCoordinate(){
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            try {
-                int coordinate = scanner.nextInt();
-                if (coordinate >= 0 && coordinate <= 50) {
-                    return coordinate;
-                }
-                else {
-                    System.out.println("coordinate is not in range of 0 - 50");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter an int");
-                scanner.next();
-            }
-        }
+       return getAndValidateChoice(1,50);
     }
 
     private Date getDateOfOrder() {
         Scanner scanner = new Scanner(System.in);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm-hh:mm");
-        Date dateOfOrder;
 
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");
+        Date dateOfOrder;
+        dateFormat.setLenient(false);
         System.out.println("Please enter the date of the order in dd/mm-hh:mm format");
         while (true){
             String dateString = scanner.next();
@@ -186,31 +248,55 @@ public class ConsoleUi {
                 System.out.println("Invalid date format, try again");
             }
         }
+
     }
 
-    private int getStoreToBuyFrom() {
+    private int getStoreToBuyFrom(String StoreOrItem) {//TODO: unite getStoreToBuyFrom and getItemFromBuyer to a generic check
         Scanner scanner = new Scanner(System.in);
         int userSelection;
-        do{
-            try{
-                String userSelectionString = scanner.next();
-                userSelection = Integer.parseInt(userSelectionString);
-                if(storeEngine.getAllStores().containsKey(userSelection)){
-                    return userSelection;
+        if (StoreOrItem == "store"){
+            do{
+                try{
+                    String userSelectionString = scanner.next();
+                    userSelection = Integer.parseInt(userSelectionString);
+                    if(storeEngine.getAllStores().containsKey(userSelection)){
+                        return userSelection;
+                    }
+                    else {
+                        System.out.println("The store you selected is not available please choose an ID from the list above");
+                    }
+                }catch (NumberFormatException e){
+                    System.out.println("Please enter a number");
                 }
-                else {
-                    System.out.println("The store you selected is not available");
+            }while (true);
+        }
+        else {
+            do{
+                try{
+                    String userSelectionString = scanner.next();
+                    if (userSelectionString.charAt(0) == 'q')
+                        return -1;
+                    userSelection = Integer.parseInt(userSelectionString);
+                    if(storeEngine.getAllItems().containsKey(userSelection)){
+                        return userSelection;
+                    }
+                    else {
+                        System.out.println("The Item you selected is not available please choose an ID from the list above");
+                    }
+                }catch (NumberFormatException e){
+                    System.out.println("Please enter a number");
                 }
-            }catch (NumberFormatException e){
-                System.out.println("Please enter a number");
-            }
-        }while (true);
+            }while (true);
+        }
+
     }
 
     private void showAllStoresInOrderMenu() {
         Map<Integer, Store> allStores = storeEngine.getAllStores();
+        System.out.println("====================================");
         for (Integer storeId : allStores.keySet()) {
             showStoreInPurchaseMenu(allStores.get(storeId));
+            System.out.println("====================================");
         }
     }
 
@@ -231,6 +317,13 @@ public class ConsoleUi {
     }
 
     private void showItemInSystem(Item item){
+        printItemDetails(item);
+        System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
+        System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
+    }
+
+    private void printItemDetails(Item item)
+    {
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
         if(item instanceof UnitItem){
@@ -241,13 +334,30 @@ public class ConsoleUi {
             System.out.println("\tItem sell by: weight");
             System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
         }
-
-        System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
-        System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
-
+    private void showItemsInOrder(Order order,int storeID){
+        ArrayList<ItemPair> items = order.getItems();
+        Item item;
+        System.out.println("The order details:");
+        for (ItemPair itemInPair: items) {
+            item =itemInPair.item();
+            printItemDetails(item);
+            if(item instanceof UnitItem){
+                System.out.println("\tThe requested amount is: "+ (int)itemInPair.amount()+" units.");
+                System.out.println("\tTotal price of requested item is: "+ (int)itemInPair.amount()* item.getPrice());
+            }
+            else{
+                System.out.println("\tThe requested amount is: "+ itemInPair.amount()+" KG.");
+                System.out.println("\tTotal price of requested item is: "+ itemInPair.amount()* item.getPrice());
+            }
+        }
+        System.out.println("\tThe price per kilometer is: "+ storeEngine.getAllStores().get(storeID).getPPK());
+        System.out.println("\tThe distance from: "+storeEngine.getAllStores().get(storeID).getName()+" is "+order.getDistance());
+        System.out.println("\tThe total cost of order is: "+order.getTotalCost());
+    }
     private void readFile(){
         this.storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
+        fileInSystem = true;
     }
 }
 

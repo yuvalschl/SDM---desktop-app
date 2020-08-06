@@ -1,15 +1,12 @@
 import Item.Item;
-import jaxb.JaxbClasses.SDMStore;
-import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
-import jaxb.XmlToObject;
-
-import java.util.List;
-import java.util.Map;
+import Item.UnitItem;
+import java.awt.*;
+import java.util.*;
 
 public class StoreManager {
     private Map<Integer, Store> allStores;
     private Map<Integer, Item> allItems;
-
+    private Set<Order> allOrders;
     public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems) {
         this.allStores = allStores;
         this.allItems = allItems;
@@ -53,4 +50,31 @@ public class StoreManager {
 
         return priceAccumulator / (float)NumberOfStoresSellingItem(item);
     }
+    public Order createOrder(Point customerLocatio, int storeID, Date date, ArrayList<ItemPair> items)
+    {
+
+        allOrders = new HashSet<>();
+        int totalPriceOfItems = 0;
+        float distance = distanceCalculator(customerLocatio, allStores.get(storeID).getLocation());
+        float shippingCost = distance * allStores.get(storeID).getPPK();
+        for (ItemPair pair: items) {
+            if (pair.item().getClass() == UnitItem.class)
+                totalPriceOfItems += (int)pair.amount() * pair.item().getPrice();
+            else
+                totalPriceOfItems += pair.amount() * pair.item().getPrice();
+
+        }
+        Order newOrder = new Order(date,items.size(),totalPriceOfItems, shippingCost, totalPriceOfItems + shippingCost, items,distance);
+        return newOrder;
+    }
+
+    public void placeOrder(Order order) {
+        allOrders.add(order);
+    }
+
+    private float distanceCalculator(Point point1, Point point2){
+        float distatance = (float) Math.sqrt(Math.pow(point1.x-point2.x, 2)+Math.pow(point1.y-point2.y, 2));
+        return  distatance;
+    }
+
 }
