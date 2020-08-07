@@ -50,12 +50,12 @@ public class StoreManager {
 
         return priceAccumulator / (float)NumberOfStoresSellingItem(item);
     }
-    public Order createOrder(Point customerLocatio, int storeID, Date date, ArrayList<ItemPair> items)
+    public Order createOrder(Point customerLocation, int storeID, Date date, ArrayList<ItemPair> items)
     {
 
         allOrders = new HashSet<>();
         int totalPriceOfItems = 0;
-        float distance = distanceCalculator(customerLocatio, allStores.get(storeID).getLocation());
+        float distance = distanceCalculator(customerLocation, allStores.get(storeID).getLocation());
         float shippingCost = distance * allStores.get(storeID).getPPK();
         for (ItemPair pair: items) {
             if (pair.item().getClass() == UnitItem.class)
@@ -73,8 +73,7 @@ public class StoreManager {
     }
 
     private float distanceCalculator(Point point1, Point point2){
-        float distatance = (float) Math.sqrt(Math.pow(point1.x-point2.x, 2)+Math.pow(point1.y-point2.y, 2));
-        return  distatance;
+        return (float) Math.sqrt(Math.pow(point1.x-point2.x, 2)+Math.pow(point1.y-point2.y, 2));
     }
 
 }

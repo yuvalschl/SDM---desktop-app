@@ -2,6 +2,7 @@ import Item.*;
 import javafx.util.Pair;
 
 import java.awt.*;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,7 +51,7 @@ public class ConsoleUi {
         return choice;
     }
 
-    public void runUI() throws ParseException {
+    public void runUI() throws ParseException /*TODO: delete this throw */{
        // getCustomerLocation(); TODO: unmark this
         Echoice[] eChoices =  Echoice.values();
         while (true){
@@ -147,14 +148,14 @@ public class ConsoleUi {
         Order order = null;
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
-        int storeID = getStoreToBuyFrom("store");
+        int storeID = getIDFromUser("store");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");//TODO:delete this, its for the test
-       Date orderDate = dateFormat.parse("12/12-12:12");
-       // Date orderDate = //getDateOfOrder();
-        Point customerLocation = new Point(1,3);//getCustomerLocation();
+       Date orderDate = dateFormat.parse("12/12-12:12");//TODO: this aswell
+       // Date orderDate = //getDateOfOrder();//TODO:unmark this
+        Point customerLocation = new Point(1,3);//getCustomerLocation();//TODO delete left of ; and umnark right of it
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
-        int itemID = getStoreToBuyFrom("item");
+        int itemID = getIDFromUser("item");
         if (itemID != -1 )
             order = order(customerLocation,storeID,itemID, orderDate);
             if (order!= null)
@@ -162,15 +163,15 @@ public class ConsoleUi {
     }
 
     private Order order(Point customerLocation, int storeID,int itemID, Date date) {
-       ArrayList<ItemPair> items = (ArrayList<ItemPair>) getItemsFromUser(storeID, itemID);
+       ArrayList<ItemPair> items =  getItemsFromUser(storeID, itemID);
        Order order = null;
             if(items.size() != 0)
                order = storeEngine.createOrder(customerLocation, storeID ,date, items);
        return order;
     }
 
-    private List getItemsFromUser(int storeID, int itemID) {
-        List items = new ArrayList<ItemPair>();
+    private ArrayList<ItemPair> getItemsFromUser(int storeID, int itemID) {
+        ArrayList<ItemPair> items = new ArrayList<ItemPair>();
         double amount;
         while (true){
             Store store= storeEngine.getAllStores().get(storeID);
@@ -184,9 +185,9 @@ public class ConsoleUi {
                     " does not have the item "+ storeEngine.getAllItems().get(itemID).getName()+".\n");
             }
             System.out.println("Please enter another item ID or q to end order");
-            itemID = getStoreToBuyFrom("item");
+            itemID = getIDFromUser("item");
             if (itemID == -1)
-                return  items;
+                return items;
         }
     }
 
@@ -194,7 +195,7 @@ public class ConsoleUi {
         Scanner input = new Scanner(System.in);
         double amount;
         String stringAmount;
-        if (item.getClass() == UnitItem.class){
+        if (item instanceof UnitItem){
             System.out.println("Please enter how many units of "+ item.getName()+ " would you like");
            while (true){
                try {
@@ -251,44 +252,39 @@ public class ConsoleUi {
 
     }
 
-    private int getStoreToBuyFrom(String StoreOrItem) {//TODO: unite getStoreToBuyFrom and getItemFromBuyer to a generic check
+    private int getIDFromUser(String StoreOrItem) {
         Scanner scanner = new Scanner(System.in);
         int userSelection;
-        if (StoreOrItem == "store"){
-            do{
-                try{
-                    String userSelectionString = scanner.next();
-                    userSelection = Integer.parseInt(userSelectionString);
-                    if(storeEngine.getAllStores().containsKey(userSelection)){
-                        return userSelection;
-                    }
-                    else {
-                        System.out.println("The store you selected is not available please choose an ID from the list above");
-                    }
-                }catch (NumberFormatException e){
-                    System.out.println("Please enter a number");
+        do {
+            try{
+                String userSelectionString = scanner.next();
+                if (userSelectionString.charAt(0) == 'q' && StoreOrItem =="item")
+                    return -1;
+                userSelection = Integer.parseInt(userSelectionString);
+                Method method = null;
+                if (StoreOrItem == "store") {
+                    method = StoreManager.class.getMethod("getAllStores", null);
                 }
-            }while (true);
-        }
-        else {
-            do{
-                try{
-                    String userSelectionString = scanner.next();
-                    if (userSelectionString.charAt(0) == 'q')
-                        return -1;
-                    userSelection = Integer.parseInt(userSelectionString);
-                    if(storeEngine.getAllItems().containsKey(userSelection)){
-                        return userSelection;
-                    }
-                    else {
-                        System.out.println("The Item you selected is not available please choose an ID from the list above");
-                    }
-                }catch (NumberFormatException e){
-                    System.out.println("Please enter a number");
-                }
-            }while (true);
-        }
+                else {
+                    method = StoreManager.class.getMethod("getAllItems", null);
 
+                }
+                if(((Map<Integer, Store>) method.invoke(storeEngine)).containsKey(userSelection)){
+                    return userSelection;
+                }
+                else{
+                    if (StoreOrItem == "store")
+                        System.out.println("The store ID you entered is not available please choose an ID from the list above");
+                    else
+                        System.out.println("The Item ID you entered is not available please choose an ID from the list above");
+                }
+
+            }
+            catch (NumberFormatException e){
+                System.out.println("Please enter a number");
+            }
+            catch (Exception e){}
+        }while (true);
     }
 
     private void showAllStoresInOrderMenu() {
