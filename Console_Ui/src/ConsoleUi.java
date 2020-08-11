@@ -246,6 +246,8 @@ public class ConsoleUi {
     }
 
     private void readFile(){
+        XmlValidation validation = new XmlValidation();
+
         this.storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
     }
 }
