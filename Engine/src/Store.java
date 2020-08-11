@@ -83,6 +83,18 @@ public class Store {
         this.totalPayment = totalPayment;
     }
 
+    public String toString(){//TODO add
+        String itemDetails = "";
+        String storeDetails =
+                "* Store ID: "+serialNumber+
+                "\n\tStore name: "+name+
+                "\n\tThe Items in these store are: \n";
+        for (Map.Entry<Integer, Item> set : inventory.entrySet()) {
+            itemDetails += set.getValue().toString(true);
+        }
+        return  storeDetails + itemDetails;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

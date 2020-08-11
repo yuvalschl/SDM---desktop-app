@@ -13,5 +13,12 @@ public class UnitItem extends Item {
     public UnitItem(int serialNumber, String name) {
         super(serialNumber, name);
     }
+
+    public String toString(Boolean isInShowStores){
+        String details = super.toString(true)+ "\tItem sell by: unit"+"\n";
+        if(isInShowStores)
+            details += "\tPrice per unit: " + getPrice()+"\n";
+        return details;
+    }
 }
 

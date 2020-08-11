@@ -9,7 +9,9 @@ public class ItemPair {
             this.item  = item;
             this.amount = amount;
         }
-
+        public boolean containsItem(Item item){
+            return (item == this.item);
+        }
         public Item item()   { return item; }
         public double amount() { return amount; }
 }

@@ -13,4 +13,11 @@ public class WeightItem extends Item {
     public WeightItem(int serialNumber, String name) {
         super(serialNumber, name);
     }
+
+    public String toString(Boolean isInShowStores){
+       String details = super.toString(true)+ "\tItem sell by: weight"+"\n";
+       if(isInShowStores)
+           details += "\tPrice per kilo: " + getPrice()+"\n";
+        return  details;
+    }
 }

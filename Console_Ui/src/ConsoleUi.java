@@ -1,4 +1,5 @@
 import Item.*;
+import com.sun.deploy.security.SelectableSecurityManager;
 import javafx.util.Pair;
 
 import java.awt.*;
@@ -63,11 +64,13 @@ public class ConsoleUi {
             else if (fileInSystem) {
                 switch (choice) {
                     case ShowStores: {
-                        showAllStoresInTheSystem();
+                        streamShowAllStoresInTheSystem();
+                        //showAllStoresInTheSystem();
                         break;
                     }
                     case ShowItems: {
-                        showAllItemsInSystem();
+                        streamShowAllItemsInSystem();
+                      //  showAllItemsInSystem();
                         break;
                     }
                     case PlaceOrder: {
@@ -95,7 +98,16 @@ public class ConsoleUi {
 
     }
 
+    private void streamShowAllStoresInTheSystem() {
+        System.out.println(storeEngine.getAllStoresDetails());
+    }
+
+    private void streamShowAllItemsInSystem() {
+        System.out.println(storeEngine.getAllItemsDetails());
+    }
+
     private void ShowHistory() {
+        storeEngine.getAllOrders().stream().forEach(System.out::println);
     }
 
     private void showAllStoresInTheSystem() {
@@ -113,16 +125,18 @@ public class ConsoleUi {
         System.out.println("Store name:" + store.getName());
         showStoreInventory(store);
         showStoreOrdersHistory(store);
-        System.out.println("Store PPK:" + store.getPPK());
-        System.out.println("Total payment to the store:" + store.getTotalPayment());
+
     }
 
     private void showStoreInventory(Store store){
         Map<Integer, Item> currentInventory = store.getInventory();
         System.out.println(store.getName() + " Items are:");
-        for(Integer itemId : currentInventory.keySet()){
-            showItemInStore(currentInventory.get(itemId));
-            System.out.println();
+   //     currentInventory.stream()
+            for(Integer itemId : currentInventory.keySet()){
+                showItemInStore(currentInventory.get(itemId));
+                System.out.println("\tStore PPK:" + store.getPPK());
+                System.out.println("\tTotal payment to the store:" + store.getTotalPayment());
+                System.out.println();
         }
     }
 
@@ -156,12 +170,41 @@ public class ConsoleUi {
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         int itemID = getIDFromUser("item");
-        if (itemID != -1 )
+        if (itemID != -1 ) {
             order = order(customerLocation,storeID,itemID, orderDate);
-            if (order!= null)
+            if (order!= null){
                 showItemsInOrder(order,storeID);
+                if(getOrderApproval()) {
+                    storeEngine.placeOrder(order);
+                    System.out.println("Order was added successfully.");
+                }
+                else
+                    System.out.println("Order canceled.");
+            }
+
+        }
+
     }
 
+    private Boolean getOrderApproval(){
+        Scanner input = new Scanner(System.in);
+        do {
+            System.out.println("enter 1 to approve the order or 2 to cancel the order");
+            String choice = input.next();
+            if (choice.charAt(0) == '1'){
+                return true;
+            }
+            else if(choice.charAt(0) == '2'){
+                return false;
+            }
+            else {
+                System.out.println("Wrong input please try again");
+            }
+        }while (true);
+
+
+
+    }
     private Order order(Point customerLocation, int storeID,int itemID, Date date) {
        ArrayList<ItemPair> items =  getItemsFromUser(storeID, itemID);
        Order order = null;
@@ -208,7 +251,7 @@ public class ConsoleUi {
            }
         }
         else{
-            System.out.println("Please enter how many KG's of "+ item+ " would you like");
+            System.out.println("Please enter how many KG's of "+ item.getName()+ " would you like");
         }
         while (true)
         {
@@ -313,22 +356,28 @@ public class ConsoleUi {
     }
 
     private void showItemInSystem(Item item){
-        printItemDetails(item);
+        printItemDetails(item, true);
         System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void printItemDetails(Item item)
+    private void printItemDetails(Item item, boolean showAveragePrice)
     {
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
         if(item instanceof UnitItem){
             System.out.println("\tItem sell by: unit");
+            if (showAveragePrice)
             System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
+            else
+            System.out.println("\tprice per unit: " + item.getPrice());
         }
         else {
             System.out.println("\tItem sell by: weight");
-            System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
+            if (showAveragePrice)
+                System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
+            else
+                System.out.println("\tprice per kilo: " + item.getPrice());
         }
     }
     private void showItemsInOrder(Order order,int storeID){
@@ -337,7 +386,7 @@ public class ConsoleUi {
         System.out.println("The order details:");
         for (ItemPair itemInPair: items) {
             item =itemInPair.item();
-            printItemDetails(item);
+            printItemDetails(item, false);
             if(item instanceof UnitItem){
                 System.out.println("\tThe requested amount is: "+ (int)itemInPair.amount()+" units.");
                 System.out.println("\tTotal price of requested item is: "+ (int)itemInPair.amount()* item.getPrice());
@@ -348,8 +397,10 @@ public class ConsoleUi {
             }
         }
         System.out.println("\tThe price per kilometer is: "+ storeEngine.getAllStores().get(storeID).getPPK());
-        System.out.println("\tThe distance from: "+storeEngine.getAllStores().get(storeID).getName()+" is "+order.getDistance());
+        System.out.println("\tThe distance from "+storeEngine.getAllStores().get(storeID).getName()+" is :"+order.getDistance()+" KM");
         System.out.println("\tThe total cost of order is: "+order.getTotalCost());
+        System.out.println("===================================================");
+
     }
     private void readFile(){
         this.storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();

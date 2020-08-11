@@ -1,5 +1,8 @@
 import Item.Item;
+import Item.WeightItem;
 import Item.UnitItem;
+import com.sun.org.apache.xpath.internal.operations.Or;
+
 import java.awt.*;
 import java.util.*;
 
@@ -11,6 +14,10 @@ public class StoreManager {
         this.allStores = allStores;
         this.allItems = allItems;
     }
+    public Set<Order> getAllOrders() {
+        return allOrders;
+    }
+
 
     public Map<Integer, Store> getAllStores() {
         return allStores;
@@ -58,13 +65,13 @@ public class StoreManager {
         float distance = distanceCalculator(customerLocation, allStores.get(storeID).getLocation());
         float shippingCost = distance * allStores.get(storeID).getPPK();
         for (ItemPair pair: items) {
-            if (pair.item().getClass() == UnitItem.class)
+            if (pair.item() instanceof UnitItem)
                 totalPriceOfItems += (int)pair.amount() * pair.item().getPrice();
             else
                 totalPriceOfItems += pair.amount() * pair.item().getPrice();
 
         }
-        Order newOrder = new Order(date,items.size(),totalPriceOfItems, shippingCost, totalPriceOfItems + shippingCost, items,distance);
+        Order newOrder = new Order(date,items.size(),totalPriceOfItems, shippingCost, totalPriceOfItems + shippingCost, items, distance, allStores.get(storeID) );
         return newOrder;
     }
 
@@ -76,4 +83,45 @@ public class StoreManager {
         return (float) Math.sqrt(Math.pow(point1.x-point2.x, 2)+Math.pow(point1.y-point2.y, 2));
     }
 
+    public String getAllStoresDetails(){//TODO: add סעיף e an below
+        //allItems.forEach((Integer, Item)-> System.out.println(Item.getItemDetails()));
+        String storeDetails = "";
+        for (Map.Entry<Integer, Store> set : allStores.entrySet()) {
+             storeDetails += set.getValue().toString();
+        }
+        return storeDetails;
+    }
+
+    public String getAllItemsDetails(){//gets the string to print in choice 3 (show all items in store)
+        String itemDetails = "";
+        for (Map.Entry<Integer, Item> set : allItems.entrySet()) {
+            Item item = set.getValue();
+            itemDetails += set.getValue().toString(false);
+            itemDetails += "\tNumber of stores that sell "+ item.getName()+" are: " +howManyStoresSellItem(item)+"\n";
+            itemDetails += "\tAverage price for "+ item.getName()+" is: "+ getAveragePrice(item)+"\n";
+         //   itemDetails += "\tNumber of times "+item.getName()+" was sold is: "+howManyTimesItemSold(item)+"\n";
+        }
+        return itemDetails;
+    }
+
+    private int howManyStoresSellItem(Item item) {
+        int numberOfStoreThatSell = 0;
+        for (Map.Entry<Integer, Store> set : allStores.entrySet()) {
+            if (set.getValue().getInventory().containsKey(item.getSerialNumber()))
+                numberOfStoreThatSell++;
+        }
+        return  numberOfStoreThatSell;
+    }
+    private  int howManyTimesItemSold(Item item){
+        int timesSold = 0;
+        if(allOrders != null)
+            for (Order order: allOrders) {
+                for (ItemPair pair:order.getItems())
+                    if(pair.item().equals(item)) {//TODO: finish to check if the pair in set has the item
+                        timesSold++;
+
+                    }
+            }
+        return  timesSold;
+    }
 }
