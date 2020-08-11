@@ -3,6 +3,7 @@ import jaxb.JaxbClasses.SDMSell;
 import jaxb.JaxbClasses.SDMStore;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class XmlValidation {
@@ -14,23 +15,22 @@ public class XmlValidation {
     private HashSet<SDMStore> invalidStoresLocations;
     private HashSet<SDMStore> invalidStoresPPK;
 
-/*    public static void main(String[] args) {
-        XmlValidation tt = new XmlValidation();
-        List<String> test = new ArrayList<>();
-        test.add("yuval");
-        test.add("dani");
-        test.add("tamir");
-        test.add("yuval");
-        HashSet<String> res = (HashSet<String>) tt.checkForDuplicate(test);
-    }*/
-
-    public void validateXmlFile(SuperDuperMarketDescriptor xmlInput){
+    public XmlValidation(SuperDuperMarketDescriptor xmlInput) {
+        invalidStoresLocations = new HashSet<>();
+        invalidStoresPPK = new HashSet<>();
         List<SDMStore> allStores = xmlInput.getSDMStores().getSDMStore();
         List<String> itemsNames = getItemsName(xmlInput.getSDMItems().getSDMItem());
         List<Integer> itemsIds = getItemsIds(xmlInput.getSDMItems().getSDMItem());
         duplicateItemNames = (HashSet<SDMItem>) checkForDuplicate(itemsNames);
         duplicateItemIds = (HashSet<SDMItem>) checkForDuplicate(itemsIds);
         checkStores(allStores);
+
+    }
+
+    public boolean validateXml(){
+        boolean isStoresValid = duplicateStoresName.isEmpty() && duplicateStoresId.isEmpty() && invalidStoresLocations.isEmpty() && invalidStoresPPK.isEmpty();
+        boolean isItemsValid = duplicateItemIds.isEmpty() && duplicateItemNames.isEmpty() && invalidItemsPrices.isEmpty();
+        return isItemsValid && isStoresValid;
 
     }
 

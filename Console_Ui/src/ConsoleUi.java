@@ -1,4 +1,6 @@
 import Item.*;
+import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
+import jaxb.XmlToObject;
 
 import java.awt.*;
 import java.text.ParseException;
@@ -246,9 +248,16 @@ public class ConsoleUi {
     }
 
     private void readFile(){
-        XmlValidation validation = new XmlValidation();
 
-        this.storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
+        SuperDuperMarketDescriptor superDuperMarketDescriptor = new XmlToObject().fromXmlFileToObject();
+        XmlValidation validation = new XmlValidation(superDuperMarketDescriptor);
+        if(validation.validateXml()){
+            this.storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
+        }
+        else{
+            //TODO: say why the file is invalid
+            System.out.println("invalid file");
+        }
     }
 }
 
