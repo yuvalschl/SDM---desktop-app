@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
 public class SDMSell {
 
     @XmlAttribute(name = "price", required = true)
-    protected int price;
+    protected float price;
     @XmlAttribute(name = "item-id", required = true)
     protected int itemId;
 
@@ -40,7 +40,7 @@ public class SDMSell {
      * Gets the value of the price property.
      * 
      */
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
@@ -48,7 +48,7 @@ public class SDMSell {
      * Sets the value of the price property.
      * 
      */
-    public void setPrice(int value) {
+    public void setPrice(float value) {
         this.price = value;
     }
 

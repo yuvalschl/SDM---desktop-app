@@ -50,7 +50,7 @@ public class XmlValidation {
 
     public Set<? extends Object> checkForDuplicate(List<? extends Object> checkDup){
         Set<Object> duplicates = new HashSet<>();
-        Set<Object> uniques = new HashSet<Object>();
+        Set<Object> uniques = new HashSet<>();
         for(Object obj : checkDup){
             if(!uniques.add(obj)){
                 duplicates.add(obj);
@@ -65,7 +65,7 @@ public class XmlValidation {
 
         for(SDMStore store : allStores){
             for(SDMSell item : store.getSDMPrices().getSDMSell()){
-                if(item.getPrice() < 0){
+                if(item.getPrice() < 0) {
                     invalidItems.put(item, store);
                 }
             }
