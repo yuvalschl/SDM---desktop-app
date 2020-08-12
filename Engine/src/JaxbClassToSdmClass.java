@@ -1,3 +1,4 @@
+import Exceptions.InvalidValueException;
 import Item.Item;
 import Item.WeightItem;
 import Item.UnitItem;
@@ -18,17 +19,21 @@ public class JaxbClassToSdmClass {
         return new StoreManager(allStores, allItems);
     }
 
-    private Map<Integer, Item> createAllItemsMap(List<SDMItem> sdmItems){
+    private Map<Integer, Item> createAllItemsMap(List<SDMItem> sdmItems) throws InvalidValueException {
         Map<Integer, Item> allItems = new HashMap<Integer, Item>();
         for(SDMItem item : sdmItems){
-            switch (item.getPurchaseCategory()){
-                case "Quantity":
+            if(allItems.containsKey(item.getId())){
+                throw new
+            }
+            switch (item.getPurchaseCategory().toLowerCase()){
+                case "quantity":
                     allItems.put(item.getId(), new UnitItem(item.getId() ,item.getName()));
                     break;
-                case "Weight":
+                case "weight":
                     allItems.put(item.getId(), new WeightItem(item.getId() ,item.getName()));
                     break;
-                //TODO add invalid category test
+                default:
+                    throw new InvalidValueException(item.getName(), "Item", "sell type");
             }
         }
         return allItems;

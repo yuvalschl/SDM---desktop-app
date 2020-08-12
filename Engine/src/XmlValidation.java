@@ -1,17 +1,15 @@
-import jaxb.JaxbClasses.SDMItem;
-import jaxb.JaxbClasses.SDMSell;
-import jaxb.JaxbClasses.SDMStore;
-import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
+import Exceptions.*;
+import jaxb.JaxbClasses.*;
 
-import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class XmlValidation {
     private HashSet<SDMStore> duplicateStoresId;
     private HashSet<SDMStore> duplicateStoresName;
-    private HashMap<SDMSell, SDMStore> invalidItemsPrices;
     private HashSet<SDMItem> duplicateItemNames;
     private HashSet<SDMItem> duplicateItemIds;
+    private HashMap<SDMSell, SDMStore> invalidItemsPrices;
     private HashSet<SDMStore> invalidStoresLocations;
     private HashSet<SDMStore> invalidStoresPPK;
 
@@ -27,11 +25,35 @@ public class XmlValidation {
 
     }
 
-    public boolean validateXml(){
-        boolean isStoresValid = duplicateStoresName.isEmpty() && duplicateStoresId.isEmpty() && invalidStoresLocations.isEmpty() && invalidStoresPPK.isEmpty();
-        boolean isItemsValid = duplicateItemIds.isEmpty() && duplicateItemNames.isEmpty() && invalidItemsPrices.isEmpty();
-        return isItemsValid && isStoresValid;
+    public boolean validateXml() throws DuplicateValueException, InvalidValueException {
+        boolean isValid = true;
+        if(checkDuplicatesInXmlFile()){
+            throw new DuplicateValueException(setToString(duplicateItemNames),setToString(duplicateItemIds),setToString(duplicateStoresId),setToString(duplicateStoresName));
+            isValid = false;
+        }
+        if(!invalidItemsPrices.isEmpty()){
+            throw new InvalidValueException(mapToString(invalidItemsPrices), "Item", "price");
+            isValid = false;
+        }
+        if(!invalidStoresLocations.isEmpty()){
+            throw new InvalidValueException(setToString(invalidStoresLocations), "store", "location");
+            isValid = false;
+        }
+        
+    }
 
+    private String mapToString (Map<?,?> map){
+        return map.entrySet()
+                .stream().map(key -> key.getKey() + ":" + key.getValue())
+                .collect(Collectors.joining(", ", "{", "}"));
+    }
+
+    private String setToString(Set<?> set){
+        return set.stream().map(Object::toString).collect(Collectors.joining(", "));
+    }
+
+    private boolean checkDuplicatesInXmlFile(){
+        return duplicateStoresId.isEmpty() && duplicateStoresName.isEmpty() && duplicateItemNames.isEmpty() && duplicateItemIds.isEmpty();
     }
 
     private void checkStores(List<SDMStore> allStores){
@@ -123,27 +145,5 @@ public class XmlValidation {
 
         return allNames;
     }
-
-/*    public Set<SDMItem> checkForDuplicateItemNameInXml(List<SDMItem> allItems){
-        Set<SDMItem> duplicates = new HashSet<SDMItem>();
-        Set<String> uniques = new HashSet<String>();
-        for(SDMItem item : allItems){
-            if(!uniques.add(item.getName())){
-                duplicates.add(item);
-            }
-        }
-        return duplicates;
-    }
-
-    public Set<SDMItem> checkForDuplicateItemIdInXml(List<SDMItem> allItems){
-        Set<SDMItem> duplicates = new HashSet<SDMItem>();
-        Set<Integer> uniques = new HashSet<Integer>();
-        for(SDMItem item : allItems){
-            if(!uniques.add(item.getId())){
-                duplicates.add(item);
-            }
-        }
-        return duplicates;
-    }*/
 
 }

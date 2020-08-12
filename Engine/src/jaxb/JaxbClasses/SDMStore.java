@@ -153,5 +153,4 @@ public class SDMStore {
     public void setId(int value) {
         this.id = value;
     }
-
 }
