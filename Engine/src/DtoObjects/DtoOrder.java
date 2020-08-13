@@ -1,8 +1,10 @@
 package DtoObjects;
 
 import ItemPair.ItemPair;
+import Order.Order;
 import Store.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -27,6 +29,7 @@ public class DtoOrder {
         this.store = store;
         this.items = items;
     }
+
 
     public Date getDateOfOrder() {
         return dateOfOrder;

@@ -1,19 +1,14 @@
-import DtoObjects.DtoItem;
-import DtoObjects.DtoOrder;
-import DtoObjects.DtoStore;
-import DtoObjects.DtoUnitItem;
+import DtoObjects.*;
 import Exceptions.*;
 import ItemPair.ItemPair;
 import Order.*;
 import Item.Item;
 import Item.UnitItem;
 import Store.Store;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 import jaxb.XmlToObject;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -22,9 +17,8 @@ import java.util.*;
 
 public class ConsoleUi {
 
-    private Menu menu = new Menu();
+    private final Menu menu = new Menu();
     private StoreManager storeEngine;
-    private boolean fileInSystem = false;
 
     public enum Echoic {
         readFile,
@@ -111,81 +105,6 @@ public class ConsoleUi {
         storeEngine.getAllOrders().stream().forEach(System.out::println);
     }
 
-    /*private void showAllStoresInTheSystem() {
-
-        System.out.println("Showing all the stores in the system");
-        System.out.println("====================================");
-        for(Integer storeId : storeEngine.getAllStores().keySet()){
-            showStore(storeEngine.getAllDtoStores().get(storeId));
-            System.out.println("===================================");
-        }
-    }
-
-
-    private void showStore(DtoStore store){
-        System.out.println("Store ID:" + store.getSerialNumber());
-        System.out.println("Store name:" + store.getName());
-        showStoreInventory(store);
-        showStoreOrdersHistory(store);
-        System.out.println("Store PPK:" + store.getPPK());
-        System.out.println("Total payment to the store:" + store.getTotalPayment());
-    }
-
-    private void showStoreInventory(Store store){
-        Map<Integer, Item> currentInventory = store.getInventory();
-        System.out.println(store.getName() + " Items are:");
-        for(Integer itemId : currentInventory.keySet()){
-            showItemInStore(currentInventory.get(itemId));
-            System.out.println();
-        }
-    }
-
-    private void showItemInStore(Item item){
-        System.out.println("*   Item ID: " + item.getSerialNumber());
-        System.out.println("\tItem name: " + item.getName());
-        if(item instanceof UnitItem){
-            System.out.println("\tItem sell by: unit");
-            System.out.println("\tPrice per unit: " + item.getPrice());
-        }
-        else {
-            System.out.println("\tItem sell by: weight");
-            System.out.println("\tPrice per kilo: " + item.getPrice());
-        }
-
-        System.out.println("\tTotal amount sold: " + item.getAmountSold());
-    }
-
-    private void showStoreInventory(DtoStore store){
-        Map<Integer, DtoItem> currentInventory = store.getInventory();
-        System.out.println(store.getName() + " Items are:");
-   //     currentInventory.stream()
-            for(Integer itemId : currentInventory.keySet()){
-                showItemInStore(currentInventory.get(itemId));
-                System.out.println("\tStore.Store PPK:" + store.getPPK());
-                System.out.println("\tTotal payment to the store:" + store.getTotalPayment());
-                System.out.println();
-        }
-    }
-
-    private void showItemInStore(DtoItem item){
-        System.out.println("*   Item ID: " + item.getSerialNumber());
-        System.out.println("\tItem name: " + item.getName());
-        if(item instanceof DtoUnitItem){
-            System.out.println("\tItem sell by: unit");
-            System.out.println("\tPrice per unit: " + item.getPrice());
-        }
-        else {
-            System.out.println("\tItem sell by: weight");
-            System.out.println("\tPrice per kilo: " + item.getPrice());
-        }
-
-        System.out.println("\tTotal amount sold: " + item.getAmountSold());
-    }
-
-    private void showStoreOrdersHistory(DtoStore store){
-        //TODO fill this method
-    }*/
-
     private void showAllStoresInTheSystem() {
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
@@ -258,7 +177,7 @@ public class ConsoleUi {
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         int itemID = getIDFromUser("item");
         if (itemID != -1 ) {
-            order = order(customerLocation,storeID,itemID, orderDate);
+            order = createOrder(customerLocation,storeID,itemID, orderDate);
             if (order!= null){
                 showItemsInOrder(order,storeID);
                 if(getOrderApproval()) {
@@ -290,7 +209,7 @@ public class ConsoleUi {
 
 
     }
-    private Order order(Point customerLocation, int storeID,int itemID, Date date) {
+    private Order createOrder(Point customerLocation, int storeID, int itemID, Date date) {
        ArrayList<ItemPair> items =  getItemsFromUser(storeID, itemID);
        Order order = null;
             if(items.size() != 0)
@@ -492,7 +411,7 @@ public class ConsoleUi {
         } catch (DuplicateValueException | InvalidValueException | ItemNotSoldException e) {
             System.out.println(e.getMessage());
         }
-
+        System.out.println("File loaded successfully");
     }
 }
 
