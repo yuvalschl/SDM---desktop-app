@@ -110,7 +110,7 @@ public class ConsoleUi {
         storeEngine.getAllOrders().stream().forEach(System.out::println);
     }
 
-    private void showAllStoresInTheSystem() {
+    /*private void showAllStoresInTheSystem() {
 
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
@@ -120,12 +120,38 @@ public class ConsoleUi {
         }
     }
 
+
     private void showStore(DtoStore store){
-        System.out.println("Store.Store ID:" + store.getSerialNumber());
-        System.out.println("Store.Store name:" + store.getName());
+        System.out.println("Store ID:" + store.getSerialNumber());
+        System.out.println("Store name:" + store.getName());
         showStoreInventory(store);
         showStoreOrdersHistory(store);
+        System.out.println("Store PPK:" + store.getPPK());
+        System.out.println("Total payment to the store:" + store.getTotalPayment());
+    }
 
+    private void showStoreInventory(Store store){
+        Map<Integer, Item> currentInventory = store.getInventory();
+        System.out.println(store.getName() + " Items are:");
+        for(Integer itemId : currentInventory.keySet()){
+            showItemInStore(currentInventory.get(itemId));
+            System.out.println();
+        }
+    }
+
+    private void showItemInStore(Item item){
+        System.out.println("*   Item ID: " + item.getSerialNumber());
+        System.out.println("\tItem name: " + item.getName());
+        if(item instanceof UnitItem){
+            System.out.println("\tItem sell by: unit");
+            System.out.println("\tPrice per unit: " + item.getPrice());
+        }
+        else {
+            System.out.println("\tItem sell by: weight");
+            System.out.println("\tPrice per kilo: " + item.getPrice());
+        }
+
+        System.out.println("\tTotal amount sold: " + item.getAmountSold());
     }
 
     private void showStoreInventory(DtoStore store){
@@ -157,7 +183,7 @@ public class ConsoleUi {
 
     private void showStoreOrdersHistory(DtoStore store){
         //TODO fill this method
-    }
+    }*/
 
 
     private void placeOrder() throws ParseException {
