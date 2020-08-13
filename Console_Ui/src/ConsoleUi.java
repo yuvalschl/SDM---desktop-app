@@ -66,7 +66,7 @@ public class ConsoleUi {
         System.out.println(menu.getMenuOption());
         Echoic[] eChoices = Echoic.values();
         boolean isFileLoaded = false;
-        Echoic choice = eChoices[getAndValidateChoice(1,6)];
+        Echoic choice = eChoices[getAndValidateChoice(1,6) - 1];
         while (true) {
             if (isFileLoaded || choice == Echoic.readFile) {
                 switch (choice) {
