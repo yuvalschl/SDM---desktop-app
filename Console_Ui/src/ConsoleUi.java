@@ -99,10 +99,11 @@ public class ConsoleUi {
                         System.exit(0);
                     }
                 }
-            } else {
+            }
+            else {
                 System.out.println("File is not loaded to the system");
             }
-            choice = eChoices[getAndValidateChoice(1,6)];
+            choice = eChoices[getAndValidateChoice(1,6) - 1];
         }
     }
 
@@ -251,9 +252,7 @@ public class ConsoleUi {
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
         int storeID = getIDFromUser("store");
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");//TODO:delete this, its for the test
-        Date orderDate = dateFormat.parse("12/12-12:12");//TODO: this aswell
-        // Date orderDate = //getDateOfOrder();//TODO:unmark this
+        Date orderDate = getDateOfOrder();
         Point customerLocation = new Point(1,3);//getCustomerLocation();//TODO delete left of ; and umnark right of it
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
