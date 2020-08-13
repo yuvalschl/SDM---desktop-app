@@ -202,6 +202,8 @@ public class ConsoleUi {
                     System.out.println("Order canceled.");
             }
         }
+        else
+            System.out.println("No order was made.");
     }
 
     private void showItemsToChooseFrom() {
