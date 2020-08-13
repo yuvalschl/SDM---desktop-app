@@ -1,15 +1,17 @@
-
 import Item.Item;
+import Order.Order;
+
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class Store {
     private String name;
     private int serialNumber;
     private Map<Integer, Item> inventory;
-    private List<Order> allOrders;
+    private Set<Order> allOrders;
     private Point location;
     private float PPK;
     private float totalPayment;
@@ -17,7 +19,7 @@ public class Store {
 
 
 
-    public Store(String name, int serialNumber, Map<Integer, Item> inventory, List<Order> allOrders, Point location, float PPK) {
+    public Store(String name, int serialNumber, Map<Integer, Item> inventory, Set<Order> allOrders, Point location, float PPK) {
         this.name = name;
         this.serialNumber = serialNumber;
         this.inventory = inventory;
@@ -59,11 +61,11 @@ public class Store {
         this.inventory = inventory;
     }
 
-    public List<Order> getAllOrders() {
+    public Set<Order> getAllOrders() {
         return allOrders;
     }
 
-    public void setAllOrders(List<Order> allOrders) {
+    public void setAllOrders(Set<Order> allOrders) {
         this.allOrders = allOrders;
     }
 

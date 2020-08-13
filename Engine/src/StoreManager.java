@@ -1,10 +1,8 @@
-import Item.Item;
-import jaxb.JaxbClasses.SDMStore;
-import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
-import jaxb.XmlToObject;
+import DtoObjects.*;
+import Item.*;
+import Order.Order;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StoreManager {
     private Map<Integer, Store> allStores;
@@ -52,5 +50,43 @@ public class StoreManager {
         }
 
         return priceAccumulator / (float)NumberOfStoresSellingItem(item);
+    }
+
+    public HashMap<Integer ,DtoStore> getAllDtoStores(){
+        HashMap<Integer ,DtoStore> allDtoStores = new HashMap<>();
+        Map<Integer, DtoItem> currentDtoInventory = new HashMap<>();
+        Set<DtoOrder> currentDtoOrders = new HashSet<>();
+        for(Integer key : allStores.keySet()){
+            Store currentStore = allStores.get(key);
+            currentDtoInventory = makeDtoInventory(currentStore);
+            currentDtoOrders = makeDtoOrders(currentStore);
+            allDtoStores.put(key, new DtoStore(currentStore.getName(), currentStore.getSerialNumber(), currentDtoInventory,
+                    currentDtoOrders, currentStore.getLocation(), currentStore.getPPK(), currentStore.getTotalPayment()));
+        }
+        return allDtoStores;
+    }
+
+    private Map<Integer, DtoItem> makeDtoInventory(Store store){
+        Map<Integer, DtoItem> currentDtoInventory = new HashMap<>();
+        for(Integer key : store.getInventory().keySet()){
+            Item currentItem = store.getInventory().get(key);
+            if(currentItem instanceof UnitItem){
+                currentDtoInventory.put(key, new DtoUnitItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold()));
+            }
+            else {
+                currentDtoInventory.put(key, new DtoWeightItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold()));
+            }
+        }
+
+        return currentDtoInventory;
+    }
+
+    private Set<DtoOrder> makeDtoOrders(Store store){
+        Set<DtoOrder> currentOrdersDtoSet = new HashSet<>();
+        for(Order order : store.getAllOrders()){
+            currentOrdersDtoSet.add(new DtoOrder(order.getDateOfOrder(), order.getAmountOfItems(), order.getTotalPriceOfItems(), order.getShippingCost(), order.getTotalCost()));
+        }
+
+        return currentOrdersDtoSet;
     }
 }

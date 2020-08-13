@@ -3,29 +3,30 @@ package Item;
 import java.util.Objects;
 
 public abstract class Item {
+    boolean isSold;
     private int serialNumber;
     private String name;
     private float price;
-    private int amountSold;
+
 
     public Item(int serialNumber, String name, float price) {
         this.serialNumber = serialNumber;
         this.name = name;
         this.price = price;
-        this.amountSold = 0;
+        isSold = false;
+    }
+
+    public boolean getIsSold() {
+        return isSold;
+    }
+
+    public void setSold(boolean sold) {
+        isSold = sold;
     }
 
     public Item(int serialNumber, String name) {
         this.serialNumber = serialNumber;
         this.name = name;
-    }
-
-    public int getAmountSold() {
-        return amountSold;
-    }
-
-    public void setAmountSold(int amountSold) {
-        this.amountSold = amountSold;
     }
 
     public int getSerialNumber() {
@@ -59,12 +60,13 @@ public abstract class Item {
         Item item = (Item) o;
         return getSerialNumber() == item.getSerialNumber() &&
                 Float.compare(item.getPrice(), getPrice()) == 0 &&
-                getAmountSold() == item.getAmountSold() &&
                 getName().equals(item.getName());
     }
 
+    public abstract float getAmountSold();
+
     @Override
     public int hashCode() {
-        return Objects.hash(getSerialNumber(), getName(), getPrice(), getAmountSold());
+        return Objects.hash(getSerialNumber(), getName(), getPrice());
     }
 }

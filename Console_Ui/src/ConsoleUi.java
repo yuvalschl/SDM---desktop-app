@@ -1,4 +1,7 @@
-import Item.*;
+import Exceptions.*;
+
+import Item.Item;
+import Item.UnitItem;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 import jaxb.XmlToObject;
 
@@ -249,15 +252,14 @@ public class ConsoleUi {
 
     private void readFile(){
 
-        SuperDuperMarketDescriptor superDuperMarketDescriptor = new XmlToObject().fromXmlFileToObject();
-        XmlValidation validation = new XmlValidation(superDuperMarketDescriptor);
-        if(validation.validateXml()){
-            this.storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
+        SuperDuperMarketDescriptor superDuperMarketDescriptor = XmlToObject.fromXmlFileToObject();
+        JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
+        try {
+            this.storeEngine = jaxbClassToStoreManager.convertJaxbClassToStoreManager();
+        } catch (DuplicateValueException | InvalidValueException | ItemNotSoldException e) {
+            System.out.println(e.getMessage());
         }
-        else{
-            //TODO: say why the file is invalid
-            System.out.println("invalid file");
-        }
+
     }
 }
 
