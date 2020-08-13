@@ -60,36 +60,39 @@ public class ConsoleUi {
     public void runUI(){
         System.out.println(menu.getMenuOption());
         Echoic[] eChoices =  Echoic.values();
+        boolean isFileLoaded = false;
         Echoic choice = eChoices[getAndValidateChoice(6)-1];
         while (true){
-            switch (choice){
-                case readFile: {
-                    readFile();
-                    break;
+            if(isFileLoaded || choice == Echoic.readFile){
+                switch (choice){
+                    case readFile: {
+                        readFile();
+                        isFileLoaded = true;
+                        break;
+                    }
+                    case ShowStores: {
+                        showAllStoresInTheSystem();
+                        break;
+                    }
+                    case ShowItems: {
+                        showAllItemsInSystem();
+                        break;
+                    }
+                    case PlaceOrder: {
+                        placeOrder();
+                        break;
+                    }
+                    case ShowHistory:{
+                        ShowHistory();
+                        break;
+                    }
+                    case Exit:{
+                        System.exit(0);
+                    }
                 }
-                case ShowStores: {
-                    //TODO check if a file is loaded to the system
-                    showAllStoresInTheSystem();
-                    break;
-                }
-                case ShowItems: {
-                    //TODO check if a file is loaded to the system
-                    showAllItemsInSystem();
-                    break;
-                }
-                case PlaceOrder: {
-                    //TODO check if a file is loaded to the system
-                    placeOrder();
-                    break;
-                }
-                case ShowHistory:{
-                    //TODO check if a file is loaded to the system
-                    ShowHistory();
-                    break;
-                }
-                case Exit:{
-                    System.exit(0);
-                }
+            }
+            else {
+                System.out.println("File is not loaded to the system");
             }
             choice = eChoices[getAndValidateChoice(6)-1];
         }

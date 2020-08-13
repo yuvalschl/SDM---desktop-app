@@ -83,8 +83,10 @@ public class StoreManager {
 
     private Set<DtoOrder> makeDtoOrders(Store store){
         Set<DtoOrder> currentOrdersDtoSet = new HashSet<>();
-        for(Order order : store.getAllOrders()){
-            currentOrdersDtoSet.add(new DtoOrder(order.getDateOfOrder(), order.getAmountOfItems(), order.getTotalPriceOfItems(), order.getShippingCost(), order.getTotalCost()));
+        if(store.getAllOrders() != null){
+            for(Order order : store.getAllOrders()){
+                currentOrdersDtoSet.add(new DtoOrder(order.getDateOfOrder(), order.getAmountOfItems(), order.getTotalPriceOfItems(), order.getShippingCost(), order.getTotalCost()));
+            }
         }
 
         return currentOrdersDtoSet;
