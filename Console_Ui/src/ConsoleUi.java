@@ -156,9 +156,9 @@ public class ConsoleUi {
     }
 
     private Point getCustomerLocation() {
-        System.out.println("Please enter your x coordinate");
+        System.out.println("Please enter your X coordinate");
         int x = readCoordinate();
-        System.out.println("Please enter your x coordinate");
+        System.out.println("Please enter your Y coordinate");
         int y = readCoordinate();
         return new Point(x,y);
     }
