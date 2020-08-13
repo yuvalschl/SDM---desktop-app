@@ -1,22 +1,24 @@
 import DtoObjects.DtoItem;
+import DtoObjects.DtoOrder;
 import DtoObjects.DtoStore;
 import DtoObjects.DtoUnitItem;
 import Exceptions.*;
+import ItemPair.ItemPair;
 import Order.*;
 import Item.Item;
 import Item.UnitItem;
+import Store.Store;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 import jaxb.XmlToObject;
-import com.sun.deploy.security.SelectableSecurityManager;
-import javafx.util.Pair;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 
 public class ConsoleUi {
 
@@ -56,7 +58,7 @@ public class ConsoleUi {
             else   {
                 System.out.println("Answer cannot be empty!");
             }
-        }while(isValid == false);
+        }while(!isValid);
         return choice;
     }
 
@@ -82,7 +84,11 @@ public class ConsoleUi {
                         break;
                     }
                     case PlaceOrder: {
-                        placeOrder();
+                        try {
+                            placeOrder();
+                        } catch (ParseException e) {
+                            System.out.println(e.getMessage());
+                        }
                         break;
                     }
                     case ShowHistory: {
@@ -108,40 +114,40 @@ public class ConsoleUi {
         storeEngine.getAllOrders().stream().forEach(System.out::println);
     }
 
-/*    private void showAllStoresInTheSystem() {
+    private void showAllStoresInTheSystem() {
 
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
         for(Integer storeId : storeEngine.getAllStores().keySet()){
-            showStore(storeEngine.getAllStores().get(storeId));
+            showStore(storeEngine.getAllDtoStores().get(storeId));
             System.out.println("===================================");
         }
     }
 
-    private void showStore(Store store){
-        System.out.println("Store ID:" + store.getSerialNumber());
-        System.out.println("Store name:" + store.getName());
+    private void showStore(DtoStore store){
+        System.out.println("Store.Store ID:" + store.getSerialNumber());
+        System.out.println("Store.Store name:" + store.getName());
         showStoreInventory(store);
         showStoreOrdersHistory(store);
 
-    }*/
+    }
 
-/*    private void showStoreInventory(Store store){
-        Map<Integer, Item> currentInventory = store.getInventory();
+    private void showStoreInventory(DtoStore store){
+        Map<Integer, DtoItem> currentInventory = store.getInventory();
         System.out.println(store.getName() + " Items are:");
    //     currentInventory.stream()
             for(Integer itemId : currentInventory.keySet()){
                 showItemInStore(currentInventory.get(itemId));
-                System.out.println("\tStore PPK:" + store.getPPK());
+                System.out.println("\tStore.Store PPK:" + store.getPPK());
                 System.out.println("\tTotal payment to the store:" + store.getTotalPayment());
                 System.out.println();
         }
-    }*/
+    }
 
-    /*private void showItemInStore(Item item){
+    private void showItemInStore(DtoItem item){
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
-        if(item instanceof UnitItem){
+        if(item instanceof DtoUnitItem){
             System.out.println("\tItem sell by: unit");
             System.out.println("\tPrice per unit: " + item.getPrice());
         }
@@ -151,25 +157,28 @@ public class ConsoleUi {
         }
 
         System.out.println("\tTotal amount sold: " + item.getAmountSold());
-    }*/
+    }
 
-/*    private void showStoreOrdersHistory(Store store){
+    private void showStoreOrdersHistory(DtoStore store){
         //TODO fill this method
-    }*/
+    }
+
+
     private void placeOrder() throws ParseException {
-        Order order = null;
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
         int storeID = getIDFromUser("store");
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");//TODO:delete this, its for the test
-       Date orderDate = dateFormat.parse("12/12-12:12");//TODO: this aswell
-       // Date orderDate = //getDateOfOrder();//TODO:unmark this
+/*      DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");//TODO:delete this, its for the test
+        Date orderDate = dateFormat.parse("12/12-12:12");//TODO: this aswell*/
+        Date orderDate = getDateOfOrder();
         Point customerLocation = new Point(1,3);//getCustomerLocation();//TODO delete left of ; and umnark right of it
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
-        int itemID = getIDFromUser("item");
-        if (itemID != -1 ) {
-            order = order(customerLocation,storeID,itemID, orderDate);
+        ArrayList<ItemPair> itemsToOrder = new ArrayList<ItemPair>();
+        while (itemID != -1 ) {
+            int itemID = getIDFromUser("item");
+            itemsToOrder.add(storeEngine.g)
+
             if (order!= null){
                 showItemsInOrder(order,storeID);
                 if(getOrderApproval()) {
@@ -215,7 +224,7 @@ public class ConsoleUi {
         ArrayList<ItemPair> items = new ArrayList<ItemPair>();
         double amount;
         while (true){
-            Store store= storeEngine.getAllStores().get(storeID);
+            DtoStore store= storeEngine.getAllDtoStores().get(storeID);
             if(store.getInventory().containsKey(itemID)){
                 amount = getItemAmount(store.getInventory().get(itemID));
                 ItemPair pair = new ItemPair(store.getInventory().get(itemID), amount);
@@ -232,11 +241,11 @@ public class ConsoleUi {
         }
     }
 
-    private double getItemAmount(Item item){
+    private double getItemAmount(DtoItem item){
         Scanner input = new Scanner(System.in);
         double amount;
         String stringAmount;
-        if (item instanceof UnitItem){
+        if (item instanceof DtoUnitItem){
             System.out.println("Please enter how many units of "+ item.getName()+ " would you like");
            while (true){
                try {
@@ -338,9 +347,9 @@ public class ConsoleUi {
     }
 
     private void showStoreInPurchaseMenu(DtoStore store){
-        System.out.println("Store ID:" + store.getSerialNumber());
-        System.out.println("Store name:" + store.getName());
-        System.out.println("Store PPK:" + store.getPPK());
+        System.out.println("Store.Store ID:" + store.getSerialNumber());
+        System.out.println("Store.Store name:" + store.getName());
+        System.out.println("Store.Store PPK:" + store.getPPK());
     }
 
     private void showAllItemsInSystem() {
@@ -378,8 +387,8 @@ public class ConsoleUi {
                 System.out.println("\tprice per kilo: " + item.getPrice());
         }
     }
-    private void showItemsInOrder(Order order,int storeID){
-        ArrayList<ItemPair> items = (ArrayList<ItemPair>) order.getItems();
+    private void showItemsInOrder(DtoOrder order, int storeID){
+        ArrayList<ItemPair> items = order.getItems();
         DtoItem item;
         System.out.println("The order details:");
         for (ItemPair itemInPair: items) {

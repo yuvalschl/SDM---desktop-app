@@ -77,4 +77,6 @@ public abstract class Item {
     public int hashCode() {
         return Objects.hash(getSerialNumber(), getName(), getPrice());
     }
+
+    public abstract void setAmountSold(int amountSold);
 }

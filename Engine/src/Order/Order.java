@@ -1,7 +1,7 @@
 package Order;
 
-import Item.Item;
-
+import Store.*;
+import ItemPair.*;
 import java.util.*;
 
 public class Order {
@@ -30,8 +30,8 @@ public class Order {
     public String toString() {
         return "*   Order ID: " +ID+"\n" +
                 "\tDate: "+dateOfOrder+"\n"+
-                "\tStore name: "+store.getName()+"\n"+
-                "\tStore ID: "+store.getSerialNumber()+"\n"+
+                "\tStore.Store name: "+store.getName()+"\n"+
+                "\tStore.Store ID: "+store.getSerialNumber()+"\n"+
                 "\tNumber of items in order: "+items.size()+"\n"+
                 "\tTotal item cost: "+totalPriceOfItems+"\n"+
                 "\tShipping price: "+shippingCost+"\n"+
