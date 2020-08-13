@@ -29,7 +29,7 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
-    public int NumberOfStoresSellingItem(Item item){
+    public int NumberOfStoresSellingItem(DtoItem item){
         int numberOfStoresSellingTheItem = 0;
         for(Integer storeId : allStores.keySet()){
             if(allStores.get(storeId).getInventory().containsKey(item.getSerialNumber())){
@@ -40,7 +40,7 @@ public class StoreManager {
         return numberOfStoresSellingTheItem;
     }
 
-    public float getAveragePrice(Item item){
+    public float getAveragePrice(DtoItem item){
         int priceAccumulator = 0;
         for(Integer storeId : allStores.keySet()){
             Map<Integer, Item> currentStoreInventory = allStores.get(storeId).getInventory();
@@ -88,5 +88,20 @@ public class StoreManager {
         }
 
         return currentOrdersDtoSet;
+    }
+
+    public Map<Integer, DtoItem> getAllDtoItems(){
+        Map<Integer, DtoItem> allDtoItems = new HashMap<Integer, DtoItem>();
+        for(Integer key : allItems.keySet()){
+            Item currentItem = allItems.get(key);
+            if(currentItem instanceof UnitItem){
+                allDtoItems.put(key, new DtoUnitItem(currentItem.getSerialNumber(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
+            }
+            else {
+                allDtoItems.put(key, new DtoWeightItem(currentItem.getSerialNumber(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
+            }
+        }
+
+        return allDtoItems;
     }
 }

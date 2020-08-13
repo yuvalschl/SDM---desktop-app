@@ -1,3 +1,6 @@
+import DtoObjects.DtoItem;
+import DtoObjects.DtoStore;
+import DtoObjects.DtoUnitItem;
 import Exceptions.*;
 
 import Item.Item;
@@ -212,20 +215,20 @@ public class ConsoleUi {
     }
 
     private void showAllStoresInOrderMenu() {
-        Map<Integer, Store> allStores = storeEngine.getAllStores();
+        Map<Integer, DtoStore> allStores = storeEngine.getAllDtoStores();
         for (Integer storeId : allStores.keySet()) {
             showStoreInPurchaseMenu(allStores.get(storeId));
         }
     }
 
-    private void showStoreInPurchaseMenu(Store store){
+    private void showStoreInPurchaseMenu(DtoStore store){
         System.out.println("Store ID:" + store.getSerialNumber());
         System.out.println("Store name:" + store.getName());
         System.out.println("Store PPK:" + store.getPPK());
     }
 
     private void showAllItemsInSystem() {
-        Map<Integer, Item> allItems = storeEngine.getAllItems();
+        Map<Integer, DtoItem> allItems = storeEngine.getAllDtoItems();
         System.out.println("Showing all the items in the system");
         System.out.println("====================================");
         for (Integer itemId : allItems.keySet()){
@@ -234,10 +237,10 @@ public class ConsoleUi {
         }
     }
 
-    private void showItemInSystem(Item item){
+    private void showItemInSystem(DtoItem item){
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
-        if(item instanceof UnitItem){
+        if(item instanceof DtoUnitItem){
             System.out.println("\tItem sell by: unit");
             System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
         }
