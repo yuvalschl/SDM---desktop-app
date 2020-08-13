@@ -81,12 +81,13 @@ public class ConsoleUi {
                         ShowHistory();
                         break;
                     }
+                    default:
+                        exit();
                 }
             }
             else if (choice == Echoice.Exit)
             {
-                System.out.println("Exiting program, cheereo and godspeed!");
-                System.exit(0);
+                exit();
             }
             else{
                 System.out.println("=========================================================================");
@@ -96,6 +97,10 @@ public class ConsoleUi {
             }
         }
 
+    }
+    private void exit(){
+        System.out.println("Exiting program, cheereo and godspeed!");
+        System.exit(0);
     }
 
     private void streamShowAllStoresInTheSystem() {

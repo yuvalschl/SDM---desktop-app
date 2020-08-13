@@ -9,7 +9,7 @@ import java.util.*;
 public class StoreManager {
     private Map<Integer, Store> allStores;
     private Map<Integer, Item> allItems;
-    private Set<Order> allOrders;
+    private Set<Order> allOrders = new HashSet<Order>();
     public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems) {
         this.allStores = allStores;
         this.allItems = allItems;
@@ -60,7 +60,6 @@ public class StoreManager {
     public Order createOrder(Point customerLocation, int storeID, Date date, ArrayList<ItemPair> items)
     {
 
-        allOrders = new HashSet<>();
         int totalPriceOfItems = 0;
         float distance = distanceCalculator(customerLocation, allStores.get(storeID).getLocation());
         float shippingCost = distance * allStores.get(storeID).getPPK();
@@ -75,8 +74,17 @@ public class StoreManager {
         return newOrder;
     }
 
-    public void placeOrder(Order order) {
+    public void placeOrder(Order order) {//finilaize the order after final approval, in this method we add the order to the order set and update the amount sold in allitems
         allOrders.add(order);
+        int amountSold =0;
+        for (ItemPair itemPair:order.getItems()) {
+            int itemID = itemPair.item().getSerialNumber();
+            if(itemPair.item() instanceof  UnitItem)
+                amountSold = allItems.get(itemID).getAmountSold() + (int)itemPair.amount();
+            else
+                amountSold = allItems.get(itemID).getAmountSold()+1;
+            allItems.get(itemID).setAmountSold(amountSold);
+        };
     }
 
     private float distanceCalculator(Point point1, Point point2){
@@ -99,7 +107,7 @@ public class StoreManager {
             itemDetails += set.getValue().toString(false);
             itemDetails += "\tNumber of stores that sell "+ item.getName()+" are: " +howManyStoresSellItem(item)+"\n";
             itemDetails += "\tAverage price for "+ item.getName()+" is: "+ getAveragePrice(item)+"\n";
-         //   itemDetails += "\tNumber of times "+item.getName()+" was sold is: "+howManyTimesItemSold(item)+"\n";
+            itemDetails += "\tNumber of times "+item.getName()+" was sold is: "+item.getAmountSold()+"\n";
         }
         return itemDetails;
     }
@@ -117,9 +125,8 @@ public class StoreManager {
         if(allOrders != null)
             for (Order order: allOrders) {
                 for (ItemPair pair:order.getItems())
-                    if(pair.item().equals(item)) {//TODO: finish to check if the pair in set has the item
-                        timesSold++;
-
+                    if(pair.item().equals(item)) {
+                        timesSold += pair.amount();
                     }
             }
         return  timesSold;

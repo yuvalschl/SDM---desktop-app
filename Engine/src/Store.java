@@ -13,9 +13,15 @@ public class Store {
     private Point location;
     private float PPK;
     private float totalPayment;
+    private int numberOfItemsSold;
 
+    public int getNumberOfItemsSold() {
+        return numberOfItemsSold;
+    }
 
-
+    public void setNumberOfItemsSold(int numberOfItemsSold) {
+        this.numberOfItemsSold = numberOfItemsSold;
+    }
 
     public Store(String name, int serialNumber, Map<Integer, Item> inventory, List<Order> allOrders, Point location, float PPK) {
         this.name = name;

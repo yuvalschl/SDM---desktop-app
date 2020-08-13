@@ -63,11 +63,12 @@ public abstract class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return getSerialNumber() == item.getSerialNumber() &&
-                Float.compare(item.getPrice(), getPrice()) == 0 &&
-                getAmountSold() == item.getAmountSold() &&
-                getName().equals(item.getName());
+        return serialNumber == item.serialNumber&&
+                amountSold == item.amountSold &&
+                Objects.equals(name, item.name);
     }
+
+
 
     @Override
     public int hashCode() {
