@@ -106,10 +106,6 @@ public class ConsoleUi {
         }
     }
 
-    private void streamShowAllItemsInSystem() {
-        System.out.println(storeEngine.getAllItemsDetails());
-    }
-
     private void ShowHistory() {
         storeEngine.getAllOrders().stream().forEach(System.out::println);
     }
@@ -165,20 +161,19 @@ public class ConsoleUi {
 
 
     private void placeOrder() throws ParseException {
+        Order order = null;
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
         int storeID = getIDFromUser("store");
-/*      DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");//TODO:delete this, its for the test
-        Date orderDate = dateFormat.parse("12/12-12:12");//TODO: this aswell*/
-        Date orderDate = getDateOfOrder();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");//TODO:delete this, its for the test
+        Date orderDate = dateFormat.parse("12/12-12:12");//TODO: this aswell
+        // Date orderDate = //getDateOfOrder();//TODO:unmark this
         Point customerLocation = new Point(1,3);//getCustomerLocation();//TODO delete left of ; and umnark right of it
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
-        ArrayList<ItemPair> itemsToOrder = new ArrayList<ItemPair>();
-        while (itemID != -1 ) {
-            int itemID = getIDFromUser("item");
-            itemsToOrder.add(storeEngine.g)
-
+        int itemID = getIDFromUser("item");
+        if (itemID != -1 ) {
+            order = order(customerLocation,storeID,itemID, orderDate);
             if (order!= null){
                 showItemsInOrder(order,storeID);
                 if(getOrderApproval()) {
@@ -188,9 +183,7 @@ public class ConsoleUi {
                 else
                     System.out.println("Order canceled.");
             }
-
         }
-
     }
 
     private Boolean getOrderApproval(){
@@ -387,7 +380,7 @@ public class ConsoleUi {
                 System.out.println("\tprice per kilo: " + item.getPrice());
         }
     }
-    private void showItemsInOrder(DtoOrder order, int storeID){
+    private void showItemsInOrder(Order order, int storeID){
         ArrayList<ItemPair> items = order.getItems();
         DtoItem item;
         System.out.println("The order details:");

@@ -1,6 +1,6 @@
 import DtoObjects.*;
 import Item.*;
-import ItemPair.*;
+import ItemPair.ItemPair;
 import Order.Order;
 import Store.Store;
 

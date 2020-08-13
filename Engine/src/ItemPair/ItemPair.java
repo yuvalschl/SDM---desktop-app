@@ -1,7 +1,6 @@
 package ItemPair;
 
 import DtoObjects.DtoItem;
-import Item.Item;
 
 public class ItemPair {
         private final double amount;
