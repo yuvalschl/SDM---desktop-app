@@ -9,7 +9,7 @@ import java.io.File;
 
 public class XmlToObject {
 
-    public static final String FILE_NAME = "ex1-small.xml";
+    public static final String FILE_NAME = "ex1-big.xml";
 
     public static SuperDuperMarketDescriptor fromXmlFileToObject() {
 

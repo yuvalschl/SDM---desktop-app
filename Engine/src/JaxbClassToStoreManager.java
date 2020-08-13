@@ -2,6 +2,7 @@ import Exceptions.*;
 import Item.Item;
 import Item.WeightItem;
 import Item.UnitItem;
+import Store.Store;
 import jaxb.JaxbClasses.*;
 import jaxb.XmlToObject;
 import java.awt.*;
@@ -43,7 +44,7 @@ public class JaxbClassToStoreManager {
         Map<Integer, Store> allStores = new HashMap<Integer, Store>();
         for(SDMStore store : sdmStores){
             if(allStores.containsKey(store.getId())){
-                throw new DuplicateValueException("Store with id: " + store.getId() + " already exists in the system");
+                throw new DuplicateValueException("Store.Store with id: " + store.getId() + " already exists in the system");
             }
             Map<Integer, Item> currentStoreInventory = createCurrentStoreInventory(allItems, store, allItems);
             Point currentStoreLocation = new Point(store.getLocation().getX(), store.getLocation().getY());
@@ -63,7 +64,7 @@ public class JaxbClassToStoreManager {
                 throw new InvalidValueException("Item with id: " + item.getItemId() + " dose not exists in the system and cannot be sold by store with id: " + currentStore.getId());
             }
             if(currentInventory.containsKey(item.getItemId())){
-                throw new InvalidValueException("Store with id: " + currentStore.getId() + " already selling item with id:" + item.getItemId());
+                throw new InvalidValueException("Store.Store with id: " + currentStore.getId() + " already selling item with id:" + item.getItemId());
             }
             Item itemToAdd = allItemsFromFile.get(item.getItemId());
             if(itemToAdd instanceof UnitItem){

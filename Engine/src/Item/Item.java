@@ -64,15 +64,19 @@ public abstract class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return serialNumber == item.serialNumber&&
-                amountSold == item.amountSold &&
-                Objects.equals(name, item.name);
+        return getSerialNumber() == item.getSerialNumber() &&
+                Float.compare(item.getPrice(), getPrice()) == 0 &&
+                getName().equals(item.getName());
     }
 
 
+
+    public abstract float getAmountSold();
 
     @Override
     public int hashCode() {
         return Objects.hash(getSerialNumber(), getName(), getPrice());
     }
+
+    public abstract void setAmountSold(int amountSold);
 }

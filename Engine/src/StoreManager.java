@@ -1,7 +1,8 @@
-import Item.Item;
-import jaxb.JaxbClasses.SDMStore;
-import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
-import jaxb.XmlToObject;
+import DtoObjects.*;
+import Item.*;
+import ItemPair.ItemPair;
+import Order.Order;
+import Store.Store;
 
 import java.awt.*;
 import java.util.*;
@@ -9,10 +10,16 @@ import java.util.*;
 public class StoreManager {
     private Map<Integer, Store> allStores;
     private Map<Integer, Item> allItems;
+    private Set<Order> allOrders = new HashSet<Order>();
+
 
     public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems) {
         this.allStores = allStores;
         this.allItems = allItems;
+    }
+
+    public Set<Order> getAllOrders() {
+        return allOrders;
     }
 
     public Map<Integer, Store> getAllStores() {
@@ -31,7 +38,7 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
-    public int NumberOfStoresSellingItem(Item item){
+    public int NumberOfStoresSellingItem(DtoItem item){
         int numberOfStoresSellingTheItem = 0;
         for(Integer storeId : allStores.keySet()){
             if(allStores.get(storeId).getInventory().containsKey(item.getSerialNumber())){
@@ -42,7 +49,7 @@ public class StoreManager {
         return numberOfStoresSellingTheItem;
     }
 
-    public float getAveragePrice(Item item){
+    public float getAveragePrice(DtoItem item){
         int priceAccumulator = 0;
         for(Integer storeId : allStores.keySet()){
             Map<Integer, Item> currentStoreInventory = allStores.get(storeId).getInventory();
@@ -87,7 +94,8 @@ public class StoreManager {
         Set<DtoOrder> currentOrdersDtoSet = new HashSet<>();
         if(store.getAllOrders() != null){
             for(Order order : store.getAllOrders()){
-                currentOrdersDtoSet.add(new DtoOrder(order.getDateOfOrder(), order.getAmountOfItems(), order.getTotalPriceOfItems(), order.getShippingCost(), order.getTotalCost()));
+                currentOrdersDtoSet.add(new DtoOrder(order.getDateOfOrder(),order.getAmountOfItems(),order.getTotalPriceOfItems(),
+                        order.getShippingCost(),order.getTotalCost(),order.getDistance(),order.getStore(), order.getItems()));
             }
         }
 
@@ -107,5 +115,78 @@ public class StoreManager {
         }
 
         return allDtoItems;
+    }
+    public Order createOrder(Point customerLocation, int storeID, Date date, ArrayList<ItemPair> items) {
+
+        int totalPriceOfItems = 0;
+        float distance = distanceCalculator(customerLocation, allStores.get(storeID).getLocation());
+        float shippingCost = distance * allStores.get(storeID).getPPK();
+        for (ItemPair pair: items) {
+            if (pair.item() instanceof DtoUnitItem)
+                totalPriceOfItems += (int)pair.amount() * pair.item().getPrice();
+            else
+                totalPriceOfItems += pair.amount() * pair.item().getPrice();
+
+        }
+        Order newOrder = new Order(date,items.size(),totalPriceOfItems, shippingCost, totalPriceOfItems + shippingCost, items, distance, allStores.get(storeID) );
+        return newOrder;
+    }
+
+    public void placeOrder(Order order) {//finilaize the order after final approval, in this method we add the order to the order set and update the amount sold in allitems
+        allOrders.add(order);
+        int amountSold = 0;
+        for (ItemPair itemPair : order.getItems()) {
+            int itemID = itemPair.item().getSerialNumber();
+            if(itemPair.item() instanceof DtoUnitItem)
+                amountSold = (int) (allItems.get(itemID).getAmountSold() + (int)itemPair.amount());
+            else
+                amountSold = (int) (allItems.get(itemID).getAmountSold()+1);
+            allItems.get(itemID).setAmountSold(amountSold);
+        };
+    }
+
+    private float distanceCalculator(Point point1, Point point2){
+        return (float) Math.sqrt(Math.pow(point1.x-point2.x, 2)+Math.pow(point1.y-point2.y, 2));
+    }
+
+    public String getAllStoresDetails(){//TODO: add סעיף e an below
+        //allItems.forEach((Integer, Item)-> System.out.println(Item.getItemDetails()));
+        String storeDetails = "";
+        for (Map.Entry<Integer, Store> set : allStores.entrySet()) {
+             storeDetails += set.getValue().toString();
+        }
+        return storeDetails;
+    }
+
+/*    public String getAllItemsDetails(){//gets the string to print in choice 3 (show all items in store)
+        String itemDetails = "";
+        for (Map.Entry<Integer, Item> set : allItems.entrySet()) {
+            DtoItem item = set.getValue();
+            itemDetails += set.getValue().toString(false);
+            itemDetails += "\tNumber of stores that sell "+ item.getName()+" are: " +howManyStoresSellItem(item)+"\n";
+            itemDetails += "\tAverage price for "+ item.getName()+" is: "+ getAveragePrice(item)+"\n";
+            itemDetails += "\tNumber of times "+item.getName()+" was sold is: "+item.getAmountSold()+"\n";
+        }
+        return itemDetails;
+    }*/
+
+    private int howManyStoresSellItem(DtoItem item) {
+        int numberOfStoreThatSell = 0;
+        for (Map.Entry<Integer, Store> set : allStores.entrySet()) {
+            if (set.getValue().getInventory().containsKey(item.getSerialNumber()))
+                numberOfStoreThatSell++;
+        }
+        return  numberOfStoreThatSell;
+    }
+    private  int howManyTimesItemSold(Item item){
+        int timesSold = 0;
+        if(allOrders != null)
+            for (Order order: allOrders) {
+                for (ItemPair pair:order.getItems())
+                    if(pair.item().equals(item)) {
+                        timesSold += pair.amount();
+                    }
+            }
+        return  timesSold;
     }
 }

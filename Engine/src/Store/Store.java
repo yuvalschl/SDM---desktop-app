@@ -1,8 +1,9 @@
+package Store;
+
 import Item.Item;
 import Order.Order;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -94,8 +95,8 @@ public class Store {
     public String toString(){//TODO add
         String itemDetails = "";
         String storeDetails =
-                "* Store ID: "+serialNumber+
-                "\n\tStore name: "+name+
+                "* Store.Store ID: "+serialNumber+
+                "\n\tStore.Store name: "+name+
                 "\n\tThe Items in these store are: \n";
         for (Map.Entry<Integer, Item> set : inventory.entrySet()) {
             itemDetails += set.getValue().toString(true);
