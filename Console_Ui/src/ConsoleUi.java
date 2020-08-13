@@ -185,6 +185,66 @@ public class ConsoleUi {
         //TODO fill this method
     }*/
 
+    private void showAllStoresInTheSystem() {
+        System.out.println("Showing all the stores in the system");
+        System.out.println("====================================");
+        for(Integer storeId : storeEngine.getAllStores().keySet()){
+            showStore(storeEngine.getAllStores().get(storeId));
+            System.out.println("===================================");
+        }
+    }
+
+    private void showStore(Store store){
+        System.out.println("Store ID:" + store.getSerialNumber());
+        System.out.println("Store name:" + store.getName());
+        showStoreInventory(store);
+        /*showStoreOrdersHistory(store);*/
+        System.out.println("Store PPK:" + store.getPPK());
+        System.out.println("Total payment to the store:" + store.getTotalPayment());
+    }
+
+    private void showStoreInventory(Store store){
+        Map<Integer, Item> currentInventory = store.getInventory();
+        System.out.println(store.getName() + " Items are:");
+        for(Integer itemId : currentInventory.keySet()){
+            showItemInStore(currentInventory.get(itemId));
+            System.out.println();
+        }
+    }
+
+    private void showItemInStore(Item item){
+        System.out.println("*   Item ID: " + item.getSerialNumber());
+        System.out.println("\tItem name: " + item.getName());
+        if(item instanceof UnitItem){
+            System.out.println("\tItem sell by: unit");
+            System.out.println("\tPrice per unit: " + item.getPrice());
+        }
+        else {
+            System.out.println("\tItem sell by: weight");
+            System.out.println("\tPrice per kilo: " + item.getPrice());
+        }
+
+        System.out.println("\tTotal amount sold: " + item.getAmountSold());
+    }
+
+    private void showItemInSystem(DtoItem item){
+        System.out.println("*   Item ID: " + item.getSerialNumber());
+        System.out.println("\tItem name: " + item.getName());
+        if(item instanceof DtoUnitItem){
+            System.out.println("\tItem sell by: unit");
+            System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
+        }
+        else {
+            System.out.println("\tItem sell by: weight");
+            System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
+        }
+
+        System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
+        System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
+    }
+
+    //-----------------------------------
+
 
     private void placeOrder() throws ParseException {
         Order order = null;
@@ -381,11 +441,6 @@ public class ConsoleUi {
         }
     }
 
-    private void showItemInSystem(DtoItem item){
-        printItemDetails(item, true);
-        System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
-        System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
-    }
 
     private void printItemDetails(DtoItem item, boolean showAveragePrice)
     {
@@ -406,6 +461,7 @@ public class ConsoleUi {
                 System.out.println("\tprice per kilo: " + item.getPrice());
         }
     }
+
     private void showItemsInOrder(Order order, int storeID){
         ArrayList<ItemPair> items = order.getItems();
         DtoItem item;
