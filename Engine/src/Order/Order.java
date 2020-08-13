@@ -1,7 +1,8 @@
 package Order;
 
-import java.util.Date;
-import java.util.Objects;
+import Item.Item;
+
+import java.util.*;
 
 public class Order {
     private Date dateOfOrder;
@@ -9,6 +10,49 @@ public class Order {
     private float totalPriceOfItems;
     private float shippingCost;
     private float totalCost;
+    private float distance;
+    private Store store;
+    private static int ID = 0;
+    private ArrayList<ItemPair> items;
+
+    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, ArrayList<ItemPair> items, float distance, Store store) {
+        this.dateOfOrder = dateOfOrder;
+        this.amountOfItems = amountOfItems;
+        this.totalPriceOfItems = totalPriceOfItems;
+        this.shippingCost = shippingCost;
+        this.totalCost = totalCost;
+        this.items = items;
+        this.distance = distance;
+        this.ID = ++ID;
+        this.store = store;
+    }
+
+    public String toString() {
+        return "*   Order ID: " +ID+"\n" +
+                "\tDate: "+dateOfOrder+"\n"+
+                "\tStore name: "+store.getName()+"\n"+
+                "\tStore ID: "+store.getSerialNumber()+"\n"+
+                "\tNumber of items in order: "+items.size()+"\n"+
+                "\tTotal item cost: "+totalPriceOfItems+"\n"+
+                "\tShipping price: "+shippingCost+"\n"+
+                "\tTotal order price: "+totalCost;
+    }
+
+    public static int getID() {
+        return ID;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public float getDistance() {
+        return distance;
+    }
+
+    public ArrayList<ItemPair> getItems() {
+        return items;
+    }
 
     public Date getDateOfOrder() {
         return dateOfOrder;

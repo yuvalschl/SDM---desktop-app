@@ -22,4 +22,11 @@ public class WeightItem extends Item {
     public void setAmountSold(float amountSold) {
         this.amountSold = amountSold;
     }
+
+    public String toString(Boolean isInShowStores){
+       String details = super.toString(true)+ "\tItem sell by: weight"+"\n";
+       if(isInShowStores)
+           details += "\tPrice per kilo: " + getPrice()+"\n";
+        return  details;
+    }
 }

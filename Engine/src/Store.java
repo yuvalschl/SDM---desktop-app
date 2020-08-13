@@ -15,9 +15,15 @@ public class Store {
     private Point location;
     private float PPK;
     private float totalPayment;
+    private int numberOfItemsSold;
 
+    public int getNumberOfItemsSold() {
+        return numberOfItemsSold;
+    }
 
-
+    public void setNumberOfItemsSold(int numberOfItemsSold) {
+        this.numberOfItemsSold = numberOfItemsSold;
+    }
 
     public Store(String name, int serialNumber, Map<Integer, Item> inventory, Set<Order> allOrders, Point location, float PPK) {
         this.name = name;
@@ -83,6 +89,18 @@ public class Store {
 
     public void setTotalPayment(float totalPayment) {
         this.totalPayment = totalPayment;
+    }
+
+    public String toString(){//TODO add
+        String itemDetails = "";
+        String storeDetails =
+                "* Store ID: "+serialNumber+
+                "\n\tStore name: "+name+
+                "\n\tThe Items in these store are: \n";
+        for (Map.Entry<Integer, Item> set : inventory.entrySet()) {
+            itemDetails += set.getValue().toString(true);
+        }
+        return  storeDetails + itemDetails;
     }
 
     @Override

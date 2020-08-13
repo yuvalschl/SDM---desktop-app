@@ -49,6 +49,12 @@ public abstract class Item {
         return price;
     }
 
+    public String toString(Boolean isInShowStores){
+        return "*   Item ID: " + serialNumber+"\n"+
+                "\tItem name: " + name+"\n";
+    }
+
+
     public void setPrice(float price) {
         this.price = price;
     }
@@ -62,6 +68,8 @@ public abstract class Item {
                 Float.compare(item.getPrice(), getPrice()) == 0 &&
                 getName().equals(item.getName());
     }
+
+
 
     public abstract float getAmountSold();
 
