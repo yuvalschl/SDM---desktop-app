@@ -22,5 +22,12 @@ public class UnitItem extends Item {
     public void setAmountSold(int amountSold) {
         this.amountSold = amountSold;
     }
+
+    public String toString(Boolean isInShowStores){
+        String details = super.toString(true)+ "\tItem sell by: unit"+"\n";
+        if(isInShowStores)
+            details += "\tPrice per unit: " + getPrice()+"\n";
+        return details;
+    }
 }
 

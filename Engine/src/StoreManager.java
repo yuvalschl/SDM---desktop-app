@@ -1,7 +1,9 @@
-import DtoObjects.*;
-import Item.*;
-import Order.Order;
+import Item.Item;
+import jaxb.JaxbClasses.SDMStore;
+import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
+import jaxb.XmlToObject;
 
+import java.awt.*;
 import java.util.*;
 
 public class StoreManager {
@@ -29,7 +31,7 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
-    public int NumberOfStoresSellingItem(DtoItem item){
+    public int NumberOfStoresSellingItem(Item item){
         int numberOfStoresSellingTheItem = 0;
         for(Integer storeId : allStores.keySet()){
             if(allStores.get(storeId).getInventory().containsKey(item.getSerialNumber())){
@@ -40,7 +42,7 @@ public class StoreManager {
         return numberOfStoresSellingTheItem;
     }
 
-    public float getAveragePrice(DtoItem item){
+    public float getAveragePrice(Item item){
         int priceAccumulator = 0;
         for(Integer storeId : allStores.keySet()){
             Map<Integer, Item> currentStoreInventory = allStores.get(storeId).getInventory();

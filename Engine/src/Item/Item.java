@@ -49,6 +49,12 @@ public abstract class Item {
         return price;
     }
 
+    public String toString(Boolean isInShowStores){
+        return "*   Item ID: " + serialNumber+"\n"+
+                "\tItem name: " + name+"\n";
+    }
+
+
     public void setPrice(float price) {
         this.price = price;
     }
@@ -58,12 +64,12 @@ public abstract class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return getSerialNumber() == item.getSerialNumber() &&
-                Float.compare(item.getPrice(), getPrice()) == 0 &&
-                getName().equals(item.getName());
+        return serialNumber == item.serialNumber&&
+                amountSold == item.amountSold &&
+                Objects.equals(name, item.name);
     }
 
-    public abstract float getAmountSold();
+
 
     @Override
     public int hashCode() {

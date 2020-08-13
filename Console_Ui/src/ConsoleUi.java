@@ -7,14 +7,17 @@ import Item.Item;
 import Item.UnitItem;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 import jaxb.XmlToObject;
+import Item.*;
+import com.sun.deploy.security.SelectableSecurityManager;
+import javafx.util.Pair;
 
 import java.awt.*;
+import java.lang.reflect.Method;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.List;
 
 public class ConsoleUi {
 
@@ -30,8 +33,7 @@ public class ConsoleUi {
         Exit
     }
 
-    private int getAndValidateChoice(int largestChoiceNumber){
-        System.out.println("Please enter choose number of a commands above(must be between 1 and " + largestChoiceNumber+"):\n");
+    private int getAndValidateChoice(int smallestChoice ,int largestChoice){
         Scanner input = new Scanner(System.in);
         int choice = -1;
         boolean isValid = false;
@@ -40,11 +42,11 @@ public class ConsoleUi {
             if (!choiceString.isEmpty()) {
                 try {
                     choice = Integer.parseInt(choiceString);
-                    if(choice > 0 && choice <= largestChoiceNumber) {
+                    if(choice >= smallestChoice && choice <= largestChoice) {
                         isValid = true;
                     }
                     else {
-                        System.out.println("Please enter a number between 1 and " + largestChoiceNumber);
+                        System.out.println("Please enter a number between "+smallestChoice+" and " + largestChoice);
                     }
                 } catch (Exception e) {
                     System.out.println("Please enter a number!");
@@ -97,6 +99,8 @@ public class ConsoleUi {
             choice = eChoices[getAndValidateChoice(6)-1];
         }
 
+    private void streamShowAllItemsInSystem() {
+        System.out.println(storeEngine.getAllItemsDetails());
     }
 
     private void ShowHistory() {
@@ -149,16 +153,35 @@ public class ConsoleUi {
     }
     private void placeOrder() {
         showAllStoresInOrderMenu();
-        int storeId = getStoreToBuyFrom();
-        Date orderDate = getDateOfOrder();
-        Point customerLocation = getCustomerLocation();
+        System.out.println("Please choose a store by its ID from the list above:");
+        int storeID = getIDFromUser("store");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");//TODO:delete this, its for the test
+       Date orderDate = dateFormat.parse("12/12-12:12");//TODO: this aswell
+       // Date orderDate = //getDateOfOrder();//TODO:unmark this
+        Point customerLocation = new Point(1,3);//getCustomerLocation();//TODO delete left of ; and umnark right of it
+        showAllItemsInSystem();
+        System.out.println("Please choose items by its ID from the list above or enter q to end order:");
+        int itemID = getIDFromUser("item");
+        if (itemID != -1 ) {
+            order = order(customerLocation,storeID,itemID, orderDate);
+            if (order!= null){
+                showItemsInOrder(order,storeID);
+                if(getOrderApproval()) {
+                    storeEngine.placeOrder(order);
+                    System.out.println("Order was added successfully.");
+                }
+                else
+                    System.out.println("Order canceled.");
+            }
+
+        }
 
     }
 
     private Point getCustomerLocation() {
-        System.out.println("Please enter your X coordinate");
+        System.out.println("Please enter your x coordinate");
         int x = readCoordinate();
-        System.out.println("Please enter your Y coordinate");
+        System.out.println("Please enter your x coordinate");
         int y = readCoordinate();
         return new Point(x,y);
     }
@@ -185,7 +208,7 @@ public class ConsoleUi {
         Scanner scanner = new Scanner(System.in);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm-hh:mm");
         Date dateOfOrder;
-
+        dateFormat.setLenient(false);
         System.out.println("Please enter the date of the order in dd/mm-hh:mm format");
         while (true){
             String dateString = scanner.next();
@@ -198,40 +221,48 @@ public class ConsoleUi {
         }
     }
 
-    private int getStoreToBuyFrom() {
+    private int getIDFromUser(String StoreOrItem) {
         Scanner scanner = new Scanner(System.in);
         int userSelection;
-        do{
+        do {
             try{
                 String userSelectionString = scanner.next();
                 userSelection = Integer.parseInt(userSelectionString);
                 if(storeEngine.getAllStores().containsKey(userSelection)){
                     return userSelection;
                 }
-                else {
-                    System.out.println("The store you selected is not available");
+                else{
+                    if (StoreOrItem == "store")
+                        System.out.println("The store ID you entered is not available please choose an ID from the list above");
+                    else
+                        System.out.println("The Item ID you entered is not available please choose an ID from the list above");
                 }
-            }catch (NumberFormatException e){
+
+            }
+            catch (NumberFormatException e){
                 System.out.println("Please enter a number");
             }
+            catch (Exception e){}
         }while (true);
     }
 
     private void showAllStoresInOrderMenu() {
-        Map<Integer, DtoStore> allStores = storeEngine.getAllDtoStores();
+        Map<Integer, Store> allStores = storeEngine.getAllStores();
+        System.out.println("====================================");
         for (Integer storeId : allStores.keySet()) {
             showStoreInPurchaseMenu(allStores.get(storeId));
+            System.out.println("====================================");
         }
     }
 
-    private void showStoreInPurchaseMenu(DtoStore store){
+    private void showStoreInPurchaseMenu(Store store){
         System.out.println("Store ID:" + store.getSerialNumber());
         System.out.println("Store name:" + store.getName());
         System.out.println("Store PPK:" + store.getPPK());
     }
 
     private void showAllItemsInSystem() {
-        Map<Integer, DtoItem> allItems = storeEngine.getAllDtoItems();
+        Map<Integer, Item> allItems = storeEngine.getAllItems();
         System.out.println("Showing all the items in the system");
         System.out.println("====================================");
         for (Integer itemId : allItems.keySet()){
@@ -240,32 +271,56 @@ public class ConsoleUi {
         }
     }
 
-    private void showItemInSystem(DtoItem item){
-        System.out.println("*   Item ID: " + item.getSerialNumber());
-        System.out.println("\tItem name: " + item.getName());
-        if(item instanceof DtoUnitItem){
-            System.out.println("\tItem sell by: unit");
-            System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
-        }
-        else {
-            System.out.println("\tItem sell by: weight");
-            System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
-        }
-
+    private void showItemInSystem(Item item){
+        printItemDetails(item, true);
         System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void readFile(){
-
-        SuperDuperMarketDescriptor superDuperMarketDescriptor = XmlToObject.fromXmlFileToObject();
-        JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
-        try {
-            this.storeEngine = jaxbClassToStoreManager.convertJaxbClassToStoreManager();
-        } catch (DuplicateValueException | InvalidValueException | ItemNotSoldException e) {
-            System.out.println(e.getMessage());
+    private void printItemDetails(Item item, boolean showAveragePrice)
+    {
+        System.out.println("*   Item ID: " + item.getSerialNumber());
+        System.out.println("\tItem name: " + item.getName());
+        if(item instanceof UnitItem){
+            System.out.println("\tItem sell by: unit");
+            if (showAveragePrice)
+            System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
+            else
+            System.out.println("\tprice per unit: " + item.getPrice());
         }
+        else {
+            System.out.println("\tItem sell by: weight");
+            if (showAveragePrice)
+                System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
+            else
+                System.out.println("\tprice per kilo: " + item.getPrice());
+        }
+    }
+    private void showItemsInOrder(Order order,int storeID){
+        ArrayList<ItemPair> items = order.getItems();
+        Item item;
+        System.out.println("The order details:");
+        for (ItemPair itemInPair: items) {
+            item =itemInPair.item();
+            printItemDetails(item, false);
+            if(item instanceof UnitItem){
+                System.out.println("\tThe requested amount is: "+ (int)itemInPair.amount()+" units.");
+                System.out.println("\tTotal price of requested item is: "+ (int)itemInPair.amount()* item.getPrice());
+            }
+            else{
+                System.out.println("\tThe requested amount is: "+ itemInPair.amount()+" KG.");
+                System.out.println("\tTotal price of requested item is: "+ itemInPair.amount()* item.getPrice());
+            }
+        }
+        System.out.println("\tThe price per kilometer is: "+ storeEngine.getAllStores().get(storeID).getPPK());
+        System.out.println("\tThe distance from "+storeEngine.getAllStores().get(storeID).getName()+" is :"+order.getDistance()+" KM");
+        System.out.println("\tThe total cost of order is: "+order.getTotalCost());
+        System.out.println("===================================================");
 
+    }
+    private void readFile(){
+        this.storeEngine = new JaxbClassToSdmClass().jaxbClassToStoreManager();
+        fileInSystem = true;
     }
 }
 
