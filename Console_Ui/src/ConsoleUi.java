@@ -163,9 +163,6 @@ public class ConsoleUi {
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    //-----------------------------------
-
-
     private void placeOrder() throws ParseException {
         Order order = null;
         showAllStoresInOrderMenu();
@@ -205,9 +202,6 @@ public class ConsoleUi {
                 System.out.println("Wrong input please try again");
             }
         }while (true);
-
-
-
     }
     private Order createOrder(Point customerLocation, int storeID, int itemID, Date date) {
        ArrayList<ItemPair> items =  getItemsFromUser(storeID, itemID);
