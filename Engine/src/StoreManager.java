@@ -16,6 +16,7 @@ public class StoreManager {
     public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems) {
         this.allStores = allStores;
         this.allItems = allItems;
+        updatePriceForItems();
     }
 
     public Set<Order> getAllOrders() {
@@ -38,6 +39,13 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
+    private void updatePriceForItems(){//TODO: check if this is necesery, maby move it to jaxB קיצר דבר איתי יכלב
+        for (Integer storeKey: allStores.keySet()) {
+            Store store = allStores.get(storeKey);
+            for (Integer itemID: store.getInventory().keySet())
+                allItems.get(itemID).setPrice(store.getInventory().get(itemID).getPrice());
+        }
+    }
     public int NumberOfStoresSellingItem(DtoItem item){
         int numberOfStoresSellingTheItem = 0;
         for(Integer storeId : allStores.keySet()){
@@ -113,7 +121,6 @@ public class StoreManager {
                 allDtoItems.put(key, new DtoWeightItem(currentItem.getSerialNumber(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
             }
         }
-
         return allDtoItems;
     }
     public Order createOrder(Point customerLocation, int storeID, Date date, ArrayList<ItemPair> items) {
@@ -142,6 +149,9 @@ public class StoreManager {
             else
                 amountSold = (int) (allItems.get(itemID).getAmountSold()+1);
             allItems.get(itemID).setAmountSold(amountSold);
+            order.getStore().getInventory().get(itemID).setAmountSold((int) (order.getStore().getInventory().get(itemID).getAmountSold()+ amountSold));//update amount sold
+            order.getStore().setTotalPayment(order.getStore().getTotalPayment()+order.getTotalCost());//update total payments to store
+            order.getStore().getAllOrders().add(order);
         };
     }
 
