@@ -2,7 +2,7 @@ import DtoObjects.DtoItem;
 import DtoObjects.DtoStore;
 import DtoObjects.DtoUnitItem;
 import Exceptions.*;
-
+import Order.*;
 import Item.Item;
 import Item.UnitItem;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
@@ -24,7 +24,7 @@ public class ConsoleUi {
     private StoreManager storeEngine;
     private boolean fileInSystem = false;
 
-    public enum Echoice {
+    public enum Echoic {
         readFile,
         ShowStores,
         ShowItems,
@@ -60,14 +60,14 @@ public class ConsoleUi {
         return choice;
     }
 
-    public void runUI(){
+    public void runUI() {
         System.out.println(menu.getMenuOption());
-        Echoic[] eChoices =  Echoic.values();
+        Echoic[] eChoices = Echoic.values();
         boolean isFileLoaded = false;
-        Echoic choice = eChoices[getAndValidateChoice(6)-1];
-        while (true){
-            if(isFileLoaded || choice == Echoic.readFile){
-                switch (choice){
+        Echoic choice = eChoices[getAndValidateChoice(1,6)];
+        while (true) {
+            if (isFileLoaded || choice == Echoic.readFile) {
+                switch (choice) {
                     case readFile: {
                         readFile();
                         isFileLoaded = true;
@@ -85,20 +85,20 @@ public class ConsoleUi {
                         placeOrder();
                         break;
                     }
-                    case ShowHistory:{
+                    case ShowHistory: {
                         ShowHistory();
                         break;
                     }
-                    case Exit:{
+                    case Exit: {
                         System.exit(0);
                     }
                 }
-            }
-            else {
+            } else {
                 System.out.println("File is not loaded to the system");
             }
-            choice = eChoices[getAndValidateChoice(6)-1];
+            choice = eChoices[getAndValidateChoice(1,6)];
         }
+    }
 
     private void streamShowAllItemsInSystem() {
         System.out.println(storeEngine.getAllItemsDetails());
@@ -108,7 +108,7 @@ public class ConsoleUi {
         storeEngine.getAllOrders().stream().forEach(System.out::println);
     }
 
-    private void showAllStoresInTheSystem() {
+/*    private void showAllStoresInTheSystem() {
 
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
@@ -124,9 +124,9 @@ public class ConsoleUi {
         showStoreInventory(store);
         showStoreOrdersHistory(store);
 
-    }
+    }*/
 
-    private void showStoreInventory(Store store){
+/*    private void showStoreInventory(Store store){
         Map<Integer, Item> currentInventory = store.getInventory();
         System.out.println(store.getName() + " Items are:");
    //     currentInventory.stream()
@@ -136,9 +136,9 @@ public class ConsoleUi {
                 System.out.println("\tTotal payment to the store:" + store.getTotalPayment());
                 System.out.println();
         }
-    }
+    }*/
 
-    private void showItemInStore(Item item){
+    /*private void showItemInStore(Item item){
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
         if(item instanceof UnitItem){
@@ -151,11 +151,11 @@ public class ConsoleUi {
         }
 
         System.out.println("\tTotal amount sold: " + item.getAmountSold());
-    }
+    }*/
 
-    private void showStoreOrdersHistory(Store store){
+/*    private void showStoreOrdersHistory(Store store){
         //TODO fill this method
-    }
+    }*/
     private void placeOrder() throws ParseException {
         Order order = null;
         showAllStoresInOrderMenu();
@@ -359,7 +359,7 @@ public class ConsoleUi {
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void printItemDetails(Item item, boolean showAveragePrice)
+    private void printItemDetails(DtoItem item, boolean showAveragePrice)
     {
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
@@ -379,13 +379,13 @@ public class ConsoleUi {
         }
     }
     private void showItemsInOrder(Order order,int storeID){
-        ArrayList<ItemPair> items = order.getItems();
-        Item item;
+        ArrayList<ItemPair> items = (ArrayList<ItemPair>) order.getItems();
+        DtoItem item;
         System.out.println("The order details:");
         for (ItemPair itemInPair: items) {
-            item =itemInPair.item();
+            item = itemInPair.item();
             printItemDetails(item, false);
-            if(item instanceof UnitItem){
+            if(item instanceof DtoUnitItem){
                 System.out.println("\tThe requested amount is: "+ (int)itemInPair.amount()+" units.");
                 System.out.println("\tTotal price of requested item is: "+ (int)itemInPair.amount()* item.getPrice());
             }
