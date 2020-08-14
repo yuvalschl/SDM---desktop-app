@@ -109,7 +109,7 @@ public class ConsoleUi {
     }
 
     private void ShowHistory() {
-        storeEngine.getAllOrders().stream().forEach(System.out::println);
+        storeEngine.getAllOrders().forEach(System.out::println);
     }
 
     private void showAllStoresInTheSystem() {
@@ -166,10 +166,10 @@ public class ConsoleUi {
         }
         else {
             System.out.println("\tItem sell by: weight");
-            System.out.println("\tPrice per kilo: " + item.getPrice());
+            System.out.println("\tPrice per kilo: " + item.getPrice()); //TODO change to 2 decimal points
         }
 
-        System.out.println("\tTotal amount sold: " + (int)item.getAmountSold());
+        System.out.println("\tTotal amount sold: " + (int)item.getAmountSold()); //TODO change to 2 decimal points
     }
 
     private void showItemInSystem(DtoItem item){
@@ -177,14 +177,14 @@ public class ConsoleUi {
         System.out.println("\tItem name: " + item.getName());
         if(item instanceof DtoUnitItem){
             System.out.println("\tItem sell by: unit");
-            System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
+            System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item)); //TODO change to 2 decimal points
         }
         else {
             System.out.println("\tItem sell by: weight");
-            System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
+            System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));//TODO change to 2 decimal points
         }
 
-        System.out.println("\tTotal amount sold in the system: " + (int)item.getAmountSold());
+        System.out.println("\tTotal amount sold in the system: " + (int)item.getAmountSold());//TODO change to 2 decimal points
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
@@ -193,8 +193,12 @@ public class ConsoleUi {
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
         int storeID = getIDFromUser("store");
-        Date orderDate = getDateOfOrder();
-        Point customerLocation = new Point(1,3);//getCustomerLocation();//TODO delete left of ; and umnark right of it
+        //Date orderDate = getDateOfOrder(); TODO:bring this back
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");
+        Date orderDate = dateFormat.parse("20/05-12:20"); //TODO delete this
+        //TODO: set year to 2020
+        //Point customerLocation = getCustomerLocation();TODO:bring this back
+        Point customerLocation = new Point(1,1);
         showItemsToChooseFrom(storeID);
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         int itemID = getIDFromUser("item");
@@ -458,8 +462,10 @@ public class ConsoleUi {
     }
     private void readFile() throws InvalidFileTypeException, DuplicateValueException, ItemNotSoldException, InvalidValueException {
 
-
-        File file = getFileFromUser();
+        //TODO: get user input and delete hard coded stuff
+        // bring this back
+        // File file = getFileFromUser();
+        File file = new File("ex1-big.xml"); //TODO: delete this
         SuperDuperMarketDescriptor superDuperMarketDescriptor = XmlToObject.fromXmlFileToObject(file);
         JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
         if(superDuperMarketDescriptor == null){
