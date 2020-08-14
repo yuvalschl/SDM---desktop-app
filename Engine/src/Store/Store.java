@@ -16,6 +16,7 @@ public class Store {
     private Set<Order> allOrders;
     private Point location;
     private float PPK;
+    private float totalDeliverycost;
     private float totalPayment;
     private int numberOfItemsSold;
 
@@ -120,5 +121,12 @@ public class Store {
     @Override
     public int hashCode() {
         return Objects.hash(getName(), getSerialNumber(), getInventory(), getAllOrders());
+    }
+
+    public float getTotalDeliveryCost() {
+        return totalDeliverycost;
+    }
+    public void setTotalDeliveryCost(float deliveryCost) {
+        this.totalDeliverycost = deliveryCost;
     }
 }
