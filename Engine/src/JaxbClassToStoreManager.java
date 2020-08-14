@@ -11,8 +11,8 @@ import java.util.List;
 
 public class JaxbClassToStoreManager {
 
-    public StoreManager convertJaxbClassToStoreManager() throws DuplicateValueException, InvalidValueException, ItemNotSoldException {
-        SuperDuperMarketDescriptor xmlStore = XmlToObject.fromXmlFileToObject();
+    public StoreManager convertJaxbClassToStoreManager(SuperDuperMarketDescriptor xmlStore) throws DuplicateValueException, InvalidValueException, ItemNotSoldException {
+/*        SuperDuperMarketDescriptor xmlStore = XmlToObject.fromXmlFileToObject();*/
         Map<Integer, Item> allItems = createAllItemsMap(xmlStore.getSDMItems().getSDMItem());
         Map<Integer, Store> allStores = createAllStoresMap(xmlStore.getSDMStores().getSDMStore(), allItems);
         HashSet<Integer> notSoldItems = checkIfAllTheItemsFromTheFileAreSold(allItems);

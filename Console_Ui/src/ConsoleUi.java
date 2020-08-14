@@ -9,7 +9,11 @@ import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 import jaxb.XmlToObject;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,8 +69,12 @@ public class ConsoleUi {
             if (isFileLoaded || choice == Echoic.readFile) {
                 switch (choice) {
                     case readFile: {
-                        readFile();
-                        isFileLoaded = true;
+                        try{
+                            readFile();
+                            isFileLoaded = true;
+                        }catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
                         break;
                     }
                     case ShowStores: {
@@ -396,16 +404,35 @@ public class ConsoleUi {
         System.out.println("===================================================");
 
     }
-    private void readFile(){
+    private void readFile() throws InvalidFileTypeException, DuplicateValueException, ItemNotSoldException, InvalidValueException {
 
-        SuperDuperMarketDescriptor superDuperMarketDescriptor = XmlToObject.fromXmlFileToObject();
+
+        File file = getFileFromUser();
+        SuperDuperMarketDescriptor superDuperMarketDescriptor = XmlToObject.fromXmlFileToObject(file);
         JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
-        try {
-            this.storeEngine = jaxbClassToStoreManager.convertJaxbClassToStoreManager();
-        } catch (DuplicateValueException | InvalidValueException | ItemNotSoldException e) {
-            System.out.println(e.getMessage());
+        if(superDuperMarketDescriptor == null){
+            throw new NullPointerException("The file you enterd is null");
         }
+        this.storeEngine = jaxbClassToStoreManager.convertJaxbClassToStoreManager(superDuperMarketDescriptor);
         System.out.println("File loaded successfully");
+    }
+
+    private File getFileFromUser() throws InvalidFileTypeException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter full path to the file");
+        String path = scanner.nextLine();
+        if(path == null){
+            throw new NullPointerException("the path you entered is null");
+        }
+        File file = new File(path);
+        if(!file.exists()){
+            throw new InvalidPathException(path, "The path you entered is invalid");
+        }
+        String fileType = file.toString().substring(file.toString().lastIndexOf(".") + 1);
+        if(!fileType.equals("xml")) {
+            throw new InvalidFileTypeException(fileType + " is an invalid file type");
+        }
+        return file;
     }
 }
 
