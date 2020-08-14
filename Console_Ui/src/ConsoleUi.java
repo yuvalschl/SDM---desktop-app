@@ -122,7 +122,7 @@ public class ConsoleUi {
         else
             System.out.println("There were no orders from this store");;
         System.out.println("\tStore PPK:" + store.getPPK());
-        System.out.println("\tThe order total cost for delivery so far is: "+ store.getTotalDeliveryCost());
+        System.out.println("\tThe total cost for delivery so far is: "+ store.getTotalDeliveryCost());
     }
 
     private void showStoreOrdersHistory(Store store) {
