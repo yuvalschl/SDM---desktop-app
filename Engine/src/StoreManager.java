@@ -38,6 +38,7 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
+
     public int NumberOfStoresSellingItem(DtoItem item){
         int numberOfStoresSellingTheItem = 0;
         for(Integer storeId : allStores.keySet()){
@@ -113,7 +114,6 @@ public class StoreManager {
                 allDtoItems.put(key, new DtoWeightItem(currentItem.getSerialNumber(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
             }
         }
-
         return allDtoItems;
     }
     public Order createOrder(Point customerLocation, int storeID, Date date, ArrayList<ItemPair> items) {
@@ -142,6 +142,10 @@ public class StoreManager {
             else
                 amountSold = (int) (allItems.get(itemID).getAmountSold()+1);
             allItems.get(itemID).setAmountSold(amountSold);
+            order.getStore().getInventory().get(itemID).setAmountSold((int) (order.getStore().getInventory().get(itemID).getAmountSold()+ amountSold));//update amount sold
+            order.getStore().setTotalPayment(order.getStore().getTotalPayment()+order.getTotalCost());//update total payments to store
+            order.getStore().getAllOrders().add(order);
+            order.getStore().setTotalDeliveryCost(order.getShippingCost()+order.getStore().getTotalDeliveryCost());
         };
     }
 

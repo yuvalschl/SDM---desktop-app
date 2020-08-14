@@ -61,12 +61,12 @@
 			<delivery-ppk>0</delivery-ppk>
 			<location x="1" y="5"/>
 			<SDM-prices>
-				<SDM-sell item-id="2" price="1"/>
-				<SDM-sell item-id="3" price="1"/>
-				<SDM-sell item-id="4" price="1"/>
-				<SDM-sell item-id="10" price="1"/>
-				<SDM-sell item-id="6" price="1"/>
-				<SDM-sell item-id="8" price="1"/>
+				<SDM-sell item-id="2" price="12"/>
+				<SDM-sell item-id="3" price="11"/>
+				<SDM-sell item-id="4" price="16"/>
+				<SDM-sell item-id="10" price="21"/>
+				<SDM-sell item-id="6" price="51"/>
+				<SDM-sell item-id="8" price="21"/>
 			</SDM-prices>
 		</SDM-store>
 		<SDM-store id="3">

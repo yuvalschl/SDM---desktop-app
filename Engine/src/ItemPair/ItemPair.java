@@ -3,7 +3,7 @@ package ItemPair;
 import DtoObjects.DtoItem;
 
 public class ItemPair {
-        private final double amount;
+        private double amount;
         private final DtoItem item;
 
         public ItemPair(DtoItem item, Double amount)
@@ -23,4 +23,5 @@ public class ItemPair {
         public double amount() {
             return amount;
         }
+        public void setAmount(double amount){ this.amount = amount;};
 }

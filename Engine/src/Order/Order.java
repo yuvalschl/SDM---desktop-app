@@ -12,6 +12,7 @@ public class Order {
     private float totalCost;
     private float distance;
     private Store store;
+    private int serialNumber;
     private static int ID = 0;
     private ArrayList<ItemPair> items;
 
@@ -23,7 +24,7 @@ public class Order {
         this.totalCost = totalCost;
         this.items = items;
         this.distance = distance;
-        this.ID = ++ID;
+        this.serialNumber = ++ID;
         this.store = store;
     }
 
@@ -38,8 +39,8 @@ public class Order {
                 "\tTotal order price: "+totalCost;
     }
 
-    public static int getID() {
-        return ID;
+    public  int getSerialNumber() {
+        return serialNumber;
     }
 
     public Store getStore() {

@@ -61,11 +61,11 @@ public class ConsoleUi {
     }
 
     public void runUI() {
-        System.out.println(menu.getMenuOption());
         Echoic[] eChoices = Echoic.values();
         boolean isFileLoaded = false;
-        Echoic choice = eChoices[getAndValidateChoice(1,6) - 1];
         while (true) {
+            System.out.println(menu.getMenuOption());
+            Echoic choice = eChoices[getAndValidateChoice(1,6) - 1];
             if (isFileLoaded || choice == Echoic.readFile) {
                 switch (choice) {
                     case readFile: {
@@ -103,9 +103,8 @@ public class ConsoleUi {
                 }
             }
             else {
-                System.out.println("File is not loaded to the system");
+                System.out.println("No files are loaded to the system yet");
             }
-            choice = eChoices[getAndValidateChoice(1,6) - 1];
         }
     }
 
@@ -126,9 +125,27 @@ public class ConsoleUi {
         System.out.println("Store ID:" + store.getSerialNumber());
         System.out.println("Store name:" + store.getName());
         showStoreInventory(store);
-        /*showStoreOrdersHistory(store);*/
-        System.out.println("Store PPK:" + store.getPPK());
-        System.out.println("Total payment to the store:" + store.getTotalPayment());
+        if (store.getAllOrders().size() != 0)
+            showStoreOrdersHistory(store);
+        else
+            System.out.println("There were no orders from this store");;
+        System.out.println("\tStore PPK:" + store.getPPK());
+        System.out.println("\tThe total cost for delivery so far is: "+ store.getTotalDeliveryCost());
+    }
+
+    private void showStoreOrdersHistory(Store store) {
+        System.out.println("The orders are:\n");
+        for(Order order: store.getAllOrders()){
+            System.out.println("*  Order ID: "+order.getSerialNumber());
+            System.out.println("\tThe order date is: "+ order.getDateOfOrder());
+            System.out.println("\tThe amount of items are: "+order.getAmountOfItems());
+            System.out.println("\tThe items total cost is: "+order.getTotalPriceOfItems());
+            System.out.println("\tThe delivery cost is: "+order.getShippingCost());
+            System.out.println("\tThe order total cost is: "+ order.getTotalCost());
+        }
+    }
+    private void printOrderHistory(Order order){
+        System.out.println();
     }
 
     private void showStoreInventory(Store store){
@@ -152,7 +169,7 @@ public class ConsoleUi {
             System.out.println("\tPrice per kilo: " + item.getPrice());
         }
 
-        System.out.println("\tTotal amount sold: " + item.getAmountSold());
+        System.out.println("\tTotal amount sold: " + (int)item.getAmountSold());
     }
 
     private void showItemInSystem(DtoItem item){
@@ -167,18 +184,18 @@ public class ConsoleUi {
             System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
         }
 
-        System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
+        System.out.println("\tTotal amount sold in the system: " + (int)item.getAmountSold());
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void placeOrder() throws ParseException {
+    private void placeOrder() throws ParseException {//TODO: if the same item id is selected more then onve, add the details to the same ID
         Order order = null;
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
         int storeID = getIDFromUser("store");
         Date orderDate = getDateOfOrder();
         Point customerLocation = new Point(1,3);//getCustomerLocation();//TODO delete left of ; and umnark right of it
-        showAllItemsInSystem();
+        showItemsToChooseFrom(storeID);
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         int itemID = getIDFromUser("item");
         if (itemID != -1 ) {
@@ -193,10 +210,18 @@ public class ConsoleUi {
                     System.out.println("Order canceled.");
             }
         }
+        else
+            System.out.println("No order was made.");
+    }
+
+    private void showItemsToChooseFrom(int storeID) {
+        Map<Integer, DtoItem> DtoItems = storeEngine.getAllDtoItems();
+        for (Integer key: DtoItems.keySet())
+            printItemDetails(DtoItems.get(key), false, storeID);
     }
 
     private Boolean getOrderApproval(){
-        Scanner input = new Scanner(System.in);
+        Scanner input = new  Scanner(System.in);
         do {
             System.out.println("enter 1 to approve the order or 2 to cancel the order");
             String choice = input.next();
@@ -222,12 +247,24 @@ public class ConsoleUi {
     private ArrayList<ItemPair> getItemsFromUser(int storeID, int itemID) {
         ArrayList<ItemPair> items = new ArrayList<ItemPair>();
         double amount;
+
         while (true){
+            boolean itemExistInOrder = false;
             DtoStore store= storeEngine.getAllDtoStores().get(storeID);
             if(store.getInventory().containsKey(itemID)){
                 amount = getItemAmount(store.getInventory().get(itemID));
-                ItemPair pair = new ItemPair(store.getInventory().get(itemID), amount);
-                items.add(pair);
+                for (ItemPair pair: items) {
+                    if (pair.item().getSerialNumber() == itemID ) {
+                        itemExistInOrder = true;
+                        amount += pair.amount();
+                        pair.setAmount(amount);
+                        break;
+                    }
+                }
+                if(!itemExistInOrder){
+                    ItemPair pair = new ItemPair(store.getInventory().get(itemID), amount);
+                    items.add(pair);
+                }
             }
             else {
                 System.out.println("The store "+ storeEngine.getAllStores().get(storeID).getName()+
@@ -307,7 +344,7 @@ public class ConsoleUi {
         do {
             try{
                 String userSelectionString = scanner.next();
-                if (userSelectionString.charAt(0) == 'q' && StoreOrItem =="item")
+                if (userSelectionString.charAt(0) == 'q' && StoreOrItem =="item" && userSelectionString.length()==1)
                     return -1;
                 userSelection = Integer.parseInt(userSelectionString);
                 Method method = null;
@@ -346,9 +383,9 @@ public class ConsoleUi {
     }
 
     private void showStoreInPurchaseMenu(DtoStore store){
-        System.out.println("Store.Store ID:" + store.getSerialNumber());
-        System.out.println("Store.Store name:" + store.getName());
-        System.out.println("Store.Store PPK:" + store.getPPK());
+        System.out.println("Store ID:" + store.getSerialNumber());
+        System.out.println("Store name:" + store.getName());
+        System.out.println("Store PPK:" + store.getPPK());
     }
 
     private void showAllItemsInSystem() {
@@ -362,23 +399,37 @@ public class ConsoleUi {
     }
 
 
-    private void printItemDetails(DtoItem item, boolean showAveragePrice)
+    private void printItemDetails(DtoItem item, boolean showAveragePrice, int storeID)
     {
-        System.out.println("*   Item ID: " + item.getSerialNumber());
+        Store store =storeEngine.getAllStores().get(storeID);
+        int itemID = item.getSerialNumber();
+        System.out.println("*   Item ID: " +itemID );
         System.out.println("\tItem name: " + item.getName());
         if(item instanceof DtoUnitItem){
             System.out.println("\tItem sell by: unit");
             if (showAveragePrice)
             System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
-            else
-            System.out.println("\tprice per unit: " + item.getPrice());
+            else {
+                if (store.getInventory().containsKey(itemID)) {
+                    System.out.println("\tprice per unit: " + store.getInventory().get(itemID).getPrice());
+                } else
+                    System.out.println("\tThe store " + store.getName() + " does not sell this item");
+            }
         }
         else {
             System.out.println("\tItem sell by: weight");
-            if (showAveragePrice)
-                System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
-            else
-                System.out.println("\tprice per kilo: " + item.getPrice());
+            {
+                if (showAveragePrice)
+                    System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
+                else{
+                    if(store.getInventory().containsKey(itemID)){
+                        System.out.println("\tprice per kilo: " + store.getInventory().get(itemID).getPrice());
+                    }
+                    else
+                        System.out.println("\tThe store "+ store.getName()+" does not sell this item");
+                }
+            }
+
         }
     }
 
@@ -388,7 +439,7 @@ public class ConsoleUi {
         System.out.println("The order details:");
         for (ItemPair itemInPair: items) {
             item = itemInPair.item();
-            printItemDetails(item, false);
+            printItemDetails(item, false,storeID);
             if(item instanceof DtoUnitItem){
                 System.out.println("\tThe requested amount is: "+ (int)itemInPair.amount()+" units.");
                 System.out.println("\tTotal price of requested item is: "+ (int)itemInPair.amount()* item.getPrice());
@@ -399,7 +450,8 @@ public class ConsoleUi {
             }
         }
         System.out.println("\tThe price per kilometer is: "+ storeEngine.getAllStores().get(storeID).getPPK());
-        System.out.println("\tThe distance from "+storeEngine.getAllStores().get(storeID).getName()+" is :"+order.getDistance()+" KM");
+        System.out.println("\tThe distance from "+storeEngine.getAllStores().get(storeID).getName()+" is :"+String.format("%.2f", order.getDistance())+" KM");
+        System.out.println("\tThe delivery cost is: "+order.getShippingCost());//TODO: check how to present two number after point
         System.out.println("\tThe total cost of order is: "+order.getTotalCost());
         System.out.println("===================================================");
 
