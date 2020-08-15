@@ -2,10 +2,11 @@ package Order;
 
 import Store.*;
 import ItemPair.*;
+
 import java.util.*;
 
 
-    //TODO set correct order id
+//TODO set correct order id
 public class Order {
     private Date dateOfOrder;
     private int amountOfItems;
@@ -14,8 +15,8 @@ public class Order {
     private float totalCost;
     private float distance;
     private Store store;
-    private int serialNumber;
-    private static int ID = 0;
+    private int orderId;
+    private static int staticId = 0;
     private ArrayList<ItemPair> items;
 
     public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, ArrayList<ItemPair> items, float distance, Store store) {
@@ -26,23 +27,45 @@ public class Order {
         this.totalCost = totalCost;
         this.items = items;
         this.distance = distance;
-        this.serialNumber = ++ID;
+        this.orderId = setIdForNewOrder();
         this.store = store;
     }
 
     public String toString() {
-        return "*   Order ID: " +ID+"\n" +
-                "\tDate: "+dateOfOrder+"\n"+
-                "\tStore.Store name: "+store.getName()+"\n"+
-                "\tStore.Store ID: "+store.getSerialNumber()+"\n"+
-                "\tNumber of items in order: "+items.size()+"\n"+
-                "\tTotal item cost: "+totalPriceOfItems+"\n"+
-                "\tShipping price: "+shippingCost+"\n"+
-                "\tTotal order price: "+totalCost;
+        return "*   Order ID: " + orderId + "\n" +
+                "\tDate: " + dateOfOrder + "\n" +
+                "\tStore.Store name: " + store.getName() + "\n" +
+                "\tStore.Store ID: " + store.getSerialNumber() + "\n" +
+                "\tNumber of items in order: " + items.size() + "\n" +
+                "\tTotal item cost: " + totalPriceOfItems + "\n" +
+                "\tShipping price: " + shippingCost + "\n" +
+                "\tTotal order price: " + totalCost;
     }
 
-    public  int getSerialNumber() {
-        return serialNumber;
+    private int setIdForNewOrder(){
+        staticId++;
+        return staticId;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+
+    public void setItems(ArrayList<ItemPair > items) {
+        this.items = items;
+    }
+
+    public int getOrderId() {
+        return orderId;
     }
 
     public Store getStore() {

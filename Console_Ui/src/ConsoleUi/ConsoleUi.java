@@ -1,20 +1,21 @@
+package ConsoleUi;
+
 import DtoObjects.*;
 import Exceptions.*;
 import ItemPair.ItemPair;
 import Order.*;
-import Item.Item;
-import Item.UnitItem;
-import Store.Store;
+import Item.*;
+import Store.*;
+import StoreManager.StoreManager;
+import jaxb.JaxbClassToStoreManager;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 import jaxb.XmlToObject;
-
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,6 +24,8 @@ public class ConsoleUi {
 
     private final Menu menu = new Menu();
     private StoreManager storeEngine;
+    private String currentFilePath;
+    private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     public enum Echoic {
         readFile,
@@ -109,7 +112,20 @@ public class ConsoleUi {
     }
 
     private void ShowHistory() {
-        storeEngine.getAllOrders().forEach(System.out::println);
+        storeEngine.getAllOrders().forEach(this::printSingleOrder);
+    }
+
+    private void printSingleOrder(Order order){
+        System.out.println(
+                "*   Order ID: " +order.getOrderId()+"\n" +
+                "\tDate: "+ order.getDateOfOrder() +"\n"+
+                "\tStore.Store name: "+ order.getStore().getName() +"\n"+
+                "\tStore.Store ID: "+ order.getStore().getSerialNumber() +"\n"+
+                "\tNumber of items in order: "+ decimalFormat.format(order.getAmountOfItems()) +"\n"+
+                "\tTotal item cost: "+  decimalFormat.format(order.getTotalPriceOfItems()) +"\n"+
+                "\tShipping price: "+ decimalFormat.format(order.getShippingCost()) +"\n"+
+                "\tTotal order price: "+ decimalFormat.format(order.getTotalCost()));
+
     }
 
     private void showAllStoresInTheSystem() {
@@ -130,22 +146,19 @@ public class ConsoleUi {
         else
             System.out.println("There were no orders from this store");;
         System.out.println("\tStore PPK:" + store.getPPK());
-        System.out.println("\tThe total cost for delivery so far is: "+ store.getTotalDeliveryCost());
+        System.out.println("\tThe total cost for delivery so far is: "+ decimalFormat.format(store.getTotalDeliveryCost()));
     }
 
     private void showStoreOrdersHistory(Store store) {
         System.out.println("The orders are:\n");
         for(Order order: store.getAllOrders()){
-            System.out.println("*  Order ID: "+order.getSerialNumber());
+            System.out.println("*  Order ID: "+order.getOrderId());
             System.out.println("\tThe order date is: "+ order.getDateOfOrder());
             System.out.println("\tThe amount of items are: "+order.getAmountOfItems());
-            System.out.println("\tThe items total cost is: "+order.getTotalPriceOfItems());
-            System.out.println("\tThe delivery cost is: "+order.getShippingCost());
-            System.out.println("\tThe order total cost is: "+ order.getTotalCost());
+            System.out.println("\tThe items total cost is: "+decimalFormat.format(order.getTotalPriceOfItems()));
+            System.out.println("\tThe delivery cost is: "+ decimalFormat.format(order.getShippingCost()));
+            System.out.println("\tThe order total cost is: "+ decimalFormat.format(order.getTotalCost()));
         }
-    }
-    private void printOrderHistory(Order order){
-        System.out.println();
     }
 
     private void showStoreInventory(Store store){
@@ -162,14 +175,14 @@ public class ConsoleUi {
         System.out.println("\tItem name: " + item.getName());
         if(item instanceof UnitItem){
             System.out.println("\tItem sell by: unit");
-            System.out.println("\tPrice per unit: " + item.getPrice());
+            System.out.println("\tPrice per unit: " + decimalFormat.format(item.getPrice()));
         }
         else {
             System.out.println("\tItem sell by: weight");
-            System.out.println("\tPrice per kilo: " + item.getPrice()); //TODO change to 2 decimal points
+            System.out.println("\tPrice per kilo: " + decimalFormat.format(item.getPrice()));
         }
 
-        System.out.println("\tTotal amount sold: " + (int)item.getAmountSold()); //TODO change to 2 decimal points
+        System.out.println("\tTotal amount sold: " + (int)item.getAmountSold()); //TODO Check why casting
     }
 
     private void showItemInSystem(DtoItem item){
@@ -177,14 +190,14 @@ public class ConsoleUi {
         System.out.println("\tItem name: " + item.getName());
         if(item instanceof DtoUnitItem){
             System.out.println("\tItem sell by: unit");
-            System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item)); //TODO change to 2 decimal points
+            System.out.println("\tAverage price per unit: " + decimalFormat.format(storeEngine.getAveragePrice(item)));
         }
         else {
             System.out.println("\tItem sell by: weight");
-            System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));//TODO change to 2 decimal points
+            System.out.println("\tAverage price per kilo: " + decimalFormat.format(storeEngine.getAveragePrice(item)));
         }
 
-        System.out.println("\tTotal amount sold in the system: " + (int)item.getAmountSold());//TODO change to 2 decimal points
+        System.out.println("\tTotal amount sold in the system: " + (int)item.getAmountSold());//TODO check why casting
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
@@ -446,17 +459,17 @@ public class ConsoleUi {
             printItemDetails(item, false,storeID);
             if(item instanceof DtoUnitItem){
                 System.out.println("\tThe requested amount is: "+ (int)itemInPair.amount()+" units.");
-                System.out.println("\tTotal price of requested item is: "+ (int)itemInPair.amount()* item.getPrice());
+                System.out.println("\tTotal price of requested item is: "+ decimalFormat.format((int)itemInPair.amount()* item.getPrice()));
             }
             else{
-                System.out.println("\tThe requested amount is: "+ itemInPair.amount()+" KG.");
-                System.out.println("\tTotal price of requested item is: "+ itemInPair.amount()* item.getPrice());
+                System.out.println("\tThe requested amount is: "+ decimalFormat.format(itemInPair.amount()) +" KG.");
+                System.out.println("\tTotal price of requested item is: "+ decimalFormat.format(itemInPair.amount()* item.getPrice()));
             }
         }
         System.out.println("\tThe price per kilometer is: "+ storeEngine.getAllStores().get(storeID).getPPK());
-        System.out.println("\tThe distance from "+storeEngine.getAllStores().get(storeID).getName()+" is :"+String.format("%.2f", order.getDistance())+" KM");
-        System.out.println("\tThe delivery cost is: "+order.getShippingCost());//TODO: check how to present two number after point
-        System.out.println("\tThe total cost of order is: "+order.getTotalCost());
+        System.out.println("\tThe distance from "+storeEngine.getAllStores().get(storeID).getName()+" is :"+decimalFormat.format(order.getDistance())+" KM");
+        System.out.println("\tThe delivery cost is: "+ decimalFormat.format(order.getShippingCost()));
+        System.out.println("\tThe total cost of order is: "+decimalFormat.format(order.getTotalCost()));
         System.out.println("===================================================");
 
     }
@@ -469,10 +482,16 @@ public class ConsoleUi {
         SuperDuperMarketDescriptor superDuperMarketDescriptor = XmlToObject.fromXmlFileToObject(file);
         JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
         if(superDuperMarketDescriptor == null){
-            throw new NullPointerException("The file you enterd is null");
+            throw new NullPointerException("The file you entered is null");
         }
-        this.storeEngine = jaxbClassToStoreManager.convertJaxbClassToStoreManager(superDuperMarketDescriptor);
-        System.out.println("File loaded successfully");
+        if(file.toString() != currentFilePath){
+            this.storeEngine = jaxbClassToStoreManager.convertJaxbClassToStoreManager(superDuperMarketDescriptor);
+            currentFilePath = file.toString();
+            System.out.println("File loaded successfully");
+        }
+        else {
+            System.out.println("This file is already loaded");
+        }
     }
 
     private File getFileFromUser() throws InvalidFileTypeException {

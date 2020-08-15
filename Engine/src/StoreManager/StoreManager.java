@@ -1,3 +1,5 @@
+package StoreManager;
+
 import DtoObjects.*;
 import Item.*;
 import ItemPair.ItemPair;

@@ -1,10 +1,13 @@
+package jaxb;
+
 import Exceptions.*;
 import Item.Item;
 import Item.WeightItem;
 import Item.UnitItem;
 import Store.Store;
+import StoreManager.StoreManager;
 import jaxb.JaxbClasses.*;
-import jaxb.XmlToObject;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;

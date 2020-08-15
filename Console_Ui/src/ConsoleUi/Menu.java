@@ -1,3 +1,5 @@
+package ConsoleUi;
+
 import java.util.List;
 
 public class Menu {
