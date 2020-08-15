@@ -188,6 +188,7 @@ public class StoreManager {
             Store currentStore = allStores.get(shippingCosts.getKey());
             currentStore.setTotalDeliveryCost(currentStore.getTotalDeliveryCost() + shippingCosts.getValue());
         }
+
         for(Map.Entry<Integer, Store> store : order.getStores().entrySet()){
             float shippingCost = order.getShippingCostByStore().get(store.getKey());
             StoreOrder orderToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, order.getDistance(), store.getValue(), order.getOrderId());

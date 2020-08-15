@@ -37,6 +37,7 @@ public class StoreOrder {
         this.items.add(item);
         totalCost += item.getItem().getPrice() * item.getAmount();
         totalPriceOfItems += item.getItem().getPrice() * item.getAmount();
+        amountOfItems += item.getAmount();
     }
 
     public void setDateOfOrder(Date dateOfOrder) {

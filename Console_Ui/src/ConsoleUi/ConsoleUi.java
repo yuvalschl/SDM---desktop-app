@@ -122,7 +122,7 @@ public class ConsoleUi {
         System.out.println(
                 "*   Order ID: " +order.getOrderId()+"\n" +
                 "\tDate: "+ order.getDateOfOrder() +"\n"+
-                "\tStores names: "+ order.getStores().toString() +"\n"+
+                "\tStores names: "+ allStoresNameString(order) +"\n"+
                 "\tStores ID: "+ allStoresIdString(order) +"\n"+
                 "\tNumber of items in order: "+ decimalFormat.format(order.getAmountOfItems()) +"\n"+
                 "\tTotal item cost: "+  decimalFormat.format(order.getTotalPriceOfItems()) +"\n"+
@@ -131,10 +131,20 @@ public class ConsoleUi {
 
     }
 
+    private String allStoresNameString(Order order){
+        String storesNames = "";
+        for(Store store : order.getStores().values()){
+            storesNames += store.getName() + ", ";
+        }
+
+        return storesNames;
+    }
+
+
     private String allStoresIdString(Order order){
         String storesId = "";
         for(Store store : order.getStores().values()){
-            storesId += store.getSerialNumber() + " ";
+            storesId += store.getSerialNumber() + ", ";
         }
 
         return storesId;
