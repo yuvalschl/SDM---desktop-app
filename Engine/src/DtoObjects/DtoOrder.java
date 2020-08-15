@@ -16,7 +16,7 @@ public class DtoOrder {
     private float totalCost;
     private float distance;
     private Store store;
-    private static int ID;
+    private int orderId;
     private ArrayList<ItemPair> items;
 
     public DtoOrder(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, float distance, Store store, ArrayList<ItemPair> items) {
@@ -59,8 +59,8 @@ public class DtoOrder {
         return store;
     }
 
-    public static int getID() {
-        return ID;
+    public int getOrderId() {
+        return orderId;
     }
 
     public ArrayList<ItemPair> getItems() {

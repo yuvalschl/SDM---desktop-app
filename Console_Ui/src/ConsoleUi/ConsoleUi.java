@@ -40,8 +40,8 @@ public class ConsoleUi {
         Scanner input = new Scanner(System.in);
         int choice = -1;
         boolean isValid = false;
+        System.out.println("Please enter a number between "+smallestChoice+" and " + largestChoice+":\n");
         do {
-            System.out.println("Please enter a number between "+smallestChoice+" and " + largestChoice+":\n");
             String choiceString = input.next();
             if (!choiceString.isEmpty()) {
                 try {
@@ -112,6 +112,9 @@ public class ConsoleUi {
     }
 
     private void ShowHistory() {
+        if (storeEngine.getAllOrders().isEmpty()){
+            System.out.println("No order were made yet");
+        }
         storeEngine.getAllOrders().forEach(this::printSingleOrder);
     }
 
@@ -201,7 +204,7 @@ public class ConsoleUi {
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void placeOrder() throws ParseException {//TODO: if the same item id is selected more then onve, add the details to the same ID
+    private void placeOrder() throws ParseException {
         Order order = null;
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
