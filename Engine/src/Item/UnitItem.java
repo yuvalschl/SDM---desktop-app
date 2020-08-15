@@ -15,6 +15,12 @@ public class UnitItem extends Item {
         amountSold = 0;
     }
 
+    public UnitItem(int serialNumber, String name, float amountSold, float price) {
+        super(serialNumber, name, price);
+        this.amountSold =  (int)amountSold;
+    }
+
+
     public float getAmountSold() {
         return amountSold;
     }

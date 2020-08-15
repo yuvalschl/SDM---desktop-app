@@ -12,14 +12,15 @@ public class Order {
     private int amountOfItems;
     private float totalPriceOfItems;
     private float shippingCost;
+    private HashMap<Integer, Float> shippingCostByStore;
     private float totalCost;
     private float distance;
-    private Store store;
+    private HashMap<Integer, Store> stores;
     private int orderId;
     private static int staticId = 0;
-    private ArrayList<ItemPair> items;
+    private ArrayList<ItemAmountAndStore> items;
 
-    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, ArrayList<ItemPair> items, float distance, Store store) {
+    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, ArrayList<ItemAmountAndStore> items, float distance, HashMap<Integer, Store> store) {
         this.dateOfOrder = dateOfOrder;
         this.amountOfItems = amountOfItems;
         this.totalPriceOfItems = totalPriceOfItems;
@@ -28,39 +29,58 @@ public class Order {
         this.items = items;
         this.distance = distance;
         this.orderId = setIdForNewOrder();
-        this.store = store;
+        this.stores = store;
+        this.shippingCostByStore = new HashMap<>();
     }
 
-    public String toString() {
+    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost,
+                 HashMap<Integer, Store> stores, ArrayList<ItemAmountAndStore> items, HashMap<Integer, Float> shippingCostByStore) {
+        this.dateOfOrder = dateOfOrder;
+        this.amountOfItems = amountOfItems;
+        this.totalPriceOfItems = totalPriceOfItems;
+        this.shippingCost = shippingCost;
+        this.totalCost = totalCost;
+        this.stores = stores;
+        this.orderId = setIdForNewOrder();
+        this.items = items;
+        this.shippingCostByStore = shippingCostByStore;
+    }
+    /*    public String toString() {
         return "*   Order ID: " + orderId + "\n" +
                 "\tDate: " + dateOfOrder + "\n" +
-                "\tStore.Store name: " + store.getName() + "\n" +
-                "\tStore.Store ID: " + store.getSerialNumber() + "\n" +
+                "\tStore.Store name: " + stores.getName() + "\n" +
+                "\tStore.Store ID: " + stores.getSerialNumber() + "\n" +
                 "\tNumber of items in order: " + items.size() + "\n" +
                 "\tTotal item cost: " + totalPriceOfItems + "\n" +
                 "\tShipping price: " + shippingCost + "\n" +
                 "\tTotal order price: " + totalCost;
-    }
+    }*/
 
     private int setIdForNewOrder(){
         staticId++;
         return staticId;
     }
 
+    public HashMap<Integer, Float> getShippingCostByStore() {
+        return shippingCostByStore;
+    }
+
+    public void setShippingCostByStore(HashMap<Integer, Float> shippingCostByStore) {
+        this.shippingCostByStore = shippingCostByStore;
+    }
+
+
     public void setDistance(float distance) {
         this.distance = distance;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
 
-    public void setItems(ArrayList<ItemPair > items) {
+    public void setItems(ArrayList<ItemAmountAndStore> items) {
         this.items = items;
     }
 
@@ -68,15 +88,27 @@ public class Order {
         return orderId;
     }
 
-    public Store getStore() {
-        return store;
+    public HashMap<Integer, Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(HashMap<Integer, Store> stores) {
+        this.stores = stores;
+    }
+
+    public static int getStaticId() {
+        return staticId;
+    }
+
+    public static void setStaticId(int staticId) {
+        Order.staticId = staticId;
     }
 
     public float getDistance() {
         return distance;
     }
 
-    public ArrayList<ItemPair> getItems() {
+    public ArrayList<ItemAmountAndStore> getItems() {
         return items;
     }
 

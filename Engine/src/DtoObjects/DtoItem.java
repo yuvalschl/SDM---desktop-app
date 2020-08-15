@@ -13,6 +13,13 @@ public abstract class DtoItem {
         this.amountSold = amountSold;
     }
 
+    public DtoItem(DtoItem item) {
+        this.serialNumber = item.getSerialNumber();
+        this.name = item.getName();
+        this.price = item.getPrice();
+        this.amountSold = item.getPrice();
+    }
+
     public int getSerialNumber() {
         return serialNumber;
     }

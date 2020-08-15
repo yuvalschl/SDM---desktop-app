@@ -9,12 +9,12 @@ public class DtoStore {
     private String name;
     private int serialNumber;
     private Map<Integer, DtoItem> inventory;
-    private Set<DtoOrder> allOrders;
+    private Set<DtoStoreOrder> allOrders;
     private Point location;
     private float PPK;
     private float totalPayment;
 
-    public DtoStore(String name, int serialNumber, Map<Integer, DtoItem> inventory, Set<DtoOrder> allOrders, Point location, float PPK, float totalPayment) {
+    public DtoStore(String name, int serialNumber, Map<Integer, DtoItem> inventory, Set<DtoStoreOrder> allOrders, Point location, float PPK, float totalPayment) {
         this.name = name;
         this.serialNumber = serialNumber;
         this.inventory = inventory;
@@ -36,7 +36,7 @@ public class DtoStore {
         return inventory;
     }
 
-    public Set<DtoOrder> getAllOrders() {
+    public Set<DtoStoreOrder> getAllOrders() {
         return allOrders;
     }
 

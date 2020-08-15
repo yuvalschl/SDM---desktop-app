@@ -5,4 +5,7 @@ public class DtoUnitItem extends DtoItem {
         super(serialNumber, name, price, amountSold);
     }
 
+    public DtoUnitItem(DtoItem item) {
+        super(item);
+    }
 }

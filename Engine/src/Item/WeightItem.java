@@ -15,6 +15,11 @@ public class WeightItem extends Item {
         amountSold = 0;
     }
 
+    public WeightItem(int serialNumber, String name, float amountSold, float price) {
+        super(serialNumber, name, price);
+        this.amountSold = amountSold;
+    }
+
     public float getAmountSold() {
         return amountSold;
     }

@@ -1,7 +1,7 @@
 package Store;
 
 import Item.Item;
-import Order.Order;
+import Order.*;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ public class Store {
     private String name;
     private int serialNumber;
     private Map<Integer, Item> inventory;
-    private Set<Order> allOrders;
+    private Set<StoreOrder> allOrders;
     private Point location;
     private float PPK;
     private float totalDeliverycost;
@@ -28,7 +28,7 @@ public class Store {
         this.numberOfItemsSold = numberOfItemsSold;
     }
 
-    public Store(String name, int serialNumber, Map<Integer, Item> inventory, Set<Order> allOrders, Point location, float PPK) {
+    public Store(String name, int serialNumber, Map<Integer, Item> inventory, Set<StoreOrder> allOrders, Point location, float PPK) {
         this.name = name;
         this.serialNumber = serialNumber;
         this.inventory = inventory;
@@ -36,7 +36,7 @@ public class Store {
         this.location = location;
         this.totalPayment = 0;
         this.PPK = PPK;
-        this.allOrders = new HashSet<Order>();
+        this.allOrders = new HashSet<StoreOrder>();
     }
 
     public Point getLocation() {
@@ -71,11 +71,11 @@ public class Store {
         this.inventory = inventory;
     }
 
-    public Set<Order> getAllOrders() {
+    public Set<StoreOrder> getAllOrders() {
         return allOrders;
     }
 
-    public void setAllOrders(Set<Order> allOrders) {
+    public void setAllOrders(Set<StoreOrder> allOrders) {
         this.allOrders = allOrders;
     }
 

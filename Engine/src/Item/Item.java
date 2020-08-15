@@ -16,6 +16,7 @@ public abstract class Item {
         isSold = false;
     }
 
+
     public boolean getIsSold() {
         return isSold;
     }
