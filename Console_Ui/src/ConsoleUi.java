@@ -348,7 +348,7 @@ public class ConsoleUi {
         do {
             try{
                 String userSelectionString = scanner.next();
-                if (userSelectionString.charAt(0) == 'q' && StoreOrItem =="item" && userSelectionString.length()==1)
+                if ( userSelectionString.toLowerCase().charAt(0) == 'q' && StoreOrItem =="item" && userSelectionString.length()== 1)
                     return -1;
                 userSelection = Integer.parseInt(userSelectionString);
                 Method method = null;
