@@ -18,7 +18,7 @@ public class DtoStoreOrder {
     private int orderId;
     private ArrayList<ItemAmountAndStore> items;
 
-    public DtoStoreOrder(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, float distance, Store store, ArrayList<ItemAmountAndStore> items) {
+    public DtoStoreOrder(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, float distance, Store store, ArrayList<ItemAmountAndStore> items, int orderId) {
         this.dateOfOrder = dateOfOrder;
         this.amountOfItems = amountOfItems;
         this.totalPriceOfItems = totalPriceOfItems;

@@ -117,7 +117,7 @@ public class StoreManager {
         if(store.getAllOrders() != null){
             for(StoreOrder order : store.getAllOrders()){
                 currentOrdersDtoSet.add(new DtoStoreOrder(order.getDateOfOrder(),order.getAmountOfItems(),order.getTotalPriceOfItems(),
-                        order.getShippingCost(),order.getTotalCost(),order.getDistance(), store, order.getItems()));
+                        order.getShippingCost(),order.getTotalCost(),order.getDistance(), store, order.getItems(), order.getOrderId()));
             }
         }
 
@@ -231,7 +231,7 @@ public class StoreManager {
         return (float) Math.sqrt(Math.pow(point1.x-point2.x, 2)+Math.pow(point1.y-point2.y, 2));
     }
 
-    public String getAllStoresDetails(){//TODO: add סעיף e an below
+    public String getAllStoresDetails(){
         //allItems.forEach((Integer, Item)-> System.out.println(Item.getItemDetails()));
         String storeDetails = "";
         for (Map.Entry<Integer, Store> set : allStores.entrySet()) {

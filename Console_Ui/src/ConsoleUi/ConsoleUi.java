@@ -173,7 +173,7 @@ public class ConsoleUi {
         if (store.getAllOrders().size() != 0)
             showStoreOrdersHistory(store);
         else
-            System.out.println("There were no orders from this store");
+            System.out.println("\tThere were no orders from this store");
         System.out.println("\tStore PPK:" + store.getPPK());
         System.out.println("\tThe total cost for delivery so far is: " + decimalFormat.format(store.getTotalDeliveriesCost()));
     }

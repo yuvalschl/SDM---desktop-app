@@ -28,7 +28,7 @@ public class Order {
         this.totalCost = totalCost;
         this.items = items;
         this.distance = distance;
-        this.orderId = setIdForNewOrder();
+        this.orderId = ++staticId;
         this.stores = store;
         this.shippingCostByStore = new HashMap<>();
     }
@@ -41,7 +41,7 @@ public class Order {
         this.shippingCost = shippingCost;
         this.totalCost = totalCost;
         this.stores = stores;
-        this.orderId = setIdForNewOrder();
+        this.orderId = ++staticId;
         this.items = items;
         this.shippingCostByStore = shippingCostByStore;
     }
@@ -56,10 +56,10 @@ public class Order {
                 "\tTotal order price: " + totalCost;
     }*/
 
-    private int setIdForNewOrder(){
-        staticId++;
+   /* private int setIdForNewOrder(){
+        this.orderId = staticId++;
         return staticId;
-    }
+    }*/
 
     public HashMap<Integer, Float> getShippingCostByStore() {
         return shippingCostByStore;
