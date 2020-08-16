@@ -10,6 +10,7 @@ import StoreManager.StoreManager;
 import jaxb.JaxbClassToStoreManager;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 import jaxb.XmlToObject;
+
 import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Method;
@@ -35,30 +36,28 @@ public class ConsoleUi {
         Exit
     }
 
-    private int getAndValidateChoice(int smallestChoice ,int largestChoice){
+    private int getAndValidateChoice(int smallestChoice, int largestChoice) {
         Scanner input = new Scanner(System.in);
         int choice = -1;
         boolean isValid = false;
-        System.out.println("Please enter a number between "+smallestChoice+" and " + largestChoice+":\n");
+        System.out.println("Please enter a number between " + smallestChoice + " and " + largestChoice + ":\n");
         do {
             String choiceString = input.next();
             if (!choiceString.isEmpty()) {
                 try {
                     choice = Integer.parseInt(choiceString);
-                    if(choice >= smallestChoice && choice <= largestChoice) {
+                    if (choice >= smallestChoice && choice <= largestChoice) {
                         isValid = true;
-                    }
-                    else {
-                        System.out.println("Please enter a number between "+smallestChoice+" and " + largestChoice);
+                    } else {
+                        System.out.println("Please enter a number between " + smallestChoice + " and " + largestChoice);
                     }
                 } catch (Exception e) {
                     System.out.println("Please enter a number!");
                 }
-            }
-            else   {
+            } else {
                 System.out.println("Answer cannot be empty!");
             }
-        }while(!isValid);
+        } while (!isValid);
         return choice;
     }
 
@@ -67,14 +66,14 @@ public class ConsoleUi {
         boolean isFileLoaded = false;
         while (true) {
             System.out.println(menu.getMenuOption());
-            Echoic choice = eChoices[getAndValidateChoice(1,6) - 1];
+            Echoic choice = eChoices[getAndValidateChoice(1, 6) - 1];
             if (isFileLoaded || choice == Echoic.readFile) {
                 switch (choice) {
                     case readFile: {
-                        try{
+                        try {
                             readFile();
                             isFileLoaded = true;
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             System.out.println(e.getMessage());
                         }
                         break;
@@ -103,36 +102,35 @@ public class ConsoleUi {
                         System.exit(0);
                     }
                 }
-            }
-            else {
+            } else {
                 System.out.println("No files are loaded to the system yet");
             }
         }
     }
 
     private void ShowHistory() {
-        if (storeEngine.getAllOrders().isEmpty()){
+        if (storeEngine.getAllOrders().isEmpty()) {
             System.out.println("No order were made yet");
         }
         storeEngine.getAllOrders().forEach(this::printSingleOrder);
     }
 
-    private void printSingleOrder(Order order){
+    private void printSingleOrder(Order order) {
         System.out.println(
-                "*   Order ID: " +order.getOrderId()+"\n" +
-                "\tDate: "+ order.getDateOfOrder() +"\n"+
-                "\tStores names: "+ allStoresNameString(order) +"\n"+
-                "\tStores ID: "+ allStoresIdString(order) +"\n"+
-                "\tNumber of items in order: "+ decimalFormat.format(order.getAmountOfItems()) +"\n"+
-                "\tTotal item cost: "+  decimalFormat.format(order.getTotalPriceOfItems()) +"\n"+
-                "\tShipping price: "+ decimalFormat.format(order.getShippingCost()) +"\n"+
-                "\tTotal order price: "+ decimalFormat.format(order.getTotalCost()));
+                "*   Order ID: " + order.getOrderId() + "\n" +
+                        "\tDate: " + order.getDateOfOrder() + "\n" +
+                        "\tStores names: " + allStoresNameString(order) + "\n" +
+                        "\tStores ID: " + allStoresIdString(order) + "\n" +
+                        "\tNumber of items in order: " + decimalFormat.format(order.getAmountOfItems()) + "\n" +
+                        "\tTotal item cost: " + decimalFormat.format(order.getTotalPriceOfItems()) + "\n" +
+                        "\tShipping price: " + decimalFormat.format(order.getShippingCost()) + "\n" +
+                        "\tTotal order price: " + decimalFormat.format(order.getTotalCost()));
 
     }
 
-    private String allStoresNameString(Order order){
+    private String allStoresNameString(Order order) {
         StringBuilder storesNames = new StringBuilder();
-        for(Store store : order.getStores().values()){
+        for (Store store : order.getStores().values()) {
             storesNames.append(store.getName()).append(", ");
         }
 
@@ -140,9 +138,9 @@ public class ConsoleUi {
     }
 
 
-    private String allStoresIdString(Order order){
+    private String allStoresIdString(Order order) {
         StringBuilder storesId = new StringBuilder();
-        for(Store store : order.getStores().values()){
+        for (Store store : order.getStores().values()) {
             storesId.append(store.getSerialNumber()).append(", ");
         }
 
@@ -152,13 +150,13 @@ public class ConsoleUi {
     private void showAllStoresInTheSystem() {
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
-        for(Integer storeId : storeEngine.getAllStores().keySet()){
+        for (Integer storeId : storeEngine.getAllStores().keySet()) {
             showStore(storeEngine.getAllStores().get(storeId));
             System.out.println("===================================");
         }
     }
 
-    private void showStore(Store store){
+    private void showStore(Store store) {
         System.out.println("Store ID:" + store.getSerialNumber());
         System.out.println("Store name:" + store.getName());
         showStoreInventory(store);
@@ -167,58 +165,56 @@ public class ConsoleUi {
         else
             System.out.println("There were no orders from this store");
         System.out.println("\tStore PPK:" + store.getPPK());
-        System.out.println("\tThe total cost for delivery so far is: "+ decimalFormat.format(store.getTotalDeliveryCost()));
+        System.out.println("\tThe total cost for delivery so far is: " + decimalFormat.format(store.getTotalDeliveryCost()));
     }
 
     private void showStoreOrdersHistory(Store store) {
         System.out.println("The orders are:\n");
-        for(StoreOrder order: store.getAllOrders()){
-            System.out.println("*  Order ID: "+order.getOrderId());
-            System.out.println("\tThe order date is: "+ order.getDateOfOrder());
-            System.out.println("\tThe amount of items are: "+order.getAmountOfItems());
-            System.out.println("\tThe items total cost is: "+decimalFormat.format(order.getTotalPriceOfItems()));
-            System.out.println("\tThe delivery cost is: "+ decimalFormat.format(order.getShippingCost()));
-            System.out.println("\tThe order total cost is: "+ decimalFormat.format(order.getTotalCost()));
+        for (StoreOrder order : store.getAllOrders()) {
+            System.out.println("*  Order ID: " + order.getOrderId());
+            System.out.println("\tThe order date is: " + order.getDateOfOrder());
+            System.out.println("\tThe amount of items are: " + order.getAmountOfItems());
+            System.out.println("\tThe items total cost is: " + decimalFormat.format(order.getTotalPriceOfItems()));
+            System.out.println("\tThe delivery cost is: " + decimalFormat.format(order.getShippingCost()));
+            System.out.println("\tThe order total cost is: " + decimalFormat.format(order.getTotalCost()));
         }
     }
 
-    private void showStoreInventory(Store store){
+    private void showStoreInventory(Store store) {
         Map<Integer, Item> currentInventory = store.getInventory();
         System.out.println(store.getName() + " Items are:");
-        for(Integer itemId : currentInventory.keySet()){
+        for (Integer itemId : currentInventory.keySet()) {
             showItemInStore(currentInventory.get(itemId));
             System.out.println();
         }
     }
 
-    private void showItemInStore(Item item){
+    private void showItemInStore(Item item) {
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
-        if(item instanceof UnitItem){
+        if (item instanceof UnitItem) {
             System.out.println("\tItem sell by: unit");
             System.out.println("\tPrice per unit: " + decimalFormat.format(item.getPrice()));
-        }
-        else {
+        } else {
             System.out.println("\tItem sell by: weight");
             System.out.println("\tPrice per kilo: " + decimalFormat.format(item.getPrice()));
         }
 
-        System.out.println("\tTotal amount sold: " + (int)item.getAmountSold()); //TODO Check why casting
+        System.out.println("\tTotal amount sold: " + (int) item.getAmountSold()); //TODO Check why casting
     }
 
-    private void showItemInSystem(DtoItem item){
+    private void showItemInSystem(DtoItem item) {
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
-        if(item instanceof DtoUnitItem){
+        if (item instanceof DtoUnitItem) {
             System.out.println("\tItem sell by: unit");
             System.out.println("\tAverage price per unit: " + decimalFormat.format(storeEngine.getAveragePrice(item)));
-        }
-        else {
+        } else {
             System.out.println("\tItem sell by: weight");
             System.out.println("\tAverage price per kilo: " + decimalFormat.format(storeEngine.getAveragePrice(item)));
         }
 
-        System.out.println("\tTotal amount sold in the system: " + (int)item.getAmountSold());//TODO check why casting
+        System.out.println("\tTotal amount sold in the system: " + (int) item.getAmountSold());//TODO check why casting
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
@@ -239,7 +235,7 @@ public class ConsoleUi {
         int itemID = getIDFromUser("item");
         ArrayList<ItemAmountAndStore> orderItems = new ArrayList<>();
         while (itemID != -1) {
-            ItemAmountAndStore itemToAdd  = storeEngine.getCheapestItem(itemID);
+            ItemAmountAndStore itemToAdd = storeEngine.getCheapestItem(itemID);
             double amount = getItemAmount(itemToAdd.getItem());
             itemToAdd.setAmount(amount);
             orderItems.add(itemToAdd);
@@ -248,31 +244,28 @@ public class ConsoleUi {
         }
         Order order = storeEngine.createOrder(customerLocation, orderDate, orderItems);
         showItemsInOrder(order);
-        if(getOrderApproval()){
+        if (getOrderApproval()) {
             storeEngine.placeOrder(order);
             System.out.println("Order was added successfully.");
-        }
-        else {
+        } else {
             System.out.println("Order canceled.");
         }
     }
 
 
-    private Boolean getOrderApproval(){
-        Scanner input = new  Scanner(System.in);
+    private Boolean getOrderApproval() {
+        Scanner input = new Scanner(System.in);
         do {
             System.out.println("enter 1 to approve the order or 2 to cancel the order");
             String choice = input.next();
-            if (choice.charAt(0) == '1'){
+            if (choice.charAt(0) == '1') {
                 return true;
-            }
-            else if(choice.charAt(0) == '2'){
+            } else if (choice.charAt(0) == '2') {
                 return false;
-            }
-            else {
+            } else {
                 System.out.println("Wrong input please try again");
             }
-        }while (true);
+        } while (true);
     }
     /*private Order createOrder(Point customerLocation, int storeID, int itemID, Date date) {
        ArrayList<ItemAmountAndStore> items =  getItemsFromUser(storeID, itemID);
@@ -315,46 +308,54 @@ public class ConsoleUi {
         }
     }*/
 
-    private double getItemAmount(DtoItem item){
+    //TODO re-write the method
+    private double getItemAmount(DtoItem item) {
         Scanner input = new Scanner(System.in);
         double amount;
         String stringAmount;
-        if (item instanceof DtoUnitItem){
-            System.out.println("Please enter how many units of "+ item.getName()+ " would you like");
-           while (true){
-               try {
-                   stringAmount = input.next();
-                   amount = Integer.parseInt(stringAmount);
-                   return amount;
-               }catch (Exception e){
-                   System.out.println("Please enter a whole number!");
-               }
-           }
+        if (item instanceof DtoUnitItem) {
+            System.out.println("Please enter how many units of " + item.getName() + " would you like");
+            while (true) {
+                try {
+                    stringAmount = input.next();
+                    amount = Integer.parseInt(stringAmount);
+                    if (amount <= 0) {
+                        System.out.println("Please enter a positive number");
+                    } else {
+                        return amount;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Please enter a whole number!");
+                }
+            }
+        } else {
+            System.out.println("Please enter how many KG's of " + item.getName() + " would you like");
         }
-        else{
-            System.out.println("Please enter how many KG's of "+ item.getName()+ " would you like");
-        }
-        while (true)
-        {
+        while (true) {
             try {
                 stringAmount = input.next();
                 amount = Double.parseDouble(stringAmount);
-                return amount;
-            }catch (Exception e){
+                if (amount <= 0) {
+                    System.out.println("Please enter a positive number");
+                } else {
+                    return amount;
+                }
+            } catch (Exception e) {
                 System.out.println("Please enter a number!");
             }
         }
     }
+
     private Point getCustomerLocation() {
         System.out.println("Please enter your X coordinate");
         int x = readCoordinate();
         System.out.println("Please enter your Y coordinate");
         int y = readCoordinate();
-        return new Point(x,y);
+        return new Point(x, y);
     }
 
-    private int readCoordinate(){
-       return getAndValidateChoice(1,50);
+    private int readCoordinate() {
+        return getAndValidateChoice(1, 50);
     }
 
     private Date getDateOfOrder() {
@@ -364,9 +365,9 @@ public class ConsoleUi {
         Date dateOfOrder;
         dateFormat.setLenient(false);
         System.out.println("Please enter the date of the order in dd/mm-hh:mm format");
-        while (true){
+        while (true) {
             String dateString = scanner.next();
-            try{
+            try {
                 dateOfOrder = dateFormat.parse(dateString);
                 return dateOfOrder;
             } catch (ParseException e) {
@@ -380,37 +381,33 @@ public class ConsoleUi {
         Scanner scanner = new Scanner(System.in);
         int userSelection;
         do {
-            try{
+            try {
                 String userSelectionString = scanner.next();
-                if ( userSelectionString.toLowerCase().charAt(0) == 'q' && StoreOrItem.equals("item") && userSelectionString.length()== 1)
+                if (userSelectionString.toLowerCase().charAt(0) == 'q' && StoreOrItem.equals("item") && userSelectionString.length() == 1)
                     return -1;
                 userSelection = Integer.parseInt(userSelectionString);
-                Method method ;
+                Method method;
                 if (StoreOrItem.equals("store")) {
                     method = StoreManager.class.getMethod("getAllStores", null);
-                }
-                else {
+                } else {
                     method = StoreManager.class.getMethod("getAllItems", null);
 
                 }
-                if(((Map<Integer, Store>) method.invoke(storeEngine)).containsKey(userSelection)){
+                if (((Map<Integer, Store>) method.invoke(storeEngine)).containsKey(userSelection)) {
                     return userSelection;
-                }
-                else{
+                } else {
                     if (StoreOrItem.equals("store"))
                         System.out.println("The store ID you entered is not available please choose an ID from the list above");
                     else
                         System.out.println("The Item ID you entered is not available please choose an ID from the list above");
                 }
 
-            }
-            catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.println("Please enter a number");
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        }while (true);
+        } while (true);
     }
 
     private void showAllStoresInOrderMenu() {
@@ -422,7 +419,7 @@ public class ConsoleUi {
         }
     }
 
-    private void showStoreInPurchaseMenu(DtoStore store){
+    private void showStoreInPurchaseMenu(DtoStore store) {
         System.out.println("Store ID:" + store.getSerialNumber());
         System.out.println("Store name:" + store.getName());
         System.out.println("Store PPK:" + store.getPPK());
@@ -432,68 +429,65 @@ public class ConsoleUi {
         Map<Integer, DtoItem> allItems = storeEngine.getAllDtoItems();
         System.out.println("Showing all the items in the system");
         System.out.println("====================================");
-        for (Integer itemId : allItems.keySet()){
+        for (Integer itemId : allItems.keySet()) {
             showItemInSystem(allItems.get(itemId));
             System.out.println("====================================");
         }
     }
 
 
-    private void printItemDetails(DtoItem item, boolean showAveragePrice, int storeID)
-    {
-        Store store =storeEngine.getAllStores().get(storeID);
+    private void printItemDetails(DtoItem item, boolean showAveragePrice, int storeID) {
+        Store store = storeEngine.getAllStores().get(storeID);
         int itemID = item.getSerialNumber();
-        System.out.println("*   Item ID: " +itemID );
+        System.out.println("*   Item ID: " + itemID);
         System.out.println("\tItem name: " + item.getName());
-        if(item instanceof DtoUnitItem){
+        if (item instanceof DtoUnitItem) {
             System.out.println("\tItem sell by: unit");
             if (showAveragePrice)
-            System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
+                System.out.println("\tAverage price per unit: " + storeEngine.getAveragePrice(item));
             else {
                 if (store.getInventory().containsKey(itemID)) {
                     System.out.println("\tprice per unit: " + store.getInventory().get(itemID).getPrice());
                 } else
                     System.out.println("\tThe store " + store.getName() + " does not sell this item");
             }
-        }
-        else {
+        } else {
             System.out.println("\tItem sell by: weight");
             {
                 if (showAveragePrice)
                     System.out.println("\tAverage price per kilo: " + storeEngine.getAveragePrice(item));
-                else{
-                    if(store.getInventory().containsKey(itemID)){
+                else {
+                    if (store.getInventory().containsKey(itemID)) {
                         System.out.println("\tprice per kilo: " + store.getInventory().get(itemID).getPrice());
-                    }
-                    else
-                        System.out.println("\tThe store "+ store.getName()+" does not sell this item");
+                    } else
+                        System.out.println("\tThe store " + store.getName() + " does not sell this item");
                 }
             }
 
         }
     }
 
-    private void showItemsInOrder(Order order){
+    private void showItemsInOrder(Order order) {
         ArrayList<ItemAmountAndStore> items = order.getItems();
         DtoItem item;
         System.out.println("The order details:");
-        for (ItemAmountAndStore itemInPair: items) {
+        for (ItemAmountAndStore itemInPair : items) {
             item = itemInPair.item();
-            printItemDetails(item, false,itemInPair.getStore().getSerialNumber());
-            if(item instanceof DtoUnitItem){
-                System.out.println("\tThe requested amount is: "+ (int)itemInPair.amount()+" units.");
-                System.out.println("\tTotal price of requested item is: "+ decimalFormat.format((int)itemInPair.amount()* item.getPrice()));
-            }
-            else{
-                System.out.println("\tThe requested amount is: "+ decimalFormat.format(itemInPair.amount()) +" KG.");
-                System.out.println("\tTotal price of requested item is: "+ decimalFormat.format(itemInPair.amount()* item.getPrice()));
+            printItemDetails(item, false, itemInPair.getStore().getSerialNumber());
+            if (item instanceof DtoUnitItem) {
+                System.out.println("\tThe requested amount is: " + (int) itemInPair.amount() + " units.");
+                System.out.println("\tTotal price of requested item is: " + decimalFormat.format((int) itemInPair.amount() * item.getPrice()));
+            } else {
+                System.out.println("\tThe requested amount is: " + decimalFormat.format(itemInPair.amount()) + " KG.");
+                System.out.println("\tTotal price of requested item is: " + decimalFormat.format(itemInPair.amount() * item.getPrice()));
             }
         }
-        System.out.println("\tThe delivery cost is: "+ decimalFormat.format(order.getShippingCost()));
-        System.out.println("\tThe total cost of order is: "+decimalFormat.format(order.getTotalCost()));
+        System.out.println("\tThe delivery cost is: " + decimalFormat.format(order.getShippingCost()));
+        System.out.println("\tThe total cost of order is: " + decimalFormat.format(order.getTotalCost()));
         System.out.println("===================================================");
 
     }
+
     private void readFile() throws DuplicateValueException, ItemNotSoldException, InvalidValueException {
 
         //TODO: get user input and delete hard coded stuff
@@ -502,15 +496,14 @@ public class ConsoleUi {
         File file = new File("ex1-big.xml"); //TODO: delete this
         SuperDuperMarketDescriptor superDuperMarketDescriptor = XmlToObject.fromXmlFileToObject(file);
         JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
-        if(superDuperMarketDescriptor == null){
+        if (superDuperMarketDescriptor == null) {
             throw new NullPointerException("The file you entered is null");
         }
-        if(storeEngine == null || !file.toString().equals(storeEngine.getCurrentFilePath())){
+        if (storeEngine == null || !file.toString().equals(storeEngine.getCurrentFilePath())) {
             this.storeEngine = jaxbClassToStoreManager.convertJaxbClassToStoreManager(superDuperMarketDescriptor);
             storeEngine.setCurrentFilePath(file.toString());
             System.out.println("File loaded successfully");
-        }
-        else {
+        } else {
             System.out.println("This file is already loaded");
         }
     }
@@ -519,15 +512,15 @@ public class ConsoleUi {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter full path to the file");
         String path = scanner.nextLine();
-        if(path == null){
+        if (path == null) {
             throw new NullPointerException("the path you entered is null");
         }
         File file = new File(path);
-        if(!file.exists()){
+        if (!file.exists()) {
             throw new InvalidPathException(path, "The path you entered is invalid");
         }
         String fileType = file.toString().substring(file.toString().lastIndexOf(".") + 1);
-        if(!fileType.equals("xml")) {
+        if (!fileType.equals("xml")) {
             throw new InvalidFileTypeException(fileType + " is an invalid file type");
         }
         return file;
