@@ -13,11 +13,25 @@ public class StoreManager {
     private Map<Integer, Store> allStores;
     private Map<Integer, Item> allItems;
     private Set<Order> allOrders = new HashSet<Order>();
+    private String currentFilePath;
 
 
     public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems) {
         this.allStores = allStores;
         this.allItems = allItems;
+        this.currentFilePath = " ";
+    }
+
+    public void setAllOrders(Set<Order> allOrders) {
+        this.allOrders = allOrders;
+    }
+
+    public String getCurrentFilePath() {
+        return currentFilePath;
+    }
+
+    public void setCurrentFilePath(String currentFilePath) {
+        this.currentFilePath = currentFilePath;
     }
 
     public Set<Order> getAllOrders() {

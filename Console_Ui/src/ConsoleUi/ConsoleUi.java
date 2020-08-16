@@ -24,7 +24,6 @@ public class ConsoleUi {
 
     private final Menu menu = new Menu();
     private StoreManager storeEngine;
-    private String currentFilePath;
     private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     public enum Echoic {
@@ -132,22 +131,22 @@ public class ConsoleUi {
     }
 
     private String allStoresNameString(Order order){
-        String storesNames = "";
+        StringBuilder storesNames = new StringBuilder();
         for(Store store : order.getStores().values()){
-            storesNames += store.getName() + ", ";
+            storesNames.append(store.getName()).append(", ");
         }
 
-        return storesNames;
+        return storesNames.toString();
     }
 
 
     private String allStoresIdString(Order order){
-        String storesId = "";
+        StringBuilder storesId = new StringBuilder();
         for(Store store : order.getStores().values()){
-            storesId += store.getSerialNumber() + ", ";
+            storesId.append(store.getSerialNumber()).append(", ");
         }
 
-        return storesId;
+        return storesId.toString();
     }
 
     private void showAllStoresInTheSystem() {
@@ -166,7 +165,7 @@ public class ConsoleUi {
         if (store.getAllOrders().size() != 0)
             showStoreOrdersHistory(store);
         else
-            System.out.println("There were no orders from this store");;
+            System.out.println("There were no orders from this store");
         System.out.println("\tStore PPK:" + store.getPPK());
         System.out.println("\tThe total cost for delivery so far is: "+ decimalFormat.format(store.getTotalDeliveryCost()));
     }
@@ -238,7 +237,7 @@ public class ConsoleUi {
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         int itemID = getIDFromUser("item");
-        ArrayList<ItemAmountAndStore> orderItems = new ArrayList<ItemAmountAndStore>();
+        ArrayList<ItemAmountAndStore> orderItems = new ArrayList<>();
         while (itemID != -1) {
             ItemAmountAndStore itemToAdd  = storeEngine.getCheapestItem(itemID);
             double amount = getItemAmount(itemToAdd.getItem());
@@ -257,27 +256,7 @@ public class ConsoleUi {
             System.out.println("Order canceled.");
         }
     }
-/*        if (itemID != -1 ) {
-            order = createOrder(customerLocation,storeID,itemID, orderDate);
-            if (order!= null){
-                showItemsInOrder(order,storeID);
-                if(getOrderApproval()) {
-                    storeEngine.placeOrder(order);
-                    System.out.println("Order was added successfully.");
-                }
-                else
-                    System.out.println("Order canceled.");
-            }
-        }
-        else
-            System.out.println("No order was made.");
-    }*/
 
-    private void showItemsToChooseFrom(int storeID) {
-        Map<Integer, DtoItem> DtoItems = storeEngine.getAllDtoItems();
-        for (Integer key: DtoItems.keySet())
-            printItemDetails(DtoItems.get(key), false, storeID);
-    }
 
     private Boolean getOrderApproval(){
         Scanner input = new  Scanner(System.in);
@@ -403,11 +382,11 @@ public class ConsoleUi {
         do {
             try{
                 String userSelectionString = scanner.next();
-                if ( userSelectionString.toLowerCase().charAt(0) == 'q' && StoreOrItem =="item" && userSelectionString.length()== 1)
+                if ( userSelectionString.toLowerCase().charAt(0) == 'q' && StoreOrItem.equals("item") && userSelectionString.length()== 1)
                     return -1;
                 userSelection = Integer.parseInt(userSelectionString);
-                Method method = null;
-                if (StoreOrItem == "store") {
+                Method method ;
+                if (StoreOrItem.equals("store")) {
                     method = StoreManager.class.getMethod("getAllStores", null);
                 }
                 else {
@@ -418,7 +397,7 @@ public class ConsoleUi {
                     return userSelection;
                 }
                 else{
-                    if (StoreOrItem == "store")
+                    if (StoreOrItem.equals("store"))
                         System.out.println("The store ID you entered is not available please choose an ID from the list above");
                     else
                         System.out.println("The Item ID you entered is not available please choose an ID from the list above");
@@ -428,7 +407,9 @@ public class ConsoleUi {
             catch (NumberFormatException e){
                 System.out.println("Please enter a number");
             }
-            catch (Exception e){}
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }while (true);
     }
 
@@ -513,7 +494,7 @@ public class ConsoleUi {
         System.out.println("===================================================");
 
     }
-    private void readFile() throws InvalidFileTypeException, DuplicateValueException, ItemNotSoldException, InvalidValueException {
+    private void readFile() throws DuplicateValueException, ItemNotSoldException, InvalidValueException {
 
         //TODO: get user input and delete hard coded stuff
         // bring this back
@@ -524,9 +505,9 @@ public class ConsoleUi {
         if(superDuperMarketDescriptor == null){
             throw new NullPointerException("The file you entered is null");
         }
-        if(file.toString() != currentFilePath){
+        if(storeEngine == null || !file.toString().equals(storeEngine.getCurrentFilePath())){
             this.storeEngine = jaxbClassToStoreManager.convertJaxbClassToStoreManager(superDuperMarketDescriptor);
-            currentFilePath = file.toString();
+            storeEngine.setCurrentFilePath(file.toString());
             System.out.println("File loaded successfully");
         }
         else {
