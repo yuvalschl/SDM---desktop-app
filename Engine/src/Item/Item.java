@@ -1,5 +1,7 @@
 package Item;
 
+import Exceptions.InvalidValueException;
+
 import java.util.Objects;
 
 public abstract class Item {
@@ -56,8 +58,13 @@ public abstract class Item {
     }
 
 
-    public void setPrice(float price) {
-        this.price = price;
+    public void setPrice(float price) throws InvalidValueException {
+        if(price > 0){
+            this.price = price;
+        }
+        else {
+            throw new InvalidValueException("Price cant be negative");
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package StoreManager;
 
 import DtoObjects.*;
+import Exceptions.InvalidValueException;
 import Item.*;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
@@ -89,6 +90,11 @@ public class StoreManager {
             allDtoStores.put(key, storeToDtoStore(currentStore));
         }
         return allDtoStores;
+    }
+
+    public void updateItemPrice(DtoItem item, float newPrice, DtoStore store) throws InvalidValueException {
+        Store storeToUpdate = allStores.get(store.getSerialNumber());
+        storeToUpdate.getInventory().get(item.getSerialNumber()).setPrice(newPrice);
     }
 
     private Map<Integer, DtoItem> getDtoInventory(Store store){

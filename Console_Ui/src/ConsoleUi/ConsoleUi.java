@@ -4,7 +4,6 @@ import DtoObjects.*;
 import Exceptions.*;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
-import Item.*;
 import Store.*;
 import StoreManager.StoreManager;
 import jaxb.JaxbClassToStoreManager;
@@ -27,13 +26,20 @@ public class ConsoleUi {
     private StoreManager storeEngine;
     private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-    public enum Echoic {
+    public enum menuChoice {
         readFile,
         ShowStores,
         ShowItems,
         PlaceOrder,
         ShowHistory,
+        UpdateStore,
         Exit
+    }
+
+    public enum storeUpdateChoice {
+        deleteItem,
+        addItem,
+        updateItem
     }
 
     private int getAndValidateChoice(int smallestChoice, int largestChoice) {
@@ -62,12 +68,12 @@ public class ConsoleUi {
     }
 
     public void runUI() {
-        Echoic[] eChoices = Echoic.values();
+        ConsoleUi.menuChoice[] eChoices = menuChoice.values();
         boolean isFileLoaded = false;
         while (true) {
             System.out.println(menu.getMenuOption());
-            Echoic choice = eChoices[getAndValidateChoice(1, 6) - 1];
-            if (isFileLoaded || choice == Echoic.readFile) {
+            ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 6) - 1];
+            if (isFileLoaded || choice == menuChoice.readFile) {
                 switch (choice) {
                     case readFile: {
                         try {
@@ -96,6 +102,10 @@ public class ConsoleUi {
                     }
                     case ShowHistory: {
                         ShowHistory();
+                        break;
+                    }
+                    case UpdateStore:{
+                        updateStore();
                         break;
                     }
                     case Exit: {
@@ -524,6 +534,69 @@ public class ConsoleUi {
             throw new InvalidFileTypeException(fileType + " is an invalid file type");
         }
         return file;
+    }
+
+    private void updateStore(){
+        ConsoleUi.storeUpdateChoice[] eChoices = storeUpdateChoice.values();
+        //TODO show store name and id
+        System.out.println("Please chose a store from the list above");
+        int storeId = getIDFromUser("store");
+        DtoStore storeToUpdate = storeEngine.getAllDtoStores().get(storeId);
+        System.out.println("Please chose an action\n" +
+                "1. delete item from store inventory\n" +
+                "2. add an item to store inventory\n" +
+                "3. update an item price");
+        ConsoleUi.storeUpdateChoice choice = eChoices[getAndValidateChoice(1, 3) - 1];
+        switch (choice){
+            case deleteItem:{
+                deleteItem();
+                break;
+            }
+            case addItem:{
+                addItem();
+                break;
+            }
+            case updateItem:{
+                updateItem(storeToUpdate);
+                break;
+            }
+        }
+    }
+
+    private void updateItem(DtoStore store) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter item id");
+        while (true){
+            int itemId = getIDFromUser("item");
+            if(store.getInventory().containsKey(itemId)){
+                DtoItem itemToUpdate = store.getInventory().get(itemId);
+                try {
+                    System.out.println("Please enter the new price");
+                    float newPrice = scanner.nextFloat();
+                    if(newPrice <= 0){
+                        System.out.println("Invalid price");
+                    }
+                    else {
+                        storeEngine.updateItemPrice(itemToUpdate, newPrice, store);
+                        break;
+                    }
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+            else {
+                System.out.println(store.getName() + "dose not sell this item, please try again");
+            }
+        }
+
+    }
+
+    private void addItem() {
+        //TODO this
+    }
+
+    private void deleteItem() {
+        //TODO this
     }
 }
 
