@@ -231,7 +231,7 @@ public class ConsoleUi {
     private void placeOrder() throws ParseException {
 /*        showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");*/
-
+        boolean itemExist = false;
         //int storeID = getIDFromUser("store");
         //Date orderDate = getDateOfOrder(); TODO:bring this back
         DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");
@@ -247,8 +247,17 @@ public class ConsoleUi {
         while (itemID != -1) {
             ItemAmountAndStore itemToAdd = storeEngine.getCheapestItem(itemID);
             double amount = getItemAmount(itemToAdd.getItem());
-            itemToAdd.setAmount(amount);
-            orderItems.add(itemToAdd);
+            for(int i=0; i<orderItems.size();i++){
+                if (itemToAdd.getItem().equals(orderItems.get(i).getItem())) {
+                    amount += orderItems.get(i).getAmount();
+                    itemExist = true;
+                    orderItems.get(i).setAmount(amount);
+                }
+            }
+            if (!itemExist){
+                itemToAdd.setAmount(amount);
+                orderItems.add(itemToAdd);
+            }
             System.out.println("Please chose another item or press q to exit");
             itemID = getIDFromUser("item");
         }
@@ -261,6 +270,7 @@ public class ConsoleUi {
             System.out.println("Order canceled.");
         }
     }
+
 
 
     private Boolean getOrderApproval() {

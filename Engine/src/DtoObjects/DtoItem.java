@@ -1,5 +1,9 @@
 package DtoObjects;
 
+import Item.Item;
+
+import java.util.Objects;
+
 public abstract class DtoItem {
     private int serialNumber;
     private String name;
@@ -34,5 +38,20 @@ public abstract class DtoItem {
 
     public float getAmountSold() {
         return amountSold;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DtoItem item = (DtoItem) o;
+        return getSerialNumber() == item.getSerialNumber() &&
+                Float.compare(item.getPrice(), getPrice()) == 0 &&
+                getName().equals(item.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSerialNumber(), getName(), getPrice());
     }
 }
