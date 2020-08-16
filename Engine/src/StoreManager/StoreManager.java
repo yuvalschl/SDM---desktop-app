@@ -84,15 +84,14 @@ public class StoreManager {
         Set<DtoStoreOrder> currentDtoOrders = new HashSet<>();
         for(Integer key : allStores.keySet()){
             Store currentStore = allStores.get(key);
-            currentDtoInventory = makeDtoInventory(currentStore);
-            currentDtoOrders = makeDtoOrders(currentStore);
-            allDtoStores.put(key, new DtoStore(currentStore.getName(), currentStore.getSerialNumber(), currentDtoInventory,
-                    currentDtoOrders, currentStore.getLocation(), currentStore.getPPK(), currentStore.getTotalPayment()));
+            currentDtoInventory = getDtoInventory(currentStore);
+            currentDtoOrders = getDtoOrders(currentStore);
+            allDtoStores.put(key, storeToDtoStore(currentStore));
         }
         return allDtoStores;
     }
 
-    private Map<Integer, DtoItem> makeDtoInventory(Store store){
+    private Map<Integer, DtoItem> getDtoInventory(Store store){
         Map<Integer, DtoItem> currentDtoInventory = new HashMap<>();
         for(Integer key : store.getInventory().keySet()){
             Item currentItem = store.getInventory().get(key);
@@ -107,7 +106,7 @@ public class StoreManager {
         return currentDtoInventory;
     }
 
-    private Set<DtoStoreOrder> makeDtoOrders(Store store){
+    private Set<DtoStoreOrder> getDtoOrders(Store store){
         Set<DtoStoreOrder> currentOrdersDtoSet = new HashSet<>();
         if(store.getAllOrders() != null){
             for(StoreOrder order : store.getAllOrders()){
@@ -132,6 +131,7 @@ public class StoreManager {
         }
         return allDtoItems;
     }
+
     public Order createOrder(Point customerLocation, Date date, ArrayList<ItemAmountAndStore> items) {
 
         int totalPriceOfItems = 0;
@@ -265,7 +265,7 @@ public class StoreManager {
         return new ItemAmountAndStore(itemToDtoItem(cheapestItem), cheapestStore);
     }
 
-    public Item DtoItemToItem(DtoItem item){
+    public static Item DtoItemToItem(DtoItem item){
         Item itemToReturn;
 
         if(item instanceof DtoUnitItem){
@@ -277,7 +277,7 @@ public class StoreManager {
         return itemToReturn;
     }
 
-    public DtoItem itemToDtoItem(Item item){
+    public static DtoItem itemToDtoItem(Item item){
         DtoItem itemToReturn;
 
         if(item instanceof UnitItem){
@@ -289,6 +289,11 @@ public class StoreManager {
         return itemToReturn;
     }
 
+    public DtoStore storeToDtoStore(Store store){
+        return new DtoStore(store.getName(),store.getSerialNumber(),store.getDtoInventory(), store.getDtoStoreOrders(),
+                store.getLocation(),store.getPPK(),store.getTotalPayment(),store.getTotalDeliveriesCost());
+    }
+
     private int howManyStoresSellItem(DtoItem item) {
         int numberOfStoreThatSell = 0;
         for (Map.Entry<Integer, Store> set : allStores.entrySet()) {
@@ -297,6 +302,7 @@ public class StoreManager {
         }
         return  numberOfStoreThatSell;
     }
+
     private  int howManyTimesItemSold(Item item){
         int timesSold = 0;
         if(allOrders != null)

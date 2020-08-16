@@ -1,5 +1,6 @@
 package Order;
 
+import DtoObjects.DtoStoreOrder;
 import ItemPair.ItemAmountAndStore;
 import Store.Store;
 
@@ -106,5 +107,10 @@ public class StoreOrder {
 
     public void setItems(ArrayList<ItemAmountAndStore> items) {
         this.items = items;
+    }
+
+    public static DtoStoreOrder storeOrderToDtoStoreOrder(StoreOrder order){
+        return new DtoStoreOrder(order.getDateOfOrder(),order.getAmountOfItems(),order.getTotalPriceOfItems(),order.getShippingCost(),order.getTotalCost(),
+                order.getDistance(),order.getStore(), order.getItems());
     }
 }

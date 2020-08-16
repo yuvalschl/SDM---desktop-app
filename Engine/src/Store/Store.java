@@ -1,13 +1,15 @@
 package Store;
 
-import Item.Item;
+import DtoObjects.DtoItem;
+import DtoObjects.DtoStoreOrder;
+import DtoObjects.DtoUnitItem;
+import DtoObjects.DtoWeightItem;
+import Item.*;
 import Order.*;
+import StoreManager.StoreManager;
 
 import java.awt.*;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Store {
     private String name;
@@ -16,7 +18,7 @@ public class Store {
     private Set<StoreOrder> allOrders;
     private Point location;
     private float PPK;
-    private float totalDeliverycost;
+    private float totalDeliveriesCost;
     private float totalPayment;
     private int numberOfItemsSold;
 
@@ -37,6 +39,14 @@ public class Store {
         this.totalPayment = 0;
         this.PPK = PPK;
         this.allOrders = new HashSet<StoreOrder>();
+    }
+
+    public float getTotalDeliveriesCost() {
+        return totalDeliveriesCost;
+    }
+
+    public void setTotalDeliveriesCost(float totalDeliveriesCost) {
+        this.totalDeliveriesCost = totalDeliveriesCost;
     }
 
     public Point getLocation() {
@@ -95,16 +105,34 @@ public class Store {
         this.totalPayment = totalPayment;
     }
 
-    public String toString(){//TODO add
+    public HashMap<Integer, DtoItem> getDtoInventory() {
+        HashMap<Integer, DtoItem> dtoInventory = new HashMap<>();
+        for (Map.Entry<Integer, Item> item : inventory.entrySet()) {
+            Item currentItem = item.getValue();
+            dtoInventory.put(item.getKey(), StoreManager.itemToDtoItem(currentItem));
+        }
+        return dtoInventory;
+    }
+
+    public Set<DtoStoreOrder> getDtoStoreOrders(){
+        Set<DtoStoreOrder> dtoStoreOrders = new HashSet<>();
+        for(StoreOrder order : allOrders){
+            dtoStoreOrders.add(StoreOrder.storeOrderToDtoStoreOrder(order));
+        }
+
+        return dtoStoreOrders;
+    }
+
+    public String toString() {//TODO add
         String itemDetails = "";
         String storeDetails =
-                "* Store.Store ID: "+serialNumber+
-                "\n\tStore.Store name: "+name+
-                "\n\tThe Items in these store are: \n";
+                "* Store.Store ID: " + serialNumber +
+                        "\n\tStore.Store name: " + name +
+                        "\n\tThe Items in these store are: \n";
         for (Map.Entry<Integer, Item> set : inventory.entrySet()) {
             itemDetails += set.getValue().toString(true);
         }
-        return  storeDetails + itemDetails;
+        return storeDetails + itemDetails;
     }
 
     @Override
@@ -124,9 +152,10 @@ public class Store {
     }
 
     public float getTotalDeliveryCost() {
-        return totalDeliverycost;
+        return totalDeliveriesCost;
     }
+
     public void setTotalDeliveryCost(float deliveryCost) {
-        this.totalDeliverycost = deliveryCost;
+        this.totalDeliveriesCost = deliveryCost;
     }
 }

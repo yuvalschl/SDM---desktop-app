@@ -150,13 +150,13 @@ public class ConsoleUi {
     private void showAllStoresInTheSystem() {
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
-        for (Integer storeId : storeEngine.getAllStores().keySet()) {
-            showStore(storeEngine.getAllStores().get(storeId));
+        for (Integer storeId : storeEngine.getAllDtoStores().keySet()) {
+            showStore(storeEngine.getAllDtoStores().get(storeId));
             System.out.println("===================================");
         }
     }
 
-    private void showStore(Store store) {
+    private void showStore(DtoStore store) {
         System.out.println("Store ID:" + store.getSerialNumber());
         System.out.println("Store name:" + store.getName());
         showStoreInventory(store);
@@ -165,12 +165,12 @@ public class ConsoleUi {
         else
             System.out.println("There were no orders from this store");
         System.out.println("\tStore PPK:" + store.getPPK());
-        System.out.println("\tThe total cost for delivery so far is: " + decimalFormat.format(store.getTotalDeliveryCost()));
+        System.out.println("\tThe total cost for delivery so far is: " + decimalFormat.format(store.getTotalDeliveriesCost()));
     }
 
-    private void showStoreOrdersHistory(Store store) {
+    private void showStoreOrdersHistory(DtoStore store) {
         System.out.println("The orders are:\n");
-        for (StoreOrder order : store.getAllOrders()) {
+        for (DtoStoreOrder order : store.getAllOrders()) {
             System.out.println("*  Order ID: " + order.getOrderId());
             System.out.println("\tThe order date is: " + order.getDateOfOrder());
             System.out.println("\tThe amount of items are: " + order.getAmountOfItems());
@@ -180,8 +180,8 @@ public class ConsoleUi {
         }
     }
 
-    private void showStoreInventory(Store store) {
-        Map<Integer, Item> currentInventory = store.getInventory();
+    private void showStoreInventory(DtoStore store) {
+        Map<Integer, DtoItem> currentInventory = store.getInventory();
         System.out.println(store.getName() + " Items are:");
         for (Integer itemId : currentInventory.keySet()) {
             showItemInStore(currentInventory.get(itemId));
@@ -189,10 +189,10 @@ public class ConsoleUi {
         }
     }
 
-    private void showItemInStore(Item item) {
+    private void showItemInStore(DtoItem item) {
         System.out.println("*   Item ID: " + item.getSerialNumber());
         System.out.println("\tItem name: " + item.getName());
-        if (item instanceof UnitItem) {
+        if (item instanceof DtoUnitItem) {
             System.out.println("\tItem sell by: unit");
             System.out.println("\tPrice per unit: " + decimalFormat.format(item.getPrice()));
         } else {

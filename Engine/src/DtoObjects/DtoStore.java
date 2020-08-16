@@ -13,8 +13,9 @@ public class DtoStore {
     private Point location;
     private float PPK;
     private float totalPayment;
+    private float totalDeliveriesCost;
 
-    public DtoStore(String name, int serialNumber, Map<Integer, DtoItem> inventory, Set<DtoStoreOrder> allOrders, Point location, float PPK, float totalPayment) {
+    public DtoStore(String name, int serialNumber, Map<Integer, DtoItem> inventory, Set<DtoStoreOrder> allOrders, Point location, float PPK, float totalPayment, float totalDeliveriesCost) {
         this.name = name;
         this.serialNumber = serialNumber;
         this.inventory = inventory;
@@ -22,6 +23,11 @@ public class DtoStore {
         this.location = location;
         this.PPK = PPK;
         this.totalPayment = totalPayment;
+        this.totalDeliveriesCost = totalDeliveriesCost;
+    }
+
+    public float getTotalDeliveriesCost() {
+        return totalDeliveriesCost;
     }
 
     public String getName() {
