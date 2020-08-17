@@ -100,7 +100,7 @@ public class ConsoleUi {
                         }
                         break;
                     }
-                    case ShowHistory: {
+                    case ShowHistory: {//TODO: fix this
                         ShowHistory();
                         break;
                     }
