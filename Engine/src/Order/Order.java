@@ -6,7 +6,6 @@ import ItemPair.*;
 import java.util.*;
 
 
-//TODO set correct order id
 public class Order {
     private Date dateOfOrder;
     private int amountOfItems;

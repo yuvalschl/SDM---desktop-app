@@ -237,9 +237,9 @@ public class ConsoleUi {
         System.out.println("Please choose a store by its ID from the list above:");*/
         boolean itemExist = false;
         //int storeID = getIDFromUser("store");
-        //Date orderDate = getDateOfOrder(); TODO:bring this back
+        Date orderDate = getDateOfOrder();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");
-        Date orderDate = dateFormat.parse("20/05-12:20"); //TODO delete this
+        //Date orderDate = dateFormat.parse("20/05-12:20"); //TODO delete this
         //TODO: set year to 2020
         //Point customerLocation = getCustomerLocation();TODO:bring this back
         Point customerLocation = new Point(1, 1);
@@ -593,6 +593,7 @@ public class ConsoleUi {
                     }
                     else {
                         storeEngine.updateItemPrice(itemToUpdate, newPrice, store);
+                        System.out.println(itemToUpdate.getName() + "price updated");
                         break;
                     }
                 }catch (Exception e){
@@ -603,33 +604,41 @@ public class ConsoleUi {
                 System.out.println(store.getName() + "dose not sell this item, please try again");
             }
         }
-
     }
 
     private void addItem(DtoStore storeToUpdate) {
-        storeEngine.getAllDtoItems().forEach((Integer, DtoItem)->printItemDetails(DtoItem, false, storeToUpdate.getSerialNumber()));
+        Scanner scanner = new Scanner(System.in);
+        showAllItemsInSystem();
         System.out.println("Please choose an item from the list above to add to the store - "+storeToUpdate.getName());
         int itemID = getIDFromUser("item");
         if(storeToUpdate.getInventory().containsKey(itemID))
             System.out.println("The store "+storeToUpdate.getName()+" already has the item "+ storeToUpdate.getInventory().get(itemID));
         else{
-            DtoItem dtoItemToAdd = storeEngine.getAllDtoItems().get(itemID);
-            storeToUpdate.getInventory().put(itemID, dtoItemToAdd);
-            System.out.println("Added "+dtoItemToAdd.getName()+" successfully");
+            System.out.println("Please enter the new price");
+            float price = scanner.nextFloat();
+            if(price <= 0){
+                System.out.println("Invalid price");
+            }
+            else {
+                DtoItem dtoItemToAdd = storeEngine.getAllDtoItems().get(itemID);
+                try {
+                    storeEngine.addItemToStore(storeToUpdate, dtoItemToAdd, price);
+                } catch (InvalidValueException e) {
+                    System.out.println(e.getMessage());
+                }
+                System.out.println("Added "+dtoItemToAdd.getName()+" successfully");
+            }
         }
-
     }
 
-    private void deleteItem(DtoStore storeToUpdate) {//TODO: method no working fix thissssss
+    private void deleteItem(DtoStore storeToUpdate) {
         storeToUpdate.getInventory().forEach((Integer,DtoItem)->printItemDetails(DtoItem, false, storeToUpdate.getSerialNumber()));
         System.out.println("Please choose an item to delete from the list above, by entering its ID:");
         int itemID = getIDFromUser("item");//TODO: fix the method getIDFromUser so it selects from the set of id's given to it
         if(storeToUpdate.getInventory().containsKey(itemID)){
                 if(storeEngine.NumberOfStoresSellingItem(storeEngine.getAllDtoItems().get(itemID)) > 1){
-                storeToUpdate.getInventory().remove(itemID);//TODO:check if it is necsery to have these two
-                storeEngine.getAllStores().get(storeToUpdate.getSerialNumber()).getInventory().remove(itemID);
-                System.out.println("Item was deleted successfully.");
-            }
+                    storeEngine.deleteItemFromStore(storeToUpdate, itemID);
+                }
             else {
                     System.out.println(storeToUpdate.getName() + " is the only store selling "
                             + storeToUpdate.getInventory().get(itemID).getName() + ", cannot delete.");

@@ -271,7 +271,7 @@ public class StoreManager {
         return new ItemAmountAndStore(itemToDtoItem(cheapestItem), cheapestStore);
     }
 
-    public static Item DtoItemToItem(DtoItem item){
+    public static Item dtoItemToItem(DtoItem item){
         Item itemToReturn;
 
         if(item instanceof DtoUnitItem){
@@ -319,5 +319,16 @@ public class StoreManager {
                     }
             }
         return  timesSold;
+    }
+
+    public void addItemToStore(DtoStore store, DtoItem itemToUpdate, float price) throws InvalidValueException {
+        Store storeToUpdate = allStores.get(store.getSerialNumber());
+        storeToUpdate.getInventory().put(itemToUpdate.getSerialNumber(), dtoItemToItem(itemToUpdate));
+        storeToUpdate.getInventory().get(itemToUpdate.getSerialNumber()).setPrice(price);
+    }
+
+    public void deleteItemFromStore(DtoStore storeToDeleteFrom, int itemId){
+        Store storeToUpdate = allStores.get(storeToDeleteFrom.getSerialNumber());
+        storeToUpdate.getInventory().remove(itemId);
     }
 }

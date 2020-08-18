@@ -123,7 +123,7 @@ public class Store {
         return dtoStoreOrders;
     }
 
-    public String toString() {//TODO add
+    public String toString() {
         String itemDetails = "";
         String storeDetails =
                 "* Store.Store ID: " + serialNumber +
@@ -158,4 +158,5 @@ public class Store {
     public void setTotalDeliveryCost(float deliveryCost) {
         this.totalDeliveriesCost = deliveryCost;
     }
+
 }
