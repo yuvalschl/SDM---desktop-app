@@ -2,6 +2,7 @@ package ConsoleUi;
 
 import DtoObjects.*;
 import Exceptions.*;
+import Item.Item;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
 import Store.*;
@@ -100,7 +101,7 @@ public class ConsoleUi {
                         }
                         break;
                     }
-                    case ShowHistory: {//TODO: fix this
+                    case ShowHistory: {
                         ShowHistory();
                         break;
                     }
@@ -161,21 +162,24 @@ public class ConsoleUi {
         System.out.println("Showing all the stores in the system");
         System.out.println("====================================");
         for (Integer storeId : storeEngine.getAllDtoStores().keySet()) {
-            showStore(storeEngine.getAllDtoStores().get(storeId));
+            showStore(storeEngine.getAllDtoStores().get(storeId), false);
             System.out.println("===================================");
         }
     }
 
-    private void showStore(DtoStore store) {
+    private void showStore(DtoStore store, boolean showOnlyNameAndID) {
         System.out.println("Store ID:" + store.getSerialNumber());
         System.out.println("Store name:" + store.getName());
-        showStoreInventory(store);
-        if (store.getAllOrders().size() != 0)
-            showStoreOrdersHistory(store);
-        else
-            System.out.println("\tThere were no orders from this store");
-        System.out.println("\tStore PPK:" + store.getPPK());
-        System.out.println("\tThe total cost for delivery so far is: " + decimalFormat.format(store.getTotalDeliveriesCost()));
+        if(!showOnlyNameAndID){
+            showStoreInventory(store);
+            if (store.getAllOrders().size() != 0)
+                showStoreOrdersHistory(store);
+            else
+                System.out.println("\tThere were no orders from this store");
+            System.out.println("\tStore PPK:" + store.getPPK());
+            System.out.println("\tThe total cost for delivery so far is: " + decimalFormat.format(store.getTotalDeliveriesCost()));
+        }
+
     }
 
     private void showStoreOrdersHistory(DtoStore store) {
@@ -228,7 +232,7 @@ public class ConsoleUi {
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void placeOrder() throws ParseException {
+    private void placeOrder() throws ParseException {//TODO: handale the case no item was selceted yet but q was enterd
 /*        showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");*/
         boolean itemExist = false;
@@ -247,11 +251,11 @@ public class ConsoleUi {
         while (itemID != -1) {
             ItemAmountAndStore itemToAdd = storeEngine.getCheapestItem(itemID);
             double amount = getItemAmount(itemToAdd.getItem());
-            for(int i=0; i<orderItems.size();i++){
-                if (itemToAdd.getItem().equals(orderItems.get(i).getItem())) {
-                    amount += orderItems.get(i).getAmount();
+            for (ItemAmountAndStore orderItem : orderItems) {//TODO: improve this using contains
+                if (itemToAdd.getItem().equals(orderItem.getItem())) {
+                    amount += orderItem.getAmount();
                     itemExist = true;
-                    orderItems.get(i).setAmount(amount);
+                    orderItem.setAmount(amount);
                 }
             }
             if (!itemExist){
@@ -548,7 +552,8 @@ public class ConsoleUi {
 
     private void updateStore(){
         ConsoleUi.storeUpdateChoice[] eChoices = storeUpdateChoice.values();
-        //TODO show store name and id
+        storeEngine.getAllDtoStores().forEach((Integer, DtoStore)->showStore(DtoStore, true));
+        System.out.println("========================================");
         System.out.println("Please chose a store from the list above");
         int storeId = getIDFromUser("store");
         DtoStore storeToUpdate = storeEngine.getAllDtoStores().get(storeId);
@@ -559,11 +564,11 @@ public class ConsoleUi {
         ConsoleUi.storeUpdateChoice choice = eChoices[getAndValidateChoice(1, 3) - 1];
         switch (choice){
             case deleteItem:{
-                deleteItem();
+                deleteItem(storeToUpdate);
                 break;
             }
             case addItem:{
-                addItem();
+                addItem(storeToUpdate);
                 break;
             }
             case updateItem:{
@@ -601,12 +606,37 @@ public class ConsoleUi {
 
     }
 
-    private void addItem() {
-        //TODO this
+    private void addItem(DtoStore storeToUpdate) {
+        storeEngine.getAllDtoItems().forEach((Integer, DtoItem)->printItemDetails(DtoItem, false, storeToUpdate.getSerialNumber()));
+        System.out.println("Please choose an item from the list above to add to the store - "+storeToUpdate.getName());
+        int itemID = getIDFromUser("item");
+        if(storeToUpdate.getInventory().containsKey(itemID))
+            System.out.println("The store "+storeToUpdate.getName()+" already has the item "+ storeToUpdate.getInventory().get(itemID));
+        else{
+            DtoItem dtoItemToAdd = storeEngine.getAllDtoItems().get(itemID);
+            storeToUpdate.getInventory().put(itemID, dtoItemToAdd);
+            System.out.println("Added "+dtoItemToAdd.getName()+" successfully");
+        }
+
     }
 
-    private void deleteItem() {
-        //TODO this
+    private void deleteItem(DtoStore storeToUpdate) {//TODO: method no working fix thissssss
+        storeToUpdate.getInventory().forEach((Integer,DtoItem)->printItemDetails(DtoItem, false, storeToUpdate.getSerialNumber()));
+        System.out.println("Please choose an item to delete from the list above, by entering its ID:");
+        int itemID = getIDFromUser("item");//TODO: fix the method getIDFromUser so it selects from the set of id's given to it
+        if(storeToUpdate.getInventory().containsKey(itemID)){
+                if(storeEngine.NumberOfStoresSellingItem(storeEngine.getAllDtoItems().get(itemID)) > 1){
+                storeToUpdate.getInventory().remove(itemID);//TODO:check if it is necsery to have these two
+                storeEngine.getAllStores().get(storeToUpdate.getSerialNumber()).getInventory().remove(itemID);
+                System.out.println("Item was deleted successfully.");
+            }
+            else {
+                    System.out.println(storeToUpdate.getName() + " is the only store selling "
+                            + storeToUpdate.getInventory().get(itemID).getName() + ", cannot delete.");
+                }
+        }
+        else
+            System.out.println("The store "+storeToUpdate.getName()+" does not have the item "+ storeEngine.getAllDtoItems().get(itemID).getName());
     }
 }
 
