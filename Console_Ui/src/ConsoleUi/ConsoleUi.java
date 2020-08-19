@@ -540,14 +540,13 @@ public class ConsoleUi {
                 try {
                     System.out.println("Please enter the new price");
                     float newPrice = scanner.nextFloat();
-                    if(newPrice <= 0){
-                        System.out.println("Invalid price");
+                    while (newPrice <= 0){
+                        System.out.println("Invalid price, try again");
+                        newPrice = scanner.nextFloat();
                     }
-                    else {
-                        storeEngine.updateItemPrice(itemToUpdate, newPrice, storeToUpdate);
-                        System.out.println(itemToUpdate.getName() + "price updated");
-                        break;
-                    }
+                    storeEngine.updateItemPrice(itemToUpdate, newPrice, storeToUpdate);
+                    System.out.println(itemToUpdate.getName() + "price updated");
+                    break;
                 }catch (Exception e){
                     System.out.println(e.getMessage());
                 }
