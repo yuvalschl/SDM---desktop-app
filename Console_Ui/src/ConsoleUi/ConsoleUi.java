@@ -214,7 +214,7 @@ public class ConsoleUi {
             System.out.println("\tPrice per kilo: " + decimalFormat.format(item.getPrice()));
         }
 
-        System.out.println("\tTotal amount sold: " + (int) item.getAmountSold()); //TODO Check why casting
+        System.out.println("\tTotal amount sold: " + (int) item.getAmountSold());
     }
 
     private void showItemInSystem(DtoItem item) {
@@ -228,22 +228,15 @@ public class ConsoleUi {
             System.out.println("\tAverage price per kilo: " + decimalFormat.format(storeEngine.getAveragePrice(item)));
         }
 
-        System.out.println("\tTotal amount sold in the system: " + (int) item.getAmountSold());//TODO check why casting
+        System.out.println("\tTotal amount sold in the system: " + (int) item.getAmountSold());
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void placeOrder() throws ParseException {//TODO: handale the case no item was selceted yet but q was enterd
-/*        showAllStoresInOrderMenu();
-        System.out.println("Please choose a store by its ID from the list above:");*/
+    private void placeOrder() throws ParseException {
         boolean itemExist = false;
-        //int storeID = getIDFromUser("store");
         Date orderDate = getDateOfOrder();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");
-        //Date orderDate = dateFormat.parse("20/05-12:20"); //TODO delete this
-        //TODO: set year to 2020
-        //Point customerLocation = getCustomerLocation();TODO:bring this back
-        Point customerLocation = new Point(1, 1);
-
+        Point customerLocation = getCustomerLocation();
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         int itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
@@ -469,10 +462,13 @@ public class ConsoleUi {
 
     private void readFile() throws DuplicateValueException, ItemNotSoldException, InvalidValueException {
 
-        //TODO: get user input and delete hard coded stuff
-        // bring this back
-        // File file = getFileFromUser();
-        File file = new File("ex1-big.xml"); //TODO: delete this
+
+        File file = null;
+        try {
+            file = getFileFromUser();
+        } catch (InvalidFileTypeException e) {
+            System.out.println(e.getMessage());
+        }
         SuperDuperMarketDescriptor superDuperMarketDescriptor = XmlToObject.fromXmlFileToObject(file);
         JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
         if (superDuperMarketDescriptor == null) {
