@@ -144,7 +144,7 @@ public class ConsoleUi {
         for (Store store : order.getStores().values()) {
             storesNames.append(store.getName()).append(", ");
         }
-
+        storesNames.deleteCharAt(storesNames.length()-2);
         return storesNames.toString();
     }
 
@@ -154,7 +154,7 @@ public class ConsoleUi {
         for (Store store : order.getStores().values()) {
             storesId.append(store.getSerialNumber()).append(", ");
         }
-
+        storesId.deleteCharAt(storesId.length()-2);
         return storesId.toString();
     }
 
@@ -246,7 +246,7 @@ public class ConsoleUi {
 
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
-        int itemID = getIDFromUser("item");
+        int itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
         ArrayList<ItemAmountAndStore> orderItems = new ArrayList<>();
         while (itemID != -1) {
             ItemAmountAndStore itemToAdd = storeEngine.getCheapestItem(itemID);
@@ -262,8 +262,13 @@ public class ConsoleUi {
                 itemToAdd.setAmount(amount);
                 orderItems.add(itemToAdd);
             }
+            itemExist = false;
             System.out.println("Please chose another item or press q to exit");
-            itemID = getIDFromUser("item");
+            itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
+        }
+        if(orderItems.size() == 0){
+            System.out.println("No order was made.");
+            return;
         }
         Order order = storeEngine.createOrder(customerLocation, orderDate, orderItems);
         showItemsInOrder(order);
@@ -291,46 +296,7 @@ public class ConsoleUi {
             }
         } while (true);
     }
-    /*private Order createOrder(Point customerLocation, int storeID, int itemID, Date date) {
-       ArrayList<ItemAmountAndStore> items =  getItemsFromUser(storeID, itemID);
-       Order order = null;
-            if(items.size() != 0)
-               order = storeEngine.createOrder(customerLocation, storeID ,date, items);
-       return order;
-    }*/
 
-    /*private ArrayList<ItemAmountAndStore> getItemsFromUser(int storeID, int itemID) {
-        ArrayList<ItemAmountAndStore> items = new ArrayList<ItemAmountAndStore>();
-        double amount;
-
-        while (true){
-            boolean itemExistInOrder = false;
-            DtoStore store= storeEngine.getAllDtoStores().get(storeID);
-            if(store.getInventory().containsKey(itemID)){
-                amount = getItemAmount(store.getInventory().get(itemID));
-                for (ItemAmountAndStore pair: items) {
-                    if (pair.item().getSerialNumber() == itemID ) {
-                        itemExistInOrder = true;
-                        amount += pair.amount();
-                        pair.setAmount(amount);
-                        break;
-                    }
-                }
-                if(!itemExistInOrder){
-                    ItemAmountAndStore pair = new ItemAmountAndStore(store.getInventory().get(itemID), amount);
-                    items.add(pair);
-                }
-            }
-            else {
-                System.out.println("The store "+ storeEngine.getAllStores().get(storeID).getName()+
-                    " does not have the item "+ storeEngine.getAllItems().get(itemID).getName()+".\n");
-            }
-            System.out.println("Please enter another item ID or q to end order");
-            itemID = getIDFromUser("item");
-            if (itemID == -1)
-                return items;
-        }
-    }*/
 
     //TODO re-write the method
     private double getItemAmount(DtoItem item) {
@@ -352,7 +318,8 @@ public class ConsoleUi {
                     System.out.println("Please enter a whole number!");
                 }
             }
-        } else {
+        }
+        else {
             System.out.println("Please enter how many KG's of " + item.getName() + " would you like");
         }
         while (true) {
@@ -401,37 +368,25 @@ public class ConsoleUi {
 
     }
 
-    private int getIDFromUser(String StoreOrItem) {
-        Scanner scanner = new Scanner(System.in);
-        int userSelection;
+    private int getIDFromUser(Set<Integer> idSet, boolean exitWithQ) {
         do {
+            Scanner scanner = new Scanner(System.in);
+            int userSelection;
             try {
                 String userSelectionString = scanner.next();
-                if (userSelectionString.toLowerCase().charAt(0) == 'q' && StoreOrItem.equals("item") && userSelectionString.length() == 1)
+                if (userSelectionString.toLowerCase().charAt(0) == 'q' && exitWithQ && userSelectionString.length() == 1)
                     return -1;
                 userSelection = Integer.parseInt(userSelectionString);
-                Method method;
-                if (StoreOrItem.equals("store")) {
-                    method = StoreManager.class.getMethod("getAllStores", null);
-                } else {
-                    method = StoreManager.class.getMethod("getAllItems", null);
-
-                }
-                if (((Map<Integer, Store>) method.invoke(storeEngine)).containsKey(userSelection)) {
+                if(userSelection > 0 && idSet.contains(userSelection)==true)
                     return userSelection;
-                } else {
-                    if (StoreOrItem.equals("store"))
-                        System.out.println("The store ID you entered is not available please choose an ID from the list above");
-                    else
-                        System.out.println("The Item ID you entered is not available please choose an ID from the list above");
-                }
-
+                else
+                    System.out.println("ID not available");
             } catch (NumberFormatException e) {
-                System.out.println("Please enter a number");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        } while (true);
+            System.out.println("Please enter a number");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        }while (true);
     }
 
     private void showAllStoresInOrderMenu() {
@@ -555,7 +510,7 @@ public class ConsoleUi {
         storeEngine.getAllDtoStores().forEach((Integer, DtoStore)->showStore(DtoStore, true));
         System.out.println("========================================");
         System.out.println("Please chose a store from the list above");
-        int storeId = getIDFromUser("store");
+        int storeId = getIDFromUser(storeEngine.getAllDtoStores().keySet(), false);
         DtoStore storeToUpdate = storeEngine.getAllDtoStores().get(storeId);
         System.out.println("Please chose an action\n" +
                 "1. delete item from store inventory\n" +
@@ -582,7 +537,7 @@ public class ConsoleUi {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter item id");
         while (true){
-            int itemId = getIDFromUser("item");
+            int itemId = getIDFromUser(store.getInventory().keySet(), false);
             if(store.getInventory().containsKey(itemId)){
                 DtoItem itemToUpdate = store.getInventory().get(itemId);
                 try {
@@ -610,7 +565,7 @@ public class ConsoleUi {
         Scanner scanner = new Scanner(System.in);
         showAllItemsInSystem();
         System.out.println("Please choose an item from the list above to add to the store - "+storeToUpdate.getName());
-        int itemID = getIDFromUser("item");
+        int itemID = getIDFromUser(storeToUpdate.getInventory().keySet(), false);
         if(storeToUpdate.getInventory().containsKey(itemID))
             System.out.println("The store "+storeToUpdate.getName()+" already has the item "+ storeToUpdate.getInventory().get(itemID));
         else{
@@ -634,10 +589,11 @@ public class ConsoleUi {
     private void deleteItem(DtoStore storeToUpdate) {
         storeToUpdate.getInventory().forEach((Integer,DtoItem)->printItemDetails(DtoItem, false, storeToUpdate.getSerialNumber()));
         System.out.println("Please choose an item to delete from the list above, by entering its ID:");
-        int itemID = getIDFromUser("item");//TODO: fix the method getIDFromUser so it selects from the set of id's given to it
+        int itemID = getIDFromUser(storeToUpdate.getInventory().keySet(), false);
         if(storeToUpdate.getInventory().containsKey(itemID)){
                 if(storeEngine.NumberOfStoresSellingItem(storeEngine.getAllDtoItems().get(itemID)) > 1){
                     storeEngine.deleteItemFromStore(storeToUpdate, itemID);
+                    System.out.println(storeEngine.getAllDtoItems().get(itemID).getName() +" was deleted");
                 }
             else {
                     System.out.println(storeToUpdate.getName() + " is the only store selling "
