@@ -47,7 +47,7 @@ public class JaxbClassToStoreManager {
         Map<Integer, Store> allStores = new HashMap<Integer, Store>();
         for(SDMStore store : sdmStores){
             if(allStores.containsKey(store.getId())){
-                throw new DuplicateValueException("Store.Store with id: " + store.getId() + " already exists in the system");
+                throw new DuplicateValueException("Store with id: " + store.getId() + " already exists in the system");
             }
             Map<Integer, Item> currentStoreInventory = createCurrentStoreInventory(allItems, store, allItems);
             Point currentStoreLocation = new Point(store.getLocation().getX(), store.getLocation().getY());

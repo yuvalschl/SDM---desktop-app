@@ -529,13 +529,14 @@ public class ConsoleUi {
         }
     }
 
-    private void updateItem(DtoStore store) {
+    private void updateItem(DtoStore storeToUpdate) {
+        storeToUpdate.getInventory().forEach((Integer,DtoItem)->printItemDetails(DtoItem, false, storeToUpdate.getSerialNumber()));
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter item id");
         while (true){
-            int itemId = getIDFromUser(store.getInventory().keySet(), false);
-            if(store.getInventory().containsKey(itemId)){
-                DtoItem itemToUpdate = store.getInventory().get(itemId);
+            int itemId = getIDFromUser(storeToUpdate.getInventory().keySet(), false);
+            if(storeToUpdate.getInventory().containsKey(itemId)){
+                DtoItem itemToUpdate = storeToUpdate.getInventory().get(itemId);
                 try {
                     System.out.println("Please enter the new price");
                     float newPrice = scanner.nextFloat();
@@ -543,7 +544,7 @@ public class ConsoleUi {
                         System.out.println("Invalid price");
                     }
                     else {
-                        storeEngine.updateItemPrice(itemToUpdate, newPrice, store);
+                        storeEngine.updateItemPrice(itemToUpdate, newPrice, storeToUpdate);
                         System.out.println(itemToUpdate.getName() + "price updated");
                         break;
                     }
@@ -552,7 +553,7 @@ public class ConsoleUi {
                 }
             }
             else {
-                System.out.println(store.getName() + "dose not sell this item, please try again");
+                System.out.println(storeToUpdate.getName() + "dose not sell this item, please try again");
             }
         }
     }
@@ -561,9 +562,9 @@ public class ConsoleUi {
         Scanner scanner = new Scanner(System.in);
         showAllItemsInSystem();
         System.out.println("Please choose an item from the list above to add to the store - "+storeToUpdate.getName());
-        int itemID = getIDFromUser(storeToUpdate.getInventory().keySet(), false);
+        int itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), false);
         if(storeToUpdate.getInventory().containsKey(itemID))
-            System.out.println("The store "+storeToUpdate.getName()+" already has the item "+ storeToUpdate.getInventory().get(itemID));
+            System.out.println("The store "+storeToUpdate.getName()+" already has the item "+ storeToUpdate.getInventory().get(itemID).getName());
         else{
             System.out.println("Please enter the new price");
             float price = scanner.nextFloat();
