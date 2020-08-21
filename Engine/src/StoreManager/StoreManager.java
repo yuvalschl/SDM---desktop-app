@@ -6,8 +6,13 @@ import Item.*;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
 import Store.Store;
+import jaxb.XmlToObject;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.awt.*;
+import java.io.File;
 import java.util.*;
 
 public class StoreManager {
@@ -55,6 +60,18 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
+    public Order loadOrder() throws JAXBException {
+        Order order = XmlToObject.fromXmlFileToOrder();
+        return order;
+    }
+
+    public void saveHistoryToFile(File file) throws JAXBException {
+        OrderWrapper orders = new OrderWrapper(allOrders);
+            JAXBContext jaxbContext = JAXBContext.newInstance(OrderWrapper.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            jaxbMarshaller.marshal(orders, file);
+    }
 
     public int NumberOfStoresSellingItem(DtoItem item){
         int numberOfStoresSellingTheItem = 0;
@@ -90,6 +107,16 @@ public class StoreManager {
             allDtoStores.put(key, storeToDtoStore(currentStore));
         }
         return allDtoStores;
+    }
+
+    public HashMap<Integer ,DtoOrder> getAllDtoOrders(){
+        HashMap<Integer ,DtoOrder> allDtoOrders = new HashMap<>();
+        for (Order order: allOrders){
+            DtoOrder dtoOrder = new DtoOrder(order.getDateOfOrder(),order.getAmountOfItems(),order.getTotalPriceOfItems()
+            ,order.getShippingCost(), order.getTotalCost(), order.getDistance(), order.getStores(),order.getItemAmountAndStores());
+            allDtoOrders.put(order.getOrderId(), dtoOrder);
+        }
+        return allDtoOrders;
     }
 
     public void updateItemPrice(DtoItem item, float newPrice, DtoStore store) throws InvalidValueException {
@@ -192,7 +219,7 @@ public class StoreManager {
     public void placeOrder(Order order) {//finilaize the order after final approval, in this method we add the order to the order set and update the amount sold in allitems
         allOrders.add(order);
         int amountSold = 0;
-        for (ItemAmountAndStore item : order.getItems()) {
+        for (ItemAmountAndStore item : order.getItemAmountAndStores()) {
             int itemID = item.item().getSerialNumber();
             if(item.item() instanceof DtoUnitItem)
                 amountSold = (int) (allItems.get(itemID).getAmountSold() + (int) item.amount());
@@ -212,7 +239,7 @@ public class StoreManager {
         for(Map.Entry<Integer, Store> store : order.getStores().entrySet()){
             float shippingCost = order.getShippingCostByStore().get(store.getKey());
             StoreOrder orderToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, order.getDistance(), store.getValue(), order.getOrderId());
-            for(ItemAmountAndStore item : order.getItems()){
+            for(ItemAmountAndStore item : order.getItemAmountAndStores()){
                 if(item.getStore().getSerialNumber() == store.getValue().getSerialNumber()){
                     orderToAdd.addItemToOrder(item);
                 }
@@ -313,7 +340,7 @@ public class StoreManager {
         int timesSold = 0;
         if(allOrders != null)
             for (Order order: allOrders) {
-                for (ItemAmountAndStore pair:order.getItems())
+                for (ItemAmountAndStore pair:order.getItemAmountAndStores())
                     if(pair.item().equals(item)) {
                         timesSold += pair.amount();
                     }

@@ -2,7 +2,6 @@ package ConsoleUi;
 
 import DtoObjects.*;
 import Exceptions.*;
-import Item.Item;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
 import Store.*;
@@ -11,10 +10,15 @@ import jaxb.JaxbClassToStoreManager;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 import jaxb.XmlToObject;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.awt.*;
 import java.io.File;
-import java.lang.reflect.Method;
+import java.io.FileNotFoundException;
 import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -22,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ConsoleUi {
+
 
     private final Menu menu = new Menu();
     private StoreManager storeEngine;
@@ -34,6 +39,8 @@ public class ConsoleUi {
         PlaceOrder,
         ShowHistory,
         UpdateStore,
+        SaveHistory,
+        LoadHistory,
         Exit
     }
 
@@ -43,37 +50,13 @@ public class ConsoleUi {
         updateItem
     }
 
-    private int getAndValidateChoice(int smallestChoice, int largestChoice) {
-        Scanner input = new Scanner(System.in);
-        int choice = -1;
-        boolean isValid = false;
-        System.out.println("Please enter a number between " + smallestChoice + " and " + largestChoice + ":\n");
-        do {
-            String choiceString = input.next();
-            if (!choiceString.isEmpty()) {
-                try {
-                    choice = Integer.parseInt(choiceString);
-                    if (choice >= smallestChoice && choice <= largestChoice) {
-                        isValid = true;
-                    } else {
-                        System.out.println("Please enter a number between " + smallestChoice + " and " + largestChoice);
-                    }
-                } catch (Exception e) {
-                    System.out.println("Please enter a number!");
-                }
-            } else {
-                System.out.println("Answer cannot be empty!");
-            }
-        } while (!isValid);
-        return choice;
-    }
 
-    public void runUI() {
+    public void runUI() throws JAXBException {
         ConsoleUi.menuChoice[] eChoices = menuChoice.values();
         boolean isFileLoaded = false;
         while (true) {
             System.out.println(menu.getMenuOption());
-            ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 6) - 1];
+            ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 9) - 1];
             if (isFileLoaded || choice == menuChoice.readFile) {
                 switch (choice) {
                     case readFile: {
@@ -109,6 +92,14 @@ public class ConsoleUi {
                         updateStore();
                         break;
                     }
+                    case SaveHistory:{
+                        saveOrderHistoryToFile();
+                        break;
+                    }
+                    case LoadHistory:{
+                        loadOrderHistory();
+                        break;
+                    }
                     case Exit: {
                         System.exit(0);
                     }
@@ -119,11 +110,83 @@ public class ConsoleUi {
         }
     }
 
+    private int getAndValidateChoice(int smallestChoice, int largestChoice) {
+        Scanner input = new Scanner(System.in);
+        int choice = -1;
+        boolean isValid = false;
+        System.out.println("Please enter a number between " + smallestChoice + " and " + largestChoice + ":\n");
+        do {
+            String choiceString = input.next();
+            if (!choiceString.isEmpty()) {
+                try {
+                    choice = Integer.parseInt(choiceString);
+                    if (choice >= smallestChoice && choice <= largestChoice) {
+                        isValid = true;
+                    } else {
+                        System.out.println("Please enter a number between " + smallestChoice + " and " + largestChoice);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Please enter a number!");
+                }
+            } else {
+                System.out.println("Answer cannot be empty!");
+            }
+        } while (!isValid);
+        return choice;
+    }
+
+
+    private void loadOrderHistory() throws JAXBException {
+        //TODO: this method
+        try {
+           Order order =  storeEngine.loadOrder();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error");
+        }
+    }
+
+    private void saveOrderHistoryToFile() {
+        if(storeEngine.getAllOrders().size() == 0)
+            System.out.println("No orders were made yet");
+        else{
+            File file = getFilePath();
+            try {
+                storeEngine.saveHistoryToFile(file);
+                System.out.println("Orders were saved successfully");
+            }
+            catch (JAXBException e) {
+                System.out.println("Invalid file path");
+            }
+        }
+
+    }
+
+    private File getFilePath() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter a file path ");
+        while (true){
+            String path = scanner.next();
+            File file = new File(path);
+            File dirFile = null;
+            if(!file.isDirectory())
+               dirFile = file.getParentFile();
+            if(dirFile != null)
+                if(dirFile.exists()){
+                 return file;
+                }
+            System.out.println("Invalid path please try again");
+        }
+
+    }
+
     private void ShowHistory() {
         if (storeEngine.getAllOrders().isEmpty()) {
             System.out.println("No order were made yet");
         }
         storeEngine.getAllOrders().forEach(this::printSingleOrder);
+
     }
 
     private void printSingleOrder(Order order) {
@@ -440,7 +503,7 @@ public class ConsoleUi {
     }
 
     private void showItemsInOrder(Order order) {
-        ArrayList<ItemAmountAndStore> items = order.getItems();
+        ArrayList<ItemAmountAndStore> items = order.getItemAmountAndStores();
         DtoItem item;
         System.out.println("The order details:");
         for (ItemAmountAndStore itemInPair : items) {
