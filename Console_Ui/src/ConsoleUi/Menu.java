@@ -10,7 +10,9 @@ public class Menu {
             "4.Place an order\n" +
             "5.Show order history\n" +
             "6.Update store\n" +
-            "7.EXIT\n";
+            "7.Save Orders\n"+
+            "8.Load history\n"+
+            "9.EXIT\n";
 
     public String getMenuOption() {
         return menuOption;

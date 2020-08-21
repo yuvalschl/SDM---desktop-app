@@ -1,11 +1,13 @@
 package jaxb;
 
+import Order.*;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.lang.reflect.Field;
 
 public class XmlToObject {
 
@@ -23,5 +25,17 @@ public class XmlToObject {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static OrderWrapper fromXmlFileToOrder(File file) throws JAXBException {
+        try {
+        JAXBContext jaxbContext = JAXBContext.newInstance(OrderWrapper.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        OrderWrapper order = (OrderWrapper) jaxbUnmarshaller.unmarshal(file);
+        return order;
+    } catch (JAXBException e) {
+        e.printStackTrace();
+        return null;
+    }
     }
 }

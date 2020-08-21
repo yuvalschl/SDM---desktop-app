@@ -1,6 +1,7 @@
 package DtoObjects;
 
 import ItemPair.ItemAmountAndStore;
+import Order.Order;
 import Store.*;
 
 import java.util.ArrayList;
@@ -65,5 +66,33 @@ public class DtoOrder {
 
     public ArrayList<ItemAmountAndStore> getItems() {
         return items;
+    }
+
+    private String allStoresNameString(DtoOrder order) {
+        StringBuilder storesNames = new StringBuilder();
+        for (Store store : order.getStores().values()) {
+            storesNames.append(store.getName()).append(", ");
+        }
+        storesNames.deleteCharAt(storesNames.length()-2);
+        return storesNames.toString();
+    }
+    private String allStoresIdString(DtoOrder order) {
+        StringBuilder storesId = new StringBuilder();
+        for (Store store : order.getStores().values()) {
+            storesId.append(store.getSerialNumber()).append(", ");
+        }
+        storesId.deleteCharAt(storesId.length()-2);
+        return storesId.toString();
+    }
+
+    public String toString() {
+        return  "*   Order ID: " + orderId + "\n" +
+                "\tDate: " + dateOfOrder + "\n" +
+                "\tStores names: " + allStoresNameString(this) + "\n" +
+                "\tStores ID: " + allStoresIdString(this) + "\n" +
+                "\tNumber of items in order: " + amountOfItems + "\n" +
+                "\tTotal item cost: " + totalPriceOfItems + "\n" +
+                "\tShipping price: " + shippingCost + "\n" +
+                "\tTotal order price: " + totalCost;
     }
 }
