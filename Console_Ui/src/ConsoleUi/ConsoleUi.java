@@ -231,10 +231,8 @@ public class ConsoleUi {
     }
 
     private void placeOrder() throws ParseException {
-//        Date orderDate = getDateOfOrder();
-//        Point customerLocation = getCustomerLocation();
-        Date orderDate = new Date();
-        Point customerLocation = new Point(1,1);
+        Date orderDate = getDateOfOrder();
+        Point customerLocation = getCustomerLocation();
         Boolean isOrderDynamic = getOrderTypeFromUser(); // return true if order is dynamic
         Order order;
         if(isOrderDynamic){
@@ -377,10 +375,24 @@ public class ConsoleUi {
     }
 
     private Point getCustomerLocation() {
-        System.out.println("Please enter your X coordinate");
-        int x = readCoordinate();
-        System.out.println("Please enter your Y coordinate");
-        int y = readCoordinate();
+        int x;
+        int y;
+        boolean isValid = true;
+        do{
+            System.out.println("Please enter your X coordinate");
+            x = readCoordinate();
+            System.out.println("Please enter your Y coordinate");
+            y = readCoordinate();
+            Point point = new Point(x,y);
+
+            for (Map.Entry<Integer, DtoStore> store : storeEngine.getAllDtoStores().entrySet()){
+                if(store.getValue().getLocation().equals(point)){
+                    isValid = false;
+                    System.out.println("there is a store in this location");
+                }
+            }
+        }while (!isValid);
+
         return new Point(x, y);
     }
 
