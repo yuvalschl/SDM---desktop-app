@@ -2,6 +2,7 @@ package ConsoleUi;
 
 import DtoObjects.*;
 import Exceptions.*;
+import Item.Item;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
 import Store.*;
@@ -240,7 +241,7 @@ public class ConsoleUi {
             order = dynamicOrder(customerLocation, orderDate);
         }
         else{
-            order = staticOrder();
+            order = staticOrder(customerLocation, orderDate);
         }
         showItemsInOrder(order);
         if (getOrderApproval()) {
@@ -255,23 +256,26 @@ public class ConsoleUi {
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
         int storeID = getIDFromUser(storeEngine.getAllStores().keySet(), false);
+        Store currentStore = storeEngine.getAllStores().get(storeID);
+        ArrayList<ItemAmountAndStore> orderItems = new ArrayList<ItemAmountAndStore>();
+        int itemId;
         showItemsToChooseFrom(storeID);
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
-        int itemID = getIDFromUser(storeEngine.getAllStores().get(storeID).getDtoInventory().keySet(), false);
-        if (itemID != -1 ) {
-            order = createOrder(customerLocation,storeID,itemID, orderDate);
-            if (order!= null){
-                showItemsInOrder(order,storeID);
-                if(getOrderApproval()) {
-                    storeEngine.placeOrder(order);
-                    System.out.println("Order was added successfully.");
-                }
-                else
-                    System.out.println("Order canceled.");
-            }
-        }
-        else
-            System.out.println("No order was made.");
+        itemId = getIDFromUser(storeEngine.getAllStores().get(storeID).getDtoInventory().keySet(), true);
+        do{
+            ItemAmountAndStore currentItem = new ItemAmountAndStore(storeEngine.getAllDtoItems().get(itemId), currentStore);
+            currentItem.setAmount(getItemAmount(currentItem.getItem()));
+            orderItems.add(currentItem);
+            System.out.println("Please choose items by its ID from the list above or enter q to end order:");
+            itemId = getIDFromUser(storeEngine.getAllStores().get(storeID).getDtoInventory().keySet(), true);
+        }while (itemId != -1);
+        return storeEngine.createOrder(customerLocation, orderDate, orderItems);
+    }
+
+    private void showItemsToChooseFrom(int storeID) {
+        Map<Integer, DtoItem> DtoItems = storeEngine.getAllDtoItems();
+        for (Integer key: DtoItems.keySet())
+            printItemDetails(DtoItems.get(key), false, storeID);
     }
 
     //ture is dynamic order type
@@ -279,8 +283,8 @@ public class ConsoleUi {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Press 1 for dynamic order and 2 for static order");
         String userInput = scanner.next();
-        while(userInput != "1" && userInput != "2"){
-            System.out.println("Invalid input, please chosse 1 or 2");
+        while(!userInput.equals("1") && !userInput.equals("2")){
+            System.out.println("Invalid input, please chose 1 or 2");
             userInput = scanner.next();
         }
         return userInput.equals("1");
@@ -315,13 +319,6 @@ public class ConsoleUi {
         }
         return storeEngine.createOrder(customerLocation, orderDate, orderItems);
     }
-
-//    private void placeOrder() throws ParseException {//TODO: if the same item id is selected more then onve, add the details to the same ID
-//        Order order = null;
-//
-//    }
-
-
 
     private Boolean getOrderApproval() {
         Scanner input = new Scanner(System.in);
@@ -418,7 +415,7 @@ public class ConsoleUi {
                 if (userSelectionString.toLowerCase().charAt(0) == 'q' && exitWithQ && userSelectionString.length() == 1)
                     return -1;
                 userSelection = Integer.parseInt(userSelectionString);
-                if(userSelection > 0 && idSet.contains(userSelection)==true)
+                if(userSelection > 0 && idSet.contains(userSelection))
                     return userSelection;
                 else
                     System.out.println("ID not available");

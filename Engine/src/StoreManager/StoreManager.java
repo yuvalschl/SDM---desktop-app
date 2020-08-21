@@ -152,8 +152,7 @@ public class StoreManager {
 
         }
         float totalCost = shippingCost + totalPriceOfItems;
-        Order newOrder = new Order(date, items.size(), totalPriceOfItems, shippingCost, totalCost, allStoresInOrder, items, shippingCostByStore); ;
-        return newOrder;
+        return new Order(date, items.size(), totalPriceOfItems, shippingCost, totalCost, allStoresInOrder, items, shippingCostByStore);
     }
 
     private HashMap<Integer, Float> calcShippingCostByStore(ArrayList<ItemAmountAndStore> allItems, Point customerLocation){
