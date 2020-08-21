@@ -1,6 +1,6 @@
 package jaxb;
 
-import Order.Order;
+import Order.*;
 import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
 
 import javax.xml.bind.JAXBContext;
@@ -27,13 +27,12 @@ public class XmlToObject {
         }
     }
 
-    public static Order fromXmlFileToOrder(/*File file*/) throws JAXBException {
+    public static OrderWrapper fromXmlFileToOrder(File file) throws JAXBException {
         try {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Order.class);
-
+        JAXBContext jaxbContext = JAXBContext.newInstance(OrderWrapper.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        File file = new File("C:\\Users\\Dani\\IdeaProjects\\SDM\\yogev.xml");
-        return  (Order) jaxbUnmarshaller.unmarshal(/*file*/file);
+        OrderWrapper order = (OrderWrapper) jaxbUnmarshaller.unmarshal(file);
+        return order;
     } catch (JAXBException e) {
         e.printStackTrace();
         return null;

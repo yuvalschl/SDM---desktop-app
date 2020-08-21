@@ -6,11 +6,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Set;
 
-@XmlRootElement(name = "orders")
+@XmlRootElement(name = "Orders")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderWrapper {
 
-    @XmlElement(name = "order")
+    @XmlElement(name = "Order")
     private Set<Order> orders = null;
 
     public OrderWrapper(Set<Order> orders) {

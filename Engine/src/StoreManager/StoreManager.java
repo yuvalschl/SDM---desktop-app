@@ -60,9 +60,8 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
-    public Order loadOrder() throws JAXBException {
-        Order order = XmlToObject.fromXmlFileToOrder();
-        return order;
+    public OrderWrapper loadOrder(File file) throws JAXBException {
+        return XmlToObject.fromXmlFileToOrder(file);
     }
 
     public void saveHistoryToFile(File file) throws JAXBException {

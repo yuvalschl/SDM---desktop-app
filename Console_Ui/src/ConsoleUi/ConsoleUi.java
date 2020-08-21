@@ -137,9 +137,9 @@ public class ConsoleUi {
 
 
     private void loadOrderHistory() throws JAXBException {
-        //TODO: this method
+        File file = getFilePath();
         try {
-           Order order =  storeEngine.loadOrder();
+           OrderWrapper order =  storeEngine.loadOrder(file);
         }
         catch (Exception e)
         {
