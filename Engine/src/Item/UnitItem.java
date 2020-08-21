@@ -25,8 +25,8 @@ public class UnitItem extends Item {
         return amountSold;
     }
 
-    public void setAmountSold(int amountSold) {
-        this.amountSold = amountSold;
+    public void setAmountSold(float amountSold) {
+        this.amountSold = (int)amountSold;
     }
 
     public String toString(Boolean isInShowStores){

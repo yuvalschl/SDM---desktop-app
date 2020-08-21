@@ -4,11 +4,11 @@ import DtoObjects.DtoItem;
 import Store.Store;
 
 public class ItemAmountAndStore {
-    private double amount;
+    private float amount;
     private final DtoItem item;
     private Store store;
 
-    public ItemAmountAndStore(DtoItem item, Double amount, Store store) {
+    public ItemAmountAndStore(DtoItem item, float amount, Store store) {
         this.item = item;
         this.amount = amount;
         this.store = store;
@@ -19,12 +19,12 @@ public class ItemAmountAndStore {
         this.store = store;
     }
 
-    public ItemAmountAndStore(double amount, DtoItem item) {
+    public ItemAmountAndStore(float amount, DtoItem item) {
         this.amount = amount;
         this.item = item;
     }
 
-    public double getAmount() {
+    public float getAmount() {
         return amount;
     }
 
@@ -48,7 +48,7 @@ public class ItemAmountAndStore {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 

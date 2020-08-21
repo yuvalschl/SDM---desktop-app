@@ -86,5 +86,5 @@ public abstract class Item {
         return Objects.hash(getSerialNumber(), getName(), getPrice());
     }
 
-    public abstract void setAmountSold(int amountSold);
+    public abstract void setAmountSold(float amountSold);
 }

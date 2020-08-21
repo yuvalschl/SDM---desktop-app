@@ -2,7 +2,6 @@ package ConsoleUi;
 
 import DtoObjects.*;
 import Exceptions.*;
-import Item.Item;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
 import Store.*;
@@ -72,7 +71,7 @@ public class ConsoleUi {
         boolean isFileLoaded = false;
         while (true) {
             System.out.println(menu.getMenuOption());
-            ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 6) - 1];
+            ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 7) - 1];
             if (isFileLoaded || choice == menuChoice.readFile) {
                 switch (choice) {
                     case readFile: {
@@ -227,14 +226,15 @@ public class ConsoleUi {
             System.out.println("\tAverage price per kilo: " + decimalFormat.format(storeEngine.getAveragePrice(item)));
         }
 
-        System.out.println("\tTotal amount sold in the system: " + (int) item.getAmountSold());
+        System.out.println("\tTotal amount sold in the system: " + item.getAmountSold());
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
     private void placeOrder() throws ParseException {
-        Date orderDate = getDateOfOrder();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");
-        Point customerLocation = getCustomerLocation();
+//        Date orderDate = getDateOfOrder();
+//        Point customerLocation = getCustomerLocation();
+        Date orderDate = new Date();
+        Point customerLocation = new Point(1,1);
         Boolean isOrderDynamic = getOrderTypeFromUser(); // return true if order is dynamic
         Order order;
         if(isOrderDynamic){
@@ -262,14 +262,45 @@ public class ConsoleUi {
         showItemsToChooseFrom(storeID);
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         itemId = getIDFromUser(storeEngine.getAllStores().get(storeID).getDtoInventory().keySet(), true);
-        do{
-            ItemAmountAndStore currentItem = new ItemAmountAndStore(storeEngine.getAllDtoItems().get(itemId), currentStore);
-            currentItem.setAmount(getItemAmount(currentItem.getItem()));
-            orderItems.add(currentItem);
+        do {
+            ItemAmountAndStore itemToAdd = new ItemAmountAndStore(storeEngine.getAllStores().get(storeID).getDtoInventory().get(itemId), currentStore);
+            float amount = getItemAmount(itemToAdd.getItem());
+            addToItemAmount(orderItems, itemToAdd, amount);
             System.out.println("Please choose items by its ID from the list above or enter q to end order:");
             itemId = getIDFromUser(storeEngine.getAllStores().get(storeID).getDtoInventory().keySet(), true);
         }while (itemId != -1);
+
         return storeEngine.createOrder(customerLocation, orderDate, orderItems);
+    }
+
+    private Order dynamicOrder(Point customerLocation, Date orderDate){
+        showAllItemsInSystem();
+        System.out.println("Please choose items by its ID from the list above or enter q to end order:");
+        int itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
+        ArrayList<ItemAmountAndStore> orderItems = new ArrayList<>();
+        while (itemID != -1) {
+            ItemAmountAndStore itemToAdd = storeEngine.getCheapestItem(itemID);
+            float amount = getItemAmount(itemToAdd.getItem());
+            addToItemAmount(orderItems, itemToAdd, amount);
+            System.out.println("Please chose another item or press q to exit");
+            itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
+        }
+        return storeEngine.createOrder(customerLocation, orderDate, orderItems);
+    }
+
+    private void addToItemAmount(ArrayList<ItemAmountAndStore> orderItems, ItemAmountAndStore itemToAdd, float amount) {
+        boolean itemExist = false;
+        for (ItemAmountAndStore orderItem : orderItems) {//TODO: improve this using contains
+            if (itemToAdd.getItem().equals(orderItem.getItem())) {
+                amount += orderItem.getAmount();
+                itemExist = true;
+                orderItem.setAmount(amount);
+            }
+        }
+        if (!itemExist){
+            itemToAdd.setAmount(amount);
+            orderItems.add(itemToAdd);
+        }
     }
 
     private void showItemsToChooseFrom(int storeID) {
@@ -290,36 +321,6 @@ public class ConsoleUi {
         return userInput.equals("1");
     }
 
-    private Order dynamicOrder(Point customerLocation, Date orderDate){
-        boolean itemExist = false;
-        showAllItemsInSystem();
-        System.out.println("Please choose items by its ID from the list above or enter q to end order:");
-        int itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
-        ArrayList<ItemAmountAndStore> orderItems = new ArrayList<>();
-        while (itemID != -1) {
-            ItemAmountAndStore itemToAdd = storeEngine.getCheapestItem(itemID);
-            double amount = getItemAmount(itemToAdd.getItem());
-            for (ItemAmountAndStore orderItem : orderItems) {//TODO: improve this using contains
-                if (itemToAdd.getItem().equals(orderItem.getItem())) {
-                    amount += orderItem.getAmount();
-                    itemExist = true;
-                    orderItem.setAmount(amount);
-                }
-            }
-            if (!itemExist){
-                itemToAdd.setAmount(amount);
-                orderItems.add(itemToAdd);
-            }
-            itemExist = false;
-            System.out.println("Please chose another item or press q to exit");
-            itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
-        }
-        if(orderItems.size() == 0){
-            System.out.println("No order was made.");
-        }
-        return storeEngine.createOrder(customerLocation, orderDate, orderItems);
-    }
-
     private Boolean getOrderApproval() {
         Scanner input = new Scanner(System.in);
         do {
@@ -337,9 +338,9 @@ public class ConsoleUi {
 
 
     //TODO re-write the method
-    private double getItemAmount(DtoItem item) {
+    private float getItemAmount(DtoItem item) {
         Scanner input = new Scanner(System.in);
-        double amount;
+        float amount;
         String stringAmount;
         if (item instanceof DtoUnitItem) {
             System.out.println("Please enter how many units of " + item.getName() + " would you like");
@@ -363,7 +364,7 @@ public class ConsoleUi {
         while (true) {
             try {
                 stringAmount = input.next();
-                amount = Double.parseDouble(stringAmount);
+                amount =Float.parseFloat(stringAmount);
                 if (amount <= 0) {
                     System.out.println("Please enter a positive number");
                 } else {
@@ -493,10 +494,10 @@ public class ConsoleUi {
             printItemDetails(item, false, itemInPair.getStore().getSerialNumber());
             if (item instanceof DtoUnitItem) {
                 System.out.println("\tThe requested amount is: " + (int) itemInPair.amount() + " units.");
-                System.out.println("\tTotal price of requested item is: " + decimalFormat.format((int) itemInPair.amount() * item.getPrice()));
+                System.out.println("\tTotal price of requested item is: " + decimalFormat.format((int) itemInPair.amount() * itemInPair.getStore().getInventory().get(item.getSerialNumber()).getPrice()));
             } else {
                 System.out.println("\tThe requested amount is: " + decimalFormat.format(itemInPair.amount()) + " KG.");
-                System.out.println("\tTotal price of requested item is: " + decimalFormat.format(itemInPair.amount() * item.getPrice()));
+                System.out.println("\tTotal price of requested item is: " + decimalFormat.format(itemInPair.amount() * itemInPair.getStore().getInventory().get(item.getSerialNumber()).getPrice()));
             }
         }
         System.out.println("\tThe delivery cost is: " + decimalFormat.format(order.getShippingCost()));

@@ -1,16 +1,16 @@
 package Order;
 
 import DtoObjects.DtoStoreOrder;
+import DtoObjects.DtoUnitItem;
 import ItemPair.ItemAmountAndStore;
 import Store.Store;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class StoreOrder {
     private Date dateOfOrder;
-    private int amountOfItems;
+    private float amountOfItems;
     private float totalPriceOfItems;
     private float shippingCost;
     private float totalCost;
@@ -38,18 +38,23 @@ public class StoreOrder {
         this.items.add(item);
         totalCost += item.getItem().getPrice() * item.getAmount();
         totalPriceOfItems += item.getItem().getPrice() * item.getAmount();
-        amountOfItems += item.getAmount();
+        if(item.getItem() instanceof DtoUnitItem){
+            amountOfItems += item.getAmount();
+        }
+        else {
+            amountOfItems += 1;
+        }
     }
 
     public void setDateOfOrder(Date dateOfOrder) {
         this.dateOfOrder = dateOfOrder;
     }
 
-    public int getAmountOfItems() {
+    public float getAmountOfItems() {
         return amountOfItems;
     }
 
-    public void setAmountOfItems(int amountOfItems) {
+    public void setAmountOfItems(float amountOfItems) {
         this.amountOfItems = amountOfItems;
     }
 
@@ -110,7 +115,7 @@ public class StoreOrder {
     }
 
     public static DtoStoreOrder storeOrderToDtoStoreOrder(StoreOrder order){
-        return new DtoStoreOrder(order.getDateOfOrder(),order.getAmountOfItems(),order.getTotalPriceOfItems(),order.getShippingCost(),order.getTotalCost(),
+        return new DtoStoreOrder(order.getDateOfOrder(),order.getItems().size(),order.getTotalPriceOfItems(),order.getShippingCost(),order.getTotalCost(),
                 order.getDistance(),order.getStore(), order.getItems(), order.getOrderId());
     }
 }

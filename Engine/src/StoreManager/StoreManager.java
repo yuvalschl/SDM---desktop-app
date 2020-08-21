@@ -116,7 +116,7 @@ public class StoreManager {
         Set<DtoStoreOrder> currentOrdersDtoSet = new HashSet<>();
         if(store.getAllOrders() != null){
             for(StoreOrder order : store.getAllOrders()){
-                currentOrdersDtoSet.add(new DtoStoreOrder(order.getDateOfOrder(),order.getAmountOfItems(),order.getTotalPriceOfItems(),
+                currentOrdersDtoSet.add(new DtoStoreOrder(order.getDateOfOrder(),order.getItems().size(),order.getTotalPriceOfItems(),
                         order.getShippingCost(),order.getTotalCost(),order.getDistance(), store, order.getItems(), order.getOrderId()));
             }
         }
@@ -146,9 +146,9 @@ public class StoreManager {
         HashMap<Integer, Float> shippingCostByStore = calcShippingCostByStore(items, customerLocation);
         for (ItemAmountAndStore pair: items) {
             if (pair.item() instanceof DtoUnitItem)
-                totalPriceOfItems += (int)pair.amount() * pair.item().getPrice();
+                totalPriceOfItems += (int)pair.amount() * pair.getItem().getPrice();
             else
-                totalPriceOfItems += pair.amount() * pair.item().getPrice();
+                totalPriceOfItems += pair.amount() * pair.getItem().getPrice();
 
         }
         float totalCost = shippingCost + totalPriceOfItems;
@@ -190,17 +190,12 @@ public class StoreManager {
 
     public void placeOrder(Order order) {//finilaize the order after final approval, in this method we add the order to the order set and update the amount sold in allitems
         allOrders.add(order);
-        int amountSold = 0;
         for (ItemAmountAndStore item : order.getItems()) {
             int itemID = item.item().getSerialNumber();
-            if(item.item() instanceof DtoUnitItem)
-                amountSold = (int) (allItems.get(itemID).getAmountSold() + (int) item.amount());
-            else
-                amountSold = (int) (allItems.get(itemID).getAmountSold()+1);
-            allItems.get(itemID).setAmountSold(amountSold);
+            allItems.get(itemID).setAmountSold(item.getAmount());
 
             Store currentStore = order.getStores().get(item.getStore().getSerialNumber());
-            order.getStores().get(currentStore.getSerialNumber()).getInventory().get(itemID).setAmountSold((int) (currentStore.getInventory().get(itemID).getAmountSold()+ amountSold));//update amount sold
+            order.getStores().get(currentStore.getSerialNumber()).getInventory().get(itemID).setAmountSold((int) (currentStore.getInventory().get(itemID).getAmountSold()+ item.getAmount()));//update amount sold
             order.getStores().get(item.getStore().getSerialNumber()).setTotalPayment(calcTotalPayment(currentStore, item));
         };
         for(Map.Entry<Integer, Float> shippingCosts : order.getShippingCostByStore().entrySet()){
@@ -239,17 +234,6 @@ public class StoreManager {
         return storeDetails;
     }
 
-/*    public String getAllItemsDetails(){//gets the string to print in choice 3 (show all items in store)
-        String itemDetails = "";
-        for (Map.Entry<Integer, Item> set : allItems.entrySet()) {
-            DtoItem item = set.getValue();
-            itemDetails += set.getValue().toString(false);
-            itemDetails += "\tNumber of stores that sell "+ item.getName()+" are: " +howManyStoresSellItem(item)+"\n";
-            itemDetails += "\tAverage price for "+ item.getName()+" is: "+ getAveragePrice(item)+"\n";
-            itemDetails += "\tNumber of times "+item.getName()+" was sold is: "+item.getAmountSold()+"\n";
-        }
-        return itemDetails;
-    }*/
 
     public ItemAmountAndStore getCheapestItem(int itemId){
         Item cheapestItem = null;

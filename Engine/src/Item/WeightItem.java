@@ -25,10 +25,6 @@ public class WeightItem extends Item {
     }
 
     @Override
-    public void setAmountSold(int amountSold) {
-        this.amountSold = amountSold;
-    }
-
     public void setAmountSold(float amountSold) {
         this.amountSold = amountSold;
     }
