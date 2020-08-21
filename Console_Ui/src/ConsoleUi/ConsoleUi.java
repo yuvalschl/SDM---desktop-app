@@ -2,7 +2,6 @@ package ConsoleUi;
 
 import DtoObjects.*;
 import Exceptions.*;
-import Item.Item;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
 import Store.*;
@@ -13,7 +12,6 @@ import jaxb.XmlToObject;
 
 import java.awt.*;
 import java.io.File;
-import java.lang.reflect.Method;
 import java.nio.file.InvalidPathException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -233,10 +231,63 @@ public class ConsoleUi {
     }
 
     private void placeOrder() throws ParseException {
-        boolean itemExist = false;
         Date orderDate = getDateOfOrder();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");
         Point customerLocation = getCustomerLocation();
+        Boolean isOrderDynamic = getOrderTypeFromUser(); // return true if order is dynamic
+        Order order;
+        if(isOrderDynamic){
+            order = dynamicOrder(customerLocation, orderDate);
+        }
+        else{
+            order = staticOrder();
+        }
+        showItemsInOrder(order);
+        if (getOrderApproval()) {
+            storeEngine.placeOrder(order);
+            System.out.println("Order was added successfully.");
+        } else {
+            System.out.println("Order canceled.");
+        }
+    }
+
+    private Order staticOrder(Point customerLocation, Date orderDate) {
+        showAllStoresInOrderMenu();
+        System.out.println("Please choose a store by its ID from the list above:");
+        int storeID = getIDFromUser(storeEngine.getAllStores().keySet(), false);
+        showItemsToChooseFrom(storeID);
+        System.out.println("Please choose items by its ID from the list above or enter q to end order:");
+        int itemID = getIDFromUser(storeEngine.getAllStores().get(storeID).getDtoInventory().keySet(), false);
+        if (itemID != -1 ) {
+            order = createOrder(customerLocation,storeID,itemID, orderDate);
+            if (order!= null){
+                showItemsInOrder(order,storeID);
+                if(getOrderApproval()) {
+                    storeEngine.placeOrder(order);
+                    System.out.println("Order was added successfully.");
+                }
+                else
+                    System.out.println("Order canceled.");
+            }
+        }
+        else
+            System.out.println("No order was made.");
+    }
+
+    //ture is dynamic order type
+    private Boolean getOrderTypeFromUser() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Press 1 for dynamic order and 2 for static order");
+        String userInput = scanner.next();
+        while(userInput != "1" && userInput != "2"){
+            System.out.println("Invalid input, please chosse 1 or 2");
+            userInput = scanner.next();
+        }
+        return userInput.equals("1");
+    }
+
+    private Order dynamicOrder(Point customerLocation, Date orderDate){
+        boolean itemExist = false;
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         int itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
@@ -261,17 +312,14 @@ public class ConsoleUi {
         }
         if(orderItems.size() == 0){
             System.out.println("No order was made.");
-            return;
         }
-        Order order = storeEngine.createOrder(customerLocation, orderDate, orderItems);
-        showItemsInOrder(order);
-        if (getOrderApproval()) {
-            storeEngine.placeOrder(order);
-            System.out.println("Order was added successfully.");
-        } else {
-            System.out.println("Order canceled.");
-        }
+        return storeEngine.createOrder(customerLocation, orderDate, orderItems);
     }
+
+//    private void placeOrder() throws ParseException {//TODO: if the same item id is selected more then onve, add the details to the same ID
+//        Order order = null;
+//
+//    }
 
 
 
