@@ -114,8 +114,4 @@ public class StoreOrder {
         this.items = items;
     }
 
-    public static DtoStoreOrder storeOrderToDtoStoreOrder(StoreOrder order){
-        return new DtoStoreOrder(order.getDateOfOrder(),order.getItems().size(),order.getTotalPriceOfItems(),order.getShippingCost(),order.getTotalCost(),
-                order.getDistance(),order.getStore(), order.getItems(), order.getOrderId());
-    }
 }

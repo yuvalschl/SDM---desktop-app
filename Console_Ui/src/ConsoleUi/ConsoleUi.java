@@ -57,7 +57,7 @@ public class ConsoleUi {
         while (true) {
             System.out.println(menu.getMenuOption());
             ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 9) - 1];
-            if (isFileLoaded || choice == menuChoice.readFile) {
+            if (isFileLoaded || choice == menuChoice.readFile || choice == menuChoice.Exit) {
                 switch (choice) {
                     case readFile: {
                         try {
@@ -315,27 +315,34 @@ public class ConsoleUi {
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void placeOrder() throws ParseException {//TODO: rearange in the following order - type, if static choose a store, date and location
-        Date orderDate = getDateOfOrder();
-        Point customerLocation = getCustomerLocation();
+    private void placeOrder() throws ParseException {
         Boolean isOrderDynamic = getOrderTypeFromUser(); // return true if order is dynamic
-        Order order;
+        ArrayList<ItemAmountAndStore> orderItems;
         if(isOrderDynamic){
-            order = dynamicOrder(customerLocation, orderDate);
+            orderItems = dynamicOrder();
         }
         else{
-            order = staticOrder(customerLocation, orderDate);//TODO: fix this, there is a problem with delivery cost
+            orderItems = staticOrder();
         }
-        showItemsInOrder(order);
-        if (getOrderApproval()) {
-            storeEngine.placeOrder(order);
-            System.out.println("Order was added successfully.");
-        } else {
-            System.out.println("Order canceled.");
+        if(orderItems.size() != 0){
+            Date orderDate = getDateOfOrder();
+            Point customerLocation = getCustomerLocation();
+            Order order = storeEngine.createOrder(customerLocation,orderDate, orderItems);
+            showItemsInOrder(order);
+            if (getOrderApproval()) {
+                storeEngine.placeOrder(order);
+                System.out.println("Order was added successfully.");
+            }
+            else {
+                System.out.println("Order canceled.");
+            }
+        }
+        else {
+            System.out.println("the order is empty, nothing happened");
         }
     }
 
-    private Order staticOrder(Point customerLocation, Date orderDate) {
+    private ArrayList<ItemAmountAndStore> staticOrder() {
         showAllStoresInOrderMenu();
         System.out.println("Please choose a store by its ID from the list above:");
         int storeID = getIDFromUser(storeEngine.getAllStores().keySet(), false);
@@ -352,11 +359,10 @@ public class ConsoleUi {
             System.out.println("Please choose items by its ID from the list above or enter q to end order:");
             itemId = getIDFromUser(storeEngine.getAllStores().get(storeID).getDtoInventory().keySet(), true);
         }while (itemId != -1);
-
-        return storeEngine.createOrder(customerLocation, orderDate, orderItems);
+        return orderItems;
     }
 
-    private Order dynamicOrder(Point customerLocation, Date orderDate){
+    private ArrayList<ItemAmountAndStore> dynamicOrder(){
         showAllItemsInSystem();
         System.out.println("Please choose items by its ID from the list above or enter q to end order:");
         int itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
@@ -368,7 +374,7 @@ public class ConsoleUi {
             System.out.println("Please chose another item or press q to exit");
             itemID = getIDFromUser(storeEngine.getAllDtoItems().keySet(), true);
         }
-        return storeEngine.createOrder(customerLocation, orderDate, orderItems);
+        return orderItems;
     }
 
     private void addToItemAmount(ArrayList<ItemAmountAndStore> orderItems, ItemAmountAndStore itemToAdd, float amount) {
