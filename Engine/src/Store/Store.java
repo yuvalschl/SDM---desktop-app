@@ -1,9 +1,6 @@
 package Store;
 
-import DtoObjects.DtoItem;
-import DtoObjects.DtoStoreOrder;
-import DtoObjects.DtoUnitItem;
-import DtoObjects.DtoWeightItem;
+import DtoObjects.*;
 import Item.*;
 import Order.*;
 import StoreManager.StoreManager;
@@ -109,7 +106,7 @@ public class Store {
         HashMap<Integer, DtoItem> dtoInventory = new HashMap<>();
         for (Map.Entry<Integer, Item> item : inventory.entrySet()) {
             Item currentItem = item.getValue();
-            dtoInventory.put(item.getKey(), StoreManager.itemToDtoItem(currentItem));
+            dtoInventory.put(item.getKey(), DtoConvertor.itemToDtoItem(currentItem));
         }
         return dtoInventory;
     }
@@ -117,7 +114,7 @@ public class Store {
     public Set<DtoStoreOrder> getDtoStoreOrders(){
         Set<DtoStoreOrder> dtoStoreOrders = new HashSet<>();
         for(StoreOrder order : allOrders){
-            dtoStoreOrders.add(StoreOrder.storeOrderToDtoStoreOrder(order));
+            dtoStoreOrders.add(DtoConvertor.storeOrderToDtoStoreOrder(order));
         }
 
         return dtoStoreOrders;

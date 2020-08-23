@@ -110,7 +110,7 @@ public class StoreManager {
             Store currentStore = allStores.get(key);
             currentDtoInventory = getDtoInventory(currentStore);
             currentDtoOrders = getDtoOrders(currentStore);
-            allDtoStores.put(key, storeToDtoStore(currentStore));
+            allDtoStores.put(key, DtoConvertor.storeToDtoStore(currentStore));
         }
         return allDtoStores;
     }
@@ -284,36 +284,7 @@ public class StoreManager {
                 }
             }
         }
-        return new ItemAmountAndStore(itemToDtoItem(cheapestItem), cheapestStore);
-    }
-
-    public static Item dtoItemToItem(DtoItem item){
-        Item itemToReturn;
-
-        if(item instanceof DtoUnitItem){
-            itemToReturn = new UnitItem(item.getSerialNumber(),item.getName(),item.getAmountSold(), item.getPrice());
-        }
-        else {
-            itemToReturn = new WeightItem(item.getSerialNumber(),item.getName(),item.getAmountSold() ,item.getPrice());
-        }
-        return itemToReturn;
-    }
-
-    public static DtoItem itemToDtoItem(Item item){
-        DtoItem itemToReturn;
-
-        if(item instanceof UnitItem){
-            itemToReturn = new DtoUnitItem(item.getSerialNumber(),item.getName(),item.getPrice(),item.getAmountSold());
-        }
-        else {
-            itemToReturn = new DtoWeightItem(item.getSerialNumber(),item.getName(),item.getPrice(),item.getAmountSold());
-        }
-        return itemToReturn;
-    }
-
-    public DtoStore storeToDtoStore(Store store){
-        return new DtoStore(store.getName(),store.getSerialNumber(),store.getDtoInventory(), store.getDtoStoreOrders(),
-                store.getLocation(),store.getPPK(),store.getTotalPayment(),store.getTotalDeliveriesCost());
+        return new ItemAmountAndStore(DtoConvertor.itemToDtoItem(cheapestItem), cheapestStore);
     }
 
     private int howManyStoresSellItem(DtoItem item) {
@@ -339,7 +310,7 @@ public class StoreManager {
 
     public void addItemToStore(DtoStore store, DtoItem itemToUpdate, float price) throws InvalidValueException {
         Store storeToUpdate = allStores.get(store.getSerialNumber());
-        storeToUpdate.getInventory().put(itemToUpdate.getSerialNumber(), dtoItemToItem(itemToUpdate));
+        storeToUpdate.getInventory().put(itemToUpdate.getSerialNumber(), DtoConvertor.dtoItemToItem(itemToUpdate));
         storeToUpdate.getInventory().get(itemToUpdate.getSerialNumber()).setPrice(price);
     }
 
