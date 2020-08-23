@@ -63,6 +63,7 @@ public class Order {
         this.shippingCostByStore = shippingCostByStore;
         updateStoreIdAndName(itemAmountAndStores);
     }
+    public Order(){}
 
     public HashMap<Integer, Float> getShippingCostByStore() {
         return shippingCostByStore;
