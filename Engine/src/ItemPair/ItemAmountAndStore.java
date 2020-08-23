@@ -52,5 +52,5 @@ public class ItemAmountAndStore {
         this.amount = amount;
     }
 
-    ;
+    public void setItem(DtoItem item){}
 }
