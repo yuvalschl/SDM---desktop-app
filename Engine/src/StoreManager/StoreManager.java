@@ -60,8 +60,15 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
-    public OrderWrapper loadOrder(File file) throws JAXBException {
-        return XmlToObject.fromXmlFileToOrder(file);
+    public void loadOrder(File file) throws JAXBException {//TODO: update the number of items sold in store and number of item sold
+        OrderWrapper orderWrapper = XmlToObject.fromXmlFileToOrder(file);
+        for (Order order: orderWrapper.getOrders()){
+              allOrders.add(order);
+        }
+    }
+    public void printOrder(Order order){
+        System.out.println(order.getDateOfOrder()+"\n"+
+                order.getOrderId());
     }
 
     public void saveHistoryToFile(File file) throws JAXBException {

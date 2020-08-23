@@ -23,7 +23,7 @@ public class Order {
     private int orderId;
     private static int staticId = 0;
     private ArrayList<ItemAmountAndStore> itemAmountAndStores;
-    @XmlElement(name = "stores")
+   // @XmlElement(name = "stores")
     private HashMap<Integer,String> storeIdAndName = new HashMap<>();;
 
     public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, ArrayList<ItemAmountAndStore> itemAmountAndStores, float distance, HashMap<Integer, Store> store) {
@@ -235,7 +235,7 @@ public class Order {
         this.storeIdAndName = storeIdAndName;
     }
 
-    public String getStoreIdAndName() {
-        return null;
+    public HashMap<Integer, String> getStoreIdAndName() {
+        return storeIdAndName;
     }
 }

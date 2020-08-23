@@ -56,7 +56,7 @@ public class ConsoleUi {
         boolean isFileLoaded = false;
         while (true) {
             System.out.println(menu.getMenuOption());
-            ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 6) - 1];
+            ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 9) - 1];
             if (isFileLoaded || choice == menuChoice.readFile) {
                 switch (choice) {
                     case readFile: {
@@ -139,7 +139,7 @@ public class ConsoleUi {
     private void loadOrderHistory() throws JAXBException {
         File file = getFilePath();
         try {
-           OrderWrapper order =  storeEngine.loadOrder(file);
+           storeEngine.loadOrder(file);
         }
         catch (Exception e)
         {
@@ -157,7 +157,7 @@ public class ConsoleUi {
                 System.out.println("Orders were saved successfully");
             }
             catch (JAXBException e) {
-                System.out.println("Invalid file path");
+               // System.out.println("Invalid file path");
             }
         }
 
@@ -190,11 +190,23 @@ public class ConsoleUi {
     }
 
     private void printSingleOrder(Order order) {
+      String storeNames="";
+        String storeID="";
+       if (order.getStores() == null){
+           for(Integer key: order.getStoreIdAndName().keySet()){
+               storeNames = storeNames + order.getStoreIdAndName().get(key)+", ";
+               storeID = storeID + key + ", ";
+           }
+       }
+       else{
+           storeNames = allStoresNameString(order);
+           storeID = allStoresIdString(order);
+       }
         System.out.println(
                 "*   Order ID: " + order.getOrderId() + "\n" +
                         "\tDate: " + order.getDateOfOrder() + "\n" +
-                        "\tStores names: " + allStoresNameString(order) + "\n" +
-                        "\tStores ID: " + allStoresIdString(order) + "\n" +
+                        "\tStores names: " + storeNames + "\n" +
+                        "\tStores ID: " + storeID + "\n" +
                         "\tNumber of items in order: " + decimalFormat.format(order.getAmountOfItems()) + "\n" +
                         "\tTotal item cost: " + decimalFormat.format(order.getTotalPriceOfItems()) + "\n" +
                         "\tShipping price: " + decimalFormat.format(order.getShippingCost()) + "\n" +
@@ -295,7 +307,7 @@ public class ConsoleUi {
         System.out.println("\tNumber of stores selling the item " + storeEngine.NumberOfStoresSellingItem(item));
     }
 
-    private void placeOrder() throws ParseException {
+    private void placeOrder() throws ParseException {//TODO: rearange in the following order - type, if static choose a store, date and location
         Date orderDate = getDateOfOrder();
         Point customerLocation = getCustomerLocation();
         Boolean isOrderDynamic = getOrderTypeFromUser(); // return true if order is dynamic
@@ -304,7 +316,7 @@ public class ConsoleUi {
             order = dynamicOrder(customerLocation, orderDate);
         }
         else{
-            order = staticOrder(customerLocation, orderDate);
+            order = staticOrder(customerLocation, orderDate);//TODO: fix this, there is a problem with delivery cost
         }
         showItemsInOrder(order);
         if (getOrderApproval()) {
