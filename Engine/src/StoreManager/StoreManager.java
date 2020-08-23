@@ -66,6 +66,9 @@ public class StoreManager {
               allOrders.add(order);
         }
     }
+
+
+
     public void printOrder(Order order){
         System.out.println(order.getDateOfOrder()+"\n"+
                 order.getOrderId());

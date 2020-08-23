@@ -140,6 +140,7 @@ public class ConsoleUi {
         File file = getFilePath();
         try {
            storeEngine.loadOrder(file);
+            System.out.println("Order was loaded successfully");
         }
         catch (Exception e)
         {
@@ -158,6 +159,7 @@ public class ConsoleUi {
             }
             catch (JAXBException e) {
                // System.out.println("Invalid file path");
+                e.printStackTrace();
             }
         }
 
@@ -190,13 +192,19 @@ public class ConsoleUi {
     }
 
     private void printSingleOrder(Order order) {
-      String storeNames="";
-        String storeID="";
-       if (order.getStores() == null){
+        String storeNames;
+        String storeID;
+       if (order.getStores() == null){//if the order is an order loaded from file
+           StringBuilder storeNamesSB= new StringBuilder();
+           StringBuilder storeIDSB= new StringBuilder();
            for(Integer key: order.getStoreIdAndName().keySet()){
-               storeNames = storeNames + order.getStoreIdAndName().get(key)+", ";
-               storeID = storeID + key + ", ";
+               storeNamesSB.append(order.getStoreIdAndName().get(key)).append(", ");
+               storeIDSB.append(key).append(", ");
            }
+           storeNamesSB.deleteCharAt(storeNamesSB.length()-2);
+           storeIDSB.deleteCharAt(storeIDSB.length()-2);
+           storeNames = storeNamesSB.toString();
+           storeID = storeIDSB.toString();
        }
        else{
            storeNames = allStoresNameString(order);
