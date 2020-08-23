@@ -41,12 +41,6 @@ public class Order {
         updateStoreIdAndName(itemAmountAndStores);
     }
 
-
-
-    public Order() {
-
-    }
-
     private void updateStoreIdAndName(ArrayList<ItemAmountAndStore> itemAmountAndStores) {
         for (ItemAmountAndStore store: itemAmountAndStores){
             int key = store.getStore().getSerialNumber();
@@ -54,6 +48,7 @@ public class Order {
             storeIdAndName.put(key,name);
         }
     }
+
 
     public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost,
                  HashMap<Integer, Store> stores, ArrayList<ItemAmountAndStore> items, HashMap<Integer, Float> shippingCostByStore) {
@@ -68,25 +63,11 @@ public class Order {
         this.shippingCostByStore = shippingCostByStore;
         updateStoreIdAndName(itemAmountAndStores);
     }
-    /*    public String toString() {
-        return "*   Order ID: " + orderId + "\n" +
-                "\tDate: " + dateOfOrder + "\n" +
-                "\tStore.Store name: " + stores.getName() + "\n" +
-                "\tStore.Store ID: " + stores.getSerialNumber() + "\n" +
-                "\tNumber of items in order: " + items.size() + "\n" +
-                "\tTotal item cost: " + totalPriceOfItems + "\n" +
-                "\tShipping price: " + shippingCost + "\n" +
-                "\tTotal order price: " + totalCost;
-    }*/
-
-   /* private int setIdForNewOrder(){
-        this.orderId = staticId++;
-        return staticId;
-    }*/
 
     public HashMap<Integer, Float> getShippingCostByStore() {
         return shippingCostByStore;
     }
+
     @XmlTransient
     public void setShippingCostByStore(HashMap<Integer, Float> shippingCostByStore) {
         this.shippingCostByStore = shippingCostByStore;
@@ -106,12 +87,9 @@ public class Order {
         this.itemAmountAndStores = itemAmountAndStores;
     }
 
-
-
     public int getOrderId() {
         return orderId;
     }
-
 
     public HashMap<Integer, Store> getStores() {
         return stores;
@@ -198,20 +176,6 @@ public class Order {
     public int hashCode() {
         return Objects.hash(getDateOfOrder(), getAmountOfItems(), getTotalPriceOfItems(), getShippingCost(), getTotalCost());
     }
-
-
-    /*public String toString() {
-        String  allNameString = allStoresNameString(this);
-        String allStoresIdString = allStoresIdString(this);
-        return  "*   Order ID: " + orderId + "\n" +
-                "\tDate: " + dateOfOrder + "\n" +
-                "\tStores names: " + allNameString  + "\n" +
-                "\tStores ID: " + allStoresIdString + "\n" +
-                "\tNumber of items in order: " + amountOfItems + "\n" +
-                "\tTotal item cost: " + totalPriceOfItems + "\n" +
-                "\tShipping price: " + shippingCost + "\n" +
-                "\tTotal order price: " + totalCost;
-    }*/
 
     private String allStoresNameString(Order order) {
         StringBuilder storesNames = new StringBuilder();
