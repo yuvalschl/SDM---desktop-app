@@ -57,7 +57,7 @@ public class ConsoleUi {
         while (true) {
             System.out.println(menu.getMenuOption());
             ConsoleUi.menuChoice choice = eChoices[getAndValidateChoice(1, 9) - 1];
-            if (isFileLoaded || choice == menuChoice.readFile) {
+            if (isFileLoaded || choice == menuChoice.readFile || choice == menuChoice.Exit) {
                 switch (choice) {
                     case readFile: {
                         try {
