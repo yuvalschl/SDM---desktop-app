@@ -2,13 +2,21 @@ package DtoObjects;
 
 import Item.Item;
 
+import javax.xml.bind.annotation.*;
 import java.util.Objects;
 
+@XmlSeeAlso({DtoUnitItem.class, DtoWeightItem.class})
+
+@XmlRootElement
 public abstract class DtoItem {
+    @XmlAttribute
     private int serialNumber;
+    @XmlAttribute
     private String name;
+    @XmlAttribute
     private float price;
     private float amountSold;
+
 
     public DtoItem(int serialNumber, String name, float price, float amountSold) {
         this.serialNumber = serialNumber;
@@ -16,6 +24,8 @@ public abstract class DtoItem {
         this.price = price;
         this.amountSold = amountSold;
     }
+
+    public DtoItem(){}
 
     public DtoItem(DtoItem item) {
         this.serialNumber = item.getSerialNumber();

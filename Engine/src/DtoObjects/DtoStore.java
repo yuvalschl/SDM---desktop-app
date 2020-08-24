@@ -1,12 +1,17 @@
 package DtoObjects;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@XmlRootElement
 public class DtoStore {
+    @XmlElement
     private String name;
+    @XmlElement
     private int serialNumber;
     private Map<Integer, DtoItem> inventory;
     private Set<DtoStoreOrder> allOrders;

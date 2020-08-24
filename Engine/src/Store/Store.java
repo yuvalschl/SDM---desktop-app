@@ -5,9 +5,14 @@ import Item.*;
 import Order.*;
 import StoreManager.StoreManager;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.awt.*;
 import java.util.*;
 
+@XmlRootElement
 public class Store {
     private String name;
     private int serialNumber;
@@ -38,10 +43,12 @@ public class Store {
         this.allOrders = new HashSet<StoreOrder>();
     }
 
+    public Store(){}
+
     public float getTotalDeliveriesCost() {
         return totalDeliveriesCost;
     }
-
+    @XmlTransient
     public void setTotalDeliveriesCost(float totalDeliveriesCost) {
         this.totalDeliveriesCost = totalDeliveriesCost;
     }
@@ -49,11 +56,11 @@ public class Store {
     public Point getLocation() {
         return location;
     }
-
+    @XmlTransient
     public void setLocation(Point location) {
         this.location = location;
     }
-
+    @XmlAttribute
     public String getName() {
         return name;
     }
@@ -61,7 +68,7 @@ public class Store {
     public void setName(String name) {
         this.name = name;
     }
-
+    @XmlAttribute
     public int getSerialNumber() {
         return serialNumber;
     }
@@ -73,7 +80,7 @@ public class Store {
     public Map<Integer, Item> getInventory() {
         return inventory;
     }
-
+    @XmlTransient
     public void setInventory(Map<Integer, Item> inventory) {
         this.inventory = inventory;
     }
@@ -81,7 +88,7 @@ public class Store {
     public Set<StoreOrder> getAllOrders() {
         return allOrders;
     }
-
+    @XmlTransient
     public void setAllOrders(Set<StoreOrder> allOrders) {
         this.allOrders = allOrders;
     }
@@ -89,7 +96,7 @@ public class Store {
     public float getPPK() {
         return PPK;
     }
-
+    @XmlTransient
     public void setPPK(float PPK) {
         this.PPK = PPK;
     }
@@ -97,7 +104,7 @@ public class Store {
     public float getTotalPayment() {
         return totalPayment;
     }
-
+    @XmlTransient
     public void setTotalPayment(float totalPayment) {
         this.totalPayment = totalPayment;
     }
@@ -152,6 +159,7 @@ public class Store {
         return totalDeliveriesCost;
     }
 
+    @XmlTransient
     public void setTotalDeliveryCost(float deliveryCost) {
         this.totalDeliveriesCost = deliveryCost;
     }

@@ -6,7 +6,7 @@ import ItemPair.*;
 import javax.xml.bind.annotation.*;
 import java.util.*;
 
-@XmlType(propOrder={"dateOfOrder", "amountOfItems", "storeIdAndName","totalPriceOfItems", "shippingCost", "totalCost"})
+@XmlType(propOrder={"dateOfOrder", "amountOfItems", "storeIdAndName","totalPriceOfItems", "shippingCost", "totalCost", "itemAmountAndStores"})
 
 @XmlRootElement(name="Order")
 
@@ -83,7 +83,7 @@ public class Order {
         this.orderId = orderId;
     }
 
-    @XmlTransient
+
     public void setItemAmountAndStores(ArrayList<ItemAmountAndStore> itemAmountAndStores) {
         this.itemAmountAndStores = itemAmountAndStores;
     }
