@@ -63,7 +63,10 @@ public class StoreManager {
     public void loadOrder(File file) throws JAXBException {//TODO: update the number of items sold in store and number of item sold
         OrderWrapper orderWrapper = XmlToObject.fromXmlFileToOrder(file);
         for (Order order: orderWrapper.getOrders()){
-              allOrders.add(order);
+            //TODO: genarate map of stores
+            //TODO generate map of items
+            Order order1 = new Order(order.getDateOfOrder(), order.getAmountOfItems(), order.getTotalPriceOfItems(), order.getShippingCost(), order.getTotalCost(), order.getItemAmountAndStores(), order.getDistance(), order.getStores());
+            allOrders.add(order1);
         }
     }
 

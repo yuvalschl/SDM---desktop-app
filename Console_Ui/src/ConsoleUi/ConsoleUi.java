@@ -144,7 +144,7 @@ public class ConsoleUi {
         }
         catch (Exception e)
         {
-            System.out.println("Error");
+            System.out.println(e.getMessage());
         }
     }
 
