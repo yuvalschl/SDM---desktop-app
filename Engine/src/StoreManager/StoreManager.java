@@ -71,7 +71,7 @@ public class StoreManager {
     public void loadOrder(File file) throws JAXBException {//TODO: check whats not working with the store update
         OrderWrapper orderWrapper = XmlToObject.fromXmlFileToOrder(file);
         for (Order order: orderWrapper.getOrders()){
-            for (ItemAmountAndStore itemAmountAndStore: order.getItemAmountAndStores()) {
+            for (ItemAmountAndStore itemAmountAndStore: order.getItemAmountAndStores()) {//This loop recreates the lost data from the history load
                 int itemID = itemAmountAndStore.getItemId();
                 Store store = allStores.get(itemAmountAndStore.getItemStore());
                 itemAmountAndStore.setItem(itemToDto(allItems.get(itemID)));
@@ -80,30 +80,7 @@ public class StoreManager {
             }
             placeOrder(order);
         }
-        /*for (Order order: orderWrapper.getOrders()){
-            for (ItemAmountAndStore itemAmountAndStore: order.getItemAmountAndStores()){
-                int itemID = itemAmountAndStore.getItemId();
-                allItems.get(itemID).setAmountSold(itemAmountAndStore.getAmount());
-                Store store = allStores.get(itemAmountAndStore.getItemStore());
-                store.getInventory().get(itemID).setAmountSold((int)(store.getInventory().get(itemID).getAmountSold() + itemAmountAndStore.getAmount()));//update amount of item sold in a store
-                store.setTotalDeliveryCost(store.getTotalDeliveryCost() + order.getShippingCostByStore().get(store.getSerialNumber()));//update the total shipping cost of a store
-                StoreOrder orderToAdd = new StoreOrder(order.getDateOfOrder(), order.getShippingCost() , order.getDistance(),allStores.get(itemAmountAndStore.getItemStore()), order.getOrderId());
-                for (Integer storeID: order.getStoreIdAndName().keySet()){
-                    for(ItemAmountAndStore item : order.getItemAmountAndStores()){
-                        if(item.getItemStore() == storeID){
-                            Map<Integer, DtoItem>allDtoItems = getAllDtoItems();
-                            DtoItem dtoItem = allDtoItems.get(item.getItemId());
-                            item.setItem(dtoItem);
-                            item.setStore(allStores.get(item.getItemStore()));
-                            orderToAdd.addItemToOrder(item);
-                        }
-                    }
-                    store.getAllOrders().add(orderToAdd);
-                }
 
-            }
-            allOrders.add(order);
-        }*/
     }
 
 
