@@ -270,7 +270,7 @@ public class ConsoleUi {
         for (DtoStoreOrder order : store.getAllOrders()) {
             System.out.println("*  Order ID: " + order.getOrderId());
             System.out.println("\tThe order date is: " + order.getDateOfOrder());
-            System.out.println("\tThe amount of items are: " + order.getAmountOfItems());
+            System.out.println("\tThe amount of items is: " + order.getAmountOfItems());
             System.out.println("\tThe items total cost is: " + decimalFormat.format(order.getTotalPriceOfItems()));
             System.out.println("\tThe delivery cost is: " + decimalFormat.format(order.getShippingCost()));
             System.out.println("\tThe order total cost is: " + decimalFormat.format(order.getTotalCost()));

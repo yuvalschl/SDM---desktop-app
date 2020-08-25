@@ -23,6 +23,7 @@ public class ItemAmountAndStore {
         this.itemStore = store.getSerialNumber();
     }
 
+
     public ItemAmountAndStore(DtoItem item, Store store) {
         this.item = item;
         this.store = store;
@@ -85,5 +86,5 @@ public class ItemAmountAndStore {
         this.amount = amount;
     }
     @XmlTransient
-    public void setItem(DtoItem item){}
+    public void setItem(DtoItem item){ this.item =item;}
 }

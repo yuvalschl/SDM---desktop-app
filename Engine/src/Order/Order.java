@@ -6,7 +6,7 @@ import ItemPair.*;
 import javax.xml.bind.annotation.*;
 import java.util.*;
 
-@XmlType(propOrder={"dateOfOrder", "amountOfItems", "storeIdAndName","totalPriceOfItems", "shippingCost", "totalCost", "itemAmountAndStores"})
+@XmlType(propOrder={"dateOfOrder", "amountOfItems", "storeIdAndName","totalPriceOfItems", "shippingCost", "totalCost", "itemAmountAndStores", "shippingCostByStore"})
 
 @XmlRootElement(name="Order")
 
@@ -19,7 +19,7 @@ public class Order {
     private HashMap<Integer, Float> shippingCostByStore;
     private float totalCost;
     private float distance;
-    private HashMap<Integer, Store> stores;
+    private HashMap<Integer, Store> stores = new HashMap<>();
     private int orderId;
     private static int staticId = 0;
     private ArrayList<ItemAmountAndStore> itemAmountAndStores;
@@ -40,7 +40,16 @@ public class Order {
 
         updateStoreIdAndName(itemAmountAndStores);
     }
-
+    public Order(int ID, Date date,int amountOfItems, float totalPriceOfItems,float shippingCost, float totalCost, ArrayList<ItemAmountAndStore> itemAmountAndStores)//Constructor for an order loaded from file
+    {
+        this.orderId = ID;
+        this.dateOfOrder = date;
+        this.amountOfItems = amountOfItems;
+        this.totalPriceOfItems = totalPriceOfItems;
+        this.shippingCost = shippingCost;
+        this.totalCost = totalCost;
+        this.itemAmountAndStores = itemAmountAndStores;
+    }
     private void updateStoreIdAndName(ArrayList<ItemAmountAndStore> itemAmountAndStores) {
         for (ItemAmountAndStore store: itemAmountAndStores){
             int key = store.getStore().getSerialNumber();
@@ -69,7 +78,7 @@ public class Order {
         return shippingCostByStore;
     }
 
-    @XmlTransient
+    @XmlElement(name = "shippingCostByStore")
     public void setShippingCostByStore(HashMap<Integer, Float> shippingCostByStore) {
         this.shippingCostByStore = shippingCostByStore;
     }
