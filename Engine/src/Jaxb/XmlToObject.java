@@ -1,13 +1,12 @@
-package jaxb;
+package Jaxb;
 
 import Order.*;
-import jaxb.JaxbClasses.SuperDuperMarketDescriptor;
+import Jaxb.jaxbClasses.SuperDuperMarketDescriptor;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.lang.reflect.Field;
 
 public class XmlToObject {
 

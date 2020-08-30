@@ -6,7 +6,7 @@ import Item.*;
 import ItemPair.ItemAmountAndStore;
 import Order.*;
 import Store.Store;
-import jaxb.XmlToObject;
+import Jaxb.XmlToObject;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

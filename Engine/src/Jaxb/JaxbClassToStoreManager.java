@@ -1,4 +1,4 @@
-package jaxb;
+package Jaxb;
 
 import Exceptions.*;
 import Item.Item;
@@ -6,7 +6,7 @@ import Item.WeightItem;
 import Item.UnitItem;
 import Store.Store;
 import StoreManager.StoreManager;
-import jaxb.JaxbClasses.*;
+import Jaxb.jaxbClasses.*;
 
 import java.awt.*;
 import java.util.*;
