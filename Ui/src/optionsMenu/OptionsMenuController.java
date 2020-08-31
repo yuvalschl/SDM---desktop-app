@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import orderScreen.OrderScreenController;
 
 import java.io.IOException;
 
@@ -32,11 +33,12 @@ public class OptionsMenuController {
 
     @FXML
     public void placeOrderAction() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/orderScreen/orderScreen.fxml"));
+        fxmlLoader.setController(new OrderScreenController(appController));
         Stage orderStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/orderScreen/orderScreen.fxml"));
+        Parent root = fxmlLoader.load();
         orderStage.setTitle("orderScreen");
         orderStage.setScene(new Scene(root, 600, 400));
-
         orderStage.show();
     }
 

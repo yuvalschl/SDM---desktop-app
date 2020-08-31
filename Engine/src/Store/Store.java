@@ -17,6 +17,7 @@ public class Store {
     private String name;
     private int serialNumber;
     private Map<Integer, Item> inventory;
+    private Set<Discount> allDiscounts;
     private Set<StoreOrder> allOrders;
     private Point location;
     private float PPK;
@@ -32,7 +33,7 @@ public class Store {
         this.numberOfItemsSold = numberOfItemsSold;
     }
 
-    public Store(String name, int serialNumber, Map<Integer, Item> inventory, Set<StoreOrder> allOrders, Point location, float PPK) {
+    public Store(String name, int serialNumber, Map<Integer, Item> inventory, Set<StoreOrder> allOrders, Point location, float PPK, Set<Discount> discounts) {
         this.name = name;
         this.serialNumber = serialNumber;
         this.inventory = inventory;
@@ -41,6 +42,7 @@ public class Store {
         this.totalPayment = 0;
         this.PPK = PPK;
         this.allOrders = new HashSet<StoreOrder>();
+        this.allDiscounts = discounts;
     }
 
     public Store(){}

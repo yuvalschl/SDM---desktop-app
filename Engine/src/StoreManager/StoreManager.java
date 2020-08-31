@@ -1,5 +1,6 @@
 package StoreManager;
 
+import Costumer.Customer;
 import DtoObjects.*;
 import Exceptions.InvalidValueException;
 import Item.*;
@@ -20,11 +21,13 @@ public class StoreManager {
     private Map<Integer, Item> allItems;
     private Set<Order> allOrders = new HashSet<Order>();
     private String currentFilePath;
+    private Map<Integer, Customer> allCustomers;
 
 
-    public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems) {
+    public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems, Map<Integer, Customer> allCustomers) {
         this.allStores = allStores;
         this.allItems = allItems;
+        this.allCustomers = allCustomers;
         this.currentFilePath = " ";
     }
 
@@ -60,21 +63,21 @@ public class StoreManager {
         this.allItems = allItems;
     }
 
-    private DtoItem itemToDto(Item item){
-        DtoItem dtoItem;
-        if(item instanceof  WeightItem)
-             dtoItem = new DtoWeightItem(item.getSerialNumber(),item.getName(), item.getAmountSold(), item.getPrice());
-        else
-            dtoItem = new DtoUnitItem(item.getSerialNumber(),item.getName(), item.getAmountSold(), item.getPrice());
-        return dtoItem;
+    public Map<Integer, Customer> getAllCustomers() {
+        return allCustomers;
     }
-    public void loadOrder(File file) throws JAXBException {//TODO: check whats not working with the store update
+
+    public void setAllCustomers(Map<Integer, Customer> allCustomers) {
+        this.allCustomers = allCustomers;
+    }
+
+    public void loadOrder(File file) throws JAXBException {
         OrderWrapper orderWrapper = XmlToObject.fromXmlFileToOrder(file);
         for (Order order: orderWrapper.getOrders()){
             for (ItemAmountAndStore itemAmountAndStore: order.getItemAmountAndStores()) {//This loop recreates the lost data from the history load
                 int itemID = itemAmountAndStore.getItemId();
                 Store store = allStores.get(itemAmountAndStore.getItemStore());
-                itemAmountAndStore.setItem(itemToDto(allItems.get(itemID)));
+                itemAmountAndStore.setItem(DtoConvertor.itemToDtoItem(allItems.get(itemID)));
                 itemAmountAndStore.setStore(store);
                 order.getStores().put(store.getSerialNumber(),store);
             }
@@ -82,7 +85,6 @@ public class StoreManager {
         }
 
     }
-
 
 
     public void printOrder(Order order){
