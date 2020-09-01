@@ -5,19 +5,17 @@ import Exceptions.InvalidValueException;
 import Exceptions.ItemNotSoldException;
 import StoreManager.StoreManager;
 import header.HeaderController;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import Jaxb.JaxbClassToStoreManager;
 import Jaxb.XmlToObject;
-import javafx.stage.Stage;
 import optionsMenu.OptionsMenuController;
-import orderScreen.OrderScreenController;
+
 
 
 import java.io.File;
@@ -32,13 +30,44 @@ public class AppController {
     @FXML private OptionsMenuController optionsMenuComponentController;
     @FXML private TextField infoField;
 
+    private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
+
+    public BooleanProperty getXmlLoaded() {
+        return xmlLoaded;
+    }
+
+    public void setXmlLoaded(BooleanProperty xmlLoaded) {
+        this.xmlLoaded = xmlLoaded;
+    }
 
     @FXML
     public void initialize() throws IOException {
         if(headerComponentController != null && optionsMenuComponentController != null){
             headerComponentController.setAppController(this);
             optionsMenuComponentController.setAppController(this);
+            // bind buttons
+            optionsMenuComponentController.getShowStoresButton().disableProperty().bind(xmlLoaded);
+            optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(xmlLoaded);
         }
+
+
+
+    }
+
+    public HeaderController getHeaderComponentController() {
+        return headerComponentController;
+    }
+
+    public void setHeaderComponentController(HeaderController headerComponentController) {
+        this.headerComponentController = headerComponentController;
+    }
+
+    public OptionsMenuController getOptionsMenuComponentController() {
+        return optionsMenuComponentController;
+    }
+
+    public void setOptionsMenuComponentController(OptionsMenuController optionsMenuComponentController) {
+        this.optionsMenuComponentController = optionsMenuComponentController;
     }
 
     public void loadXmlAction() {

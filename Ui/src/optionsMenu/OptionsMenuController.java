@@ -22,9 +22,27 @@ public class OptionsMenuController {
     }
 
     @FXML
-    private Button showStores;
+    private Button showStoresButton;
+
     @FXML
-    private Button placeOrder;
+    private Button placeOrderButton;
+
+
+    public Button getShowStoresButton() {
+        return showStoresButton;
+    }
+
+    public void setShowStoresButton(Button showStoresButton) {
+        this.showStoresButton = showStoresButton;
+    }
+
+    public Button getPlaceOrderButton() {
+        return placeOrderButton;
+    }
+
+    public void setPlaceOrderButton(Button placeOrderButton) {
+        this.placeOrderButton = placeOrderButton;
+    }
 
     @FXML
     public void showStoresAction() throws IOException {
@@ -34,7 +52,6 @@ public class OptionsMenuController {
         Scene scene = new Scene(root, 600, 400);
         Main.getPrimaryStage().setScene(scene);
     }
-
 
 
     @FXML
