@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import orderScreen.OrderScreenController;
+import showItems.ShowItemsController;
 import showStores.ShowStoresController;
 
 import java.io.IOException;
@@ -48,4 +49,13 @@ public class OptionsMenuController {
         orderStage.show();
     }
 
+    @FXML
+    public void showItemsAction()throws IOException{
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/showItems/showItems.fxml"));
+        fxmlLoader.setController(new ShowItemsController(appController));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 600, 400);
+        Main.getPrimaryStage().setScene(scene);
+    }
 }

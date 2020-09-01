@@ -62,6 +62,4 @@ public class AppController {
         return storeManager;
     }
 
-    public void showStoresAction() throws IOException {
-    }
 }
