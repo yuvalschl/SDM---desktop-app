@@ -39,5 +39,4 @@ public class OrderScreenController {
     public void setAppController(AppController appController) {
         this.appController = appController;
     }
-
 }

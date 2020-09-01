@@ -7,12 +7,15 @@ import StoreManager.StoreManager;
 import header.HeaderController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import Jaxb.JaxbClassToStoreManager;
 import Jaxb.XmlToObject;
+import javafx.stage.Stage;
 import optionsMenu.OptionsMenuController;
 import orderScreen.OrderScreenController;
 
@@ -28,8 +31,6 @@ public class AppController {
     @FXML private ScrollPane optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
     @FXML private TextField infoField;
-    @FXML private ScrollPane orderScreenComponent;
-    @FXML private OrderScreenController orderScreenComponentController;
 
 
     @FXML
@@ -61,7 +62,6 @@ public class AppController {
         return storeManager;
     }
 
-    public void showStoresAction() {
-
+    public void showStoresAction() throws IOException {
     }
 }

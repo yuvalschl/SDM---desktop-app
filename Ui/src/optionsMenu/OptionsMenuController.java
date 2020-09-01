@@ -1,6 +1,7 @@
 package optionsMenu;
 
 import appController.AppController;
+import appController.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import orderScreen.OrderScreenController;
+import showStores.ShowStoresController;
 
 import java.io.IOException;
 
@@ -25,8 +27,12 @@ public class OptionsMenuController {
     private Button placeOrder;
 
     @FXML
-    public void showStoresAction() {
-        appController.showStoresAction();
+    public void showStoresAction() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/showStores/showStores.fxml"));
+        fxmlLoader.setController(new ShowStoresController(appController));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 600, 400);
+        Main.getPrimaryStage().setScene(scene);
     }
 
 
