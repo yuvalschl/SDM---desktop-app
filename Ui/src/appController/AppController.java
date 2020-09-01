@@ -45,7 +45,7 @@ public class AppController {
         if(headerComponentController != null && optionsMenuComponentController != null){
             headerComponentController.setAppController(this);
             optionsMenuComponentController.setAppController(this);
-            // bind buttons
+            // bind buttons to enable them if xml is loaded
             optionsMenuComponentController.getShowStoresButton().disableProperty().bind(xmlLoaded);
             optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(xmlLoaded);
         }

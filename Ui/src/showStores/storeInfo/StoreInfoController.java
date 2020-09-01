@@ -1,10 +1,15 @@
 package showStores.storeInfo;
 
-import appController.AppController;
+import Store.Store;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
 import showStores.ShowStoresController;
 
 public class StoreInfoController {
@@ -13,18 +18,64 @@ public class StoreInfoController {
 
     @FXML
     private Label storeNameLabel;
-
     @FXML
     private Label storeIdLabel;
-
     @FXML
     private Label PPKLabel;
-
     @FXML
     private Label shippingCostLabel;
-
     @FXML
     private ListView<String> itemsListView;
+/*    private StringProperty storeName;
+    private StringProperty PPK;
+    private StringProperty storeId;
+    private StringProperty shippingCost;*/
+
+    public Label getStoreNameLabel() {
+        return storeNameLabel;
+    }
+
+    public void setStoreNameLabel(Label storeNameLabel) {
+        this.storeNameLabel = storeNameLabel;
+    }
+
+    public Label getStoreIdLabel() {
+        return storeIdLabel;
+    }
+
+    public void setStoreIdLabel(Label storeIdLabel) {
+        this.storeIdLabel = storeIdLabel;
+    }
+
+    public Label getPPKLabel() {
+        return PPKLabel;
+    }
+
+    public void setPPKLabel(Label PPKLabel) {
+        this.PPKLabel = PPKLabel;
+    }
+
+    public Label getShippingCostLabel() {
+        return shippingCostLabel;
+    }
+
+    public void setShippingCostLabel(Label shippingCostLabel) {
+        this.shippingCostLabel = shippingCostLabel;
+    }
+
+    public ListView<String> getItemsListView() {
+        return itemsListView;
+    }
+
+/*    @FXML
+    public void initialize(){
+        storeName = new SimpleStringProperty();
+        PPK = new SimpleStringProperty();
+        storeId = new SimpleStringProperty();
+        shippingCost = new SimpleStringProperty();
+    }*/
+
+
 
     public void setShowStoresController(ShowStoresController showStoresController) {
         this.showStoresController = showStoresController;

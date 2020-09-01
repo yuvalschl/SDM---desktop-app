@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane dividerPositions="0.5805369127516778" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="412.0" prefWidth="340.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="showStores.storeInfo.StoreInfoController">
+<SplitPane dividerPositions="0.5805369127516778" minHeight="-Infinity" minWidth="-Infinity" prefHeight="412.0" prefWidth="340.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="showStores.storeInfo.StoreInfoController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="157.0">
          <children>
