@@ -14,9 +14,10 @@ public class ShowStoresController {
     private AppController appController;
 
     @FXML
-    private StoreInfoController storeInfoComponentController;
-    @FXML
     private SplitPane storeInfoComponent;
+
+    @FXML
+    private StoreInfoController storeInfoComponentController;
 
     @FXML
     private ListView<String> storesLV;
@@ -27,6 +28,7 @@ public class ShowStoresController {
     }
 
     public void initialize(){
+        storeInfoComponentController.setShowStoresController(this);
         for(Map.Entry<Integer, DtoStore> store : appController.getStoreManager().getAllDtoStores().entrySet()){
             storesLV.getItems().add(store.getValue().getName());
         }

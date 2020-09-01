@@ -23,7 +23,6 @@ public class StoreInfoController {
     @FXML
     private Label shippingCostLabel;
 
-
     @FXML
     private ListView<String> itemsListView;
 
