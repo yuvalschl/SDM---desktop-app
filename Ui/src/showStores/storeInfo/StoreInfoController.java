@@ -1,12 +1,5 @@
 package showStores.storeInfo;
 
-import Store.Store;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -23,7 +16,7 @@ public class StoreInfoController {
     @FXML
     private Label PPKLabel;
     @FXML
-    private Label shippingCostLabel;
+    private Label shippingPaymentLabel;
     @FXML
     private ListView<String> itemsListView;
 /*    private StringProperty storeName;
@@ -55,12 +48,12 @@ public class StoreInfoController {
         this.PPKLabel = PPKLabel;
     }
 
-    public Label getShippingCostLabel() {
-        return shippingCostLabel;
+    public Label getShippingPaymentLabel() {
+        return shippingPaymentLabel;
     }
 
-    public void setShippingCostLabel(Label shippingCostLabel) {
-        this.shippingCostLabel = shippingCostLabel;
+    public void setShippingPaymentLabel(Label shippingPaymentLabel) {
+        this.shippingPaymentLabel = shippingPaymentLabel;
     }
 
     public ListView<String> getItemsListView() {
