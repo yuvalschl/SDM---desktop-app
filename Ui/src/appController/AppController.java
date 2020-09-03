@@ -7,6 +7,8 @@ import StoreManager.StoreManager;
 import header.HeaderController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -55,6 +57,7 @@ public class AppController {
 
     }
 
+
     public HeaderController getHeaderComponentController() {
         return headerComponentController;
     }
@@ -91,6 +94,7 @@ public class AppController {
         else
             headerComponentController.getLoadActionText().setText("Error! no file loaded");
     }
+
 
     public StoreManager getStoreManager() {
         return storeManager;
