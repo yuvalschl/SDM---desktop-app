@@ -6,6 +6,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 public class HeaderController {
 
@@ -16,6 +18,12 @@ public class HeaderController {
     private Button loadXmlButton;
     @FXML
     private Button mainMenuButton;
+    @FXML
+    private Text loadActionText;
+
+    public Text getLoadActionText() {
+        return loadActionText;
+    }
 
     public void setAppController(AppController appController) {
         this.appController = appController;
@@ -24,7 +32,7 @@ public class HeaderController {
     @FXML
     void loadXmlAction() {
         appController.loadXmlAction();
-        appController.getXmlLoaded().setValue(false);
+        //appController.getXmlLoaded().setValue(false);
     }
 
     @FXML

@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import Jaxb.JaxbClassToStoreManager;
 import Jaxb.XmlToObject;
@@ -24,11 +25,10 @@ import java.io.IOException;
 public class AppController {
     private StoreManager storeManager;
 
-    @FXML private HBox headerComponent;
+    @FXML private VBox headerComponent;
     @FXML private HeaderController headerComponentController;
     @FXML private ScrollPane optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
-    @FXML private TextField infoField;
 
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
 
@@ -48,6 +48,7 @@ public class AppController {
             // bind buttons to enable them if xml is loaded
             optionsMenuComponentController.getShowStoresButton().disableProperty().bind(xmlLoaded);
             optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(xmlLoaded);
+            optionsMenuComponentController.getShowItemsButton().disableProperty().bind(xmlLoaded);
         }
 
 
@@ -84,7 +85,11 @@ public class AppController {
             } catch (ItemNotSoldException e) {
                 e.printStackTrace();
             }
+            getXmlLoaded().setValue(false);
+            headerComponentController.getLoadActionText().setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
         }
+        else
+            headerComponentController.getLoadActionText().setText("Error! no file loaded");
     }
 
     public StoreManager getStoreManager() {

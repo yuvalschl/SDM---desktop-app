@@ -28,6 +28,16 @@ public class OptionsMenuController {
     @FXML
     private Button placeOrderButton;
 
+    @FXML
+    private Button showItemsButton;
+
+    public Button getShowItemsButton() {
+        return showItemsButton;
+    }
+
+    public void setShowItemsButton(Button showItemsButton) {
+        this.showItemsButton = showItemsButton;
+    }
 
     public Button getShowStoresButton() {
         return showStoresButton;
