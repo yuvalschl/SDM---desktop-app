@@ -1,6 +1,7 @@
 package showStores;
 
-import DtoObjects.DtoStore;
+import Item.Item;
+import Order.*;
 import Store.Store;
 import appController.AppController;
 import javafx.beans.value.ChangeListener;
@@ -12,9 +13,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
+import showStores.storeInfo.ItemListViewCell;
+import showStores.storeInfo.OrderListViewCell;
 import showStores.storeInfo.StoreInfoController;
+import showStores.storeInfo.itemInfo.ItemInfoController;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -43,6 +48,7 @@ public class ShowStoresController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         storeInfoComponentController.setShowStoresController(this);
 
+
         //set listener to the map of stores so the list view updates dynamically
         storesObservableMap = FXCollections.observableMap(appController.getStoreManager().getAllStores());
         storesObservableMap.addListener(new MapChangeListener<Integer, Store>() {
@@ -57,13 +63,28 @@ public class ShowStoresController implements Initializable {
         storesLV.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Store>() {
             @Override
             public void changed(ObservableValue<? extends Store> observable, Store oldValue, Store newValue) {
+                //set the labels of the store
                 storeInfoComponentController.getStoreNameLabel().setText(newValue.getName());
                 storeInfoComponentController.getStoreIdLabel().setText(String.valueOf(newValue.getSerialNumber()));
                 storeInfoComponentController.getPPKLabel().setText(String.valueOf(newValue.getPPK()));
                 storeInfoComponentController.getShippingPaymentLabel().setText(String.valueOf(newValue.getTotalDeliveriesCost()));
+
+                //set the items list view
+                storeInfoComponentController.getItemsListView().getItems().clear();
+                storeInfoComponentController.getItemsListView().getItems().addAll(newValue.getInventory().values());
+                storeInfoComponentController.getItemsListView().setCellFactory(e -> new ItemListViewCell());
+
+                //set the order list view
+                //TODO this may not work, check when place order is done
+                storeInfoComponentController.getOrdersListView().getItems().clear();
+                storeInfoComponentController.getOrdersListView().getItems().addAll(new ArrayList<StoreOrder>(newValue.getAllOrders()));
+                storeInfoComponentController.getOrdersListView().setCellFactory(e -> new OrderListViewCell());
+
             }
         });
 
+
+        //set the stores list view
         for(Map.Entry<Integer, Store> store : appController.getStoreManager().getAllStores().entrySet()){
             storesLV.getItems().add(store.getValue());
         }
