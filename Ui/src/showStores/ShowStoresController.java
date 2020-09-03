@@ -58,7 +58,7 @@ public class ShowStoresController {
         });
 
         for(Map.Entry<Integer, DtoStore> store : appController.getStoreManager().getAllDtoStores().entrySet()){
-            storesLV.getItems().add(store.getValue().getName());
+            storesLV.getItems().add("ID: " + store.getValue().getSerialNumber() + " Name: " + store.getValue().getName());
         }
     }
 }
