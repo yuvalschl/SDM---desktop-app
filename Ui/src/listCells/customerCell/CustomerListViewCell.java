@@ -1,7 +1,6 @@
-package showStores.storeInfo;
+package listCells.customerCell;
 
-import Item.Item;
-import Order.*;
+import Costumer.Customer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -10,31 +9,32 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class OrderListViewCell extends ListCell<StoreOrder> {
+
+public class CustomerListViewCell extends ListCell<Customer> {
+
+    @FXML
+    private Label CustomerNameLabel;
+
+    @FXML
+    private Label CustomerIdLabel;
 
     @FXML
     private VBox cellVbox;
 
-    @FXML
-    private Label orderDateLabel;
-
-    @FXML
-    private Label orderIdLabel;
-
     private FXMLLoader fxmlLoader;
 
     @Override
-    protected void updateItem(StoreOrder order, boolean empty) {
-        super.updateItem(order, empty);
+    protected void updateItem(Customer customer, boolean empty) {
+        super.updateItem(customer, empty);
 
-        if(empty || order == null) {
+        if(empty || customer == null) {
 
             setText(null);
             setGraphic(null);
 
         } else {
             if (fxmlLoader == null) {
-                fxmlLoader = new FXMLLoader(getClass().getResource("/showStores/storeInfo/orderListViewCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource("/listCells/customerCell/customerListViewCell.fxml"));
                 fxmlLoader.setController(this);
 
                 try {
@@ -45,12 +45,13 @@ public class OrderListViewCell extends ListCell<StoreOrder> {
 
             }
 
-            orderDateLabel.setText(String.valueOf(order.getDateOfOrder()));
-            orderIdLabel.setText(String.valueOf(order.getOrderId()));
+            CustomerNameLabel.setText(String.valueOf(customer.getName()));
+            CustomerIdLabel.setText(String.valueOf(customer.getId()));
 
             setText(null);
             setGraphic(cellVbox);
         }
 
     }
+
 }

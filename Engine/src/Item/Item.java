@@ -6,13 +6,13 @@ import java.util.Objects;
 
 public abstract class Item {
     boolean isSold;
-    private int serialNumber;
+    private int id;
     private String name;
     private float price;
 
 
-    public Item(int serialNumber, String name, float price) {
-        this.serialNumber = serialNumber;
+    public Item(int id, String name, float price) {
+        this.id = id;
         this.name = name;
         this.price = price;
         isSold = false;
@@ -27,17 +27,17 @@ public abstract class Item {
         isSold = sold;
     }
 
-    public Item(int serialNumber, String name) {
-        this.serialNumber = serialNumber;
+    public Item(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
-    public int getSerialNumber() {
-        return serialNumber;
+    public int getId() {
+        return id;
     }
 
-    public void setSerialNumber(int serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -53,7 +53,7 @@ public abstract class Item {
     }
 
     public String toString(Boolean isInShowStores){
-        return "*   Item ID: " + serialNumber+"\n"+
+        return "*   Item ID: " + id +"\n"+
                 "\tItem name: " + name+"\n";
     }
 
@@ -72,7 +72,7 @@ public abstract class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return getSerialNumber() == item.getSerialNumber() &&
+        return getId() == item.getId() &&
                 Float.compare(item.getPrice(), getPrice()) == 0 &&
                 getName().equals(item.getName());
     }
@@ -83,7 +83,7 @@ public abstract class Item {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getSerialNumber(), getName(), getPrice());
+        return Objects.hash(getId(), getName(), getPrice());
     }
 
     public abstract void setAmountSold(float amountSold);

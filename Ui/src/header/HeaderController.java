@@ -51,13 +51,14 @@ public class HeaderController {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                for (int i=0 ; i<100; i++) {
+                for (int i=0 ; i<101; i++) {
                     Thread.sleep(10);
                     updateProgress(i, 100);
                 }
                 return null;
             }
         };
+
         fileProgressBar.progressProperty().unbind();
         fileProgressBar.progressProperty().bind(task.progressProperty());
         progressPercentText.textProperty().bind(Bindings.concat(

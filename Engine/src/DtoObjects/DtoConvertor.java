@@ -22,10 +22,10 @@ public class DtoConvertor {
         DtoItem itemToReturn;
 
         if(item instanceof UnitItem){
-            itemToReturn = new DtoUnitItem(item.getSerialNumber(),item.getName(),item.getPrice(),item.getAmountSold());
+            itemToReturn = new DtoUnitItem(item.getId(),item.getName(),item.getPrice(),item.getAmountSold());
         }
         else {
-            itemToReturn = new DtoWeightItem(item.getSerialNumber(),item.getName(),item.getPrice(),item.getAmountSold());
+            itemToReturn = new DtoWeightItem(item.getId(),item.getName(),item.getPrice(),item.getAmountSold());
         }
         return itemToReturn;
     }

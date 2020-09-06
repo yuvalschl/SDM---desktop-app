@@ -1,4 +1,4 @@
-package showStores;
+package listCells.storeCell;
 
 import Store.Store;
 import javafx.fxml.FXML;
@@ -34,7 +34,7 @@ public class StoreListViewCell extends ListCell<Store> {
 
         } else {
             if (fxmlLoader == null) {
-                fxmlLoader = new FXMLLoader(getClass().getResource("/showStores/storeListViewCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource("/listCells/storeCell/storeListViewCell.fxml"));
                 fxmlLoader.setController(this);
 
                 try {
@@ -53,4 +53,5 @@ public class StoreListViewCell extends ListCell<Store> {
         }
 
     }
+
 }

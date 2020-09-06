@@ -29,7 +29,7 @@ public class AppController {
 
     @FXML private VBox headerComponent;
     @FXML private HeaderController headerComponentController;
-    @FXML private ScrollPane optionsMenuComponent;
+    @FXML private VBox optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
 
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
@@ -40,6 +40,14 @@ public class AppController {
 
     public void setXmlLoaded(BooleanProperty xmlLoaded) {
         this.xmlLoaded = xmlLoaded;
+    }
+
+    public VBox getHeaderComponent() {
+        return headerComponent;
+    }
+
+    public void setHeaderComponent(VBox headerComponent) {
+        this.headerComponent = headerComponent;
     }
 
     @FXML
@@ -81,11 +89,7 @@ public class AppController {
             JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
             try {
                 storeManager = jaxbClassToStoreManager.convertJaxbClassToStoreManager(XmlToObject.fromXmlFileToObject(file));
-            } catch (DuplicateValueException e) {
-                e.printStackTrace();
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            } catch (ItemNotSoldException e) {
+            } catch (DuplicateValueException | InvalidValueException | ItemNotSoldException e) {
                 e.printStackTrace();
             }
             getXmlLoaded().setValue(false);

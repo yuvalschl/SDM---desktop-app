@@ -47,7 +47,7 @@ public class StoreInfoController {
                 if (newValue != null){
                     String sellBy = newValue instanceof UnitItem ? "Unit" : "Weight";
                     itemInfoController.getItemNameLabel().setText(newValue.getName());
-                    itemInfoController.getItmeIdLabel().setText(String.valueOf(newValue.getSerialNumber()));
+                    itemInfoController.getItmeIdLabel().setText(String.valueOf(newValue.getId()));
                     itemInfoController.getAmountSoldLabel().setText(String.valueOf(newValue.getAmountSold()));
                     itemInfoController.getPricePerUnitLabel().setText(String.valueOf(newValue.getPrice()));
                     itemInfoController.getItemSellByLabel().setText(sellBy);

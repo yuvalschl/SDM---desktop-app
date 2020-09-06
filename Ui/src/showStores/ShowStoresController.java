@@ -1,6 +1,5 @@
 package showStores;
 
-import Item.Item;
 import Order.*;
 import Store.Store;
 import appController.AppController;
@@ -13,10 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
-import showStores.storeInfo.ItemListViewCell;
-import showStores.storeInfo.OrderListViewCell;
+import listCells.storeCell.StoreListViewCell;
+import listCells.itemCell.ItemListViewCell;
+import listCells.orderCell.OrderListViewCell;
 import showStores.storeInfo.StoreInfoController;
-import showStores.storeInfo.itemInfo.ItemInfoController;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -73,6 +72,7 @@ public class ShowStoresController implements Initializable {
                 storeInfoComponentController.getItemsListView().getItems().clear();
                 storeInfoComponentController.getItemsListView().getItems().addAll(newValue.getInventory().values());
                 storeInfoComponentController.getItemsListView().setCellFactory(e -> new ItemListViewCell());
+                storeInfoComponentController.getItemsListView().scrollTo(0);
 
                 //set the order list view
                 //TODO this may not work, check when place order is done

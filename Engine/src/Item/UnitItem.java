@@ -5,7 +5,7 @@ public class UnitItem extends Item {
 
     //constructor for store specific item
     public UnitItem(Item item, float price) {
-        super(item.getSerialNumber(), item.getName(), price);
+        super(item.getId(), item.getName(), price);
         amountSold = 0;
     }
 
