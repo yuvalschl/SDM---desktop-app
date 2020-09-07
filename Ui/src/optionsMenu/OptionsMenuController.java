@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import orderScreen.OrderScreenController;
 import showItems.ShowItemsController;
-import showStores.ShowStoresController;
 
 import java.io.IOException;
 
@@ -57,23 +56,27 @@ public class OptionsMenuController {
 
     @FXML
     public void showStoresAction() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/showStores/showStores.fxml"));
+        disablePanes();
+        appController.getShowStoresComponent().setVisible(true);
+
+
+/*        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/showStores/showStores.fxml"));
         fxmlLoader.setController(new ShowStoresController(appController));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 600, 400);
-        Main.getPrimaryStage().setScene(scene);
+        Main.getPrimaryStage().setScene(scene);*/
     }
+    @FXML
+    public void homeButtonAction(){
+        disablePanes();
+        appController.getHomeComponent().setVisible(true);
 
+    }
 
     @FXML
     public void placeOrderAction() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/orderScreen/orderScreen.fxml"));
-        fxmlLoader.setController(new OrderScreenController(appController));
-        Stage orderStage = new Stage();
-        Parent root = fxmlLoader.load();
-        orderStage.setTitle("orderScreen");
-        orderStage.setScene(new Scene(root, 600, 400));
-        orderStage.show();
+        disablePanes();
+        appController.getOrderScreenComponent().setVisible(true);
     }
 
     @FXML
@@ -84,5 +87,12 @@ public class OptionsMenuController {
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 600, 400);
         Main.getPrimaryStage().setScene(scene);
+    }
+
+    private void disablePanes(){
+        appController.getHomeComponent().setVisible(false);
+        appController.getShowStoresComponent().setVisible(false);
+        appController.getOrderScreenComponent().setVisible(false);
+
     }
 }

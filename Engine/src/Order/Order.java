@@ -1,5 +1,6 @@
 package Order;
 
+import Costumer.Customer;
 import Store.*;
 import ItemPair.*;
 
@@ -22,6 +23,7 @@ public class Order {
     private HashMap<Integer, Store> stores = new HashMap<>();
     private int orderId;
     private static int staticId = 0;
+    private Customer customer;
     private ArrayList<ItemAmountAndStore> itemAmountAndStores;
 
     private HashMap<Integer,String> storeIdAndName = new HashMap<>();;
@@ -73,6 +75,14 @@ public class Order {
         updateStoreIdAndName(itemAmountAndStores);
     }
     public Order(){}
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
     public HashMap<Integer, Float> getShippingCostByStore() {
         return shippingCostByStore;

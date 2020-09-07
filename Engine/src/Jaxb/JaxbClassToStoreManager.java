@@ -119,8 +119,8 @@ public class JaxbClassToStoreManager {
             else {
                 itemToAdd = new WeightItem(itemToAdd, item.getPrice());
             }
-            currentInventory.put(itemToAdd.getSerialNumber(), itemToAdd);
-            allItemsInSystem.get(itemToAdd.getSerialNumber()).setSold(true);
+            currentInventory.put(itemToAdd.getId(), itemToAdd);
+            allItemsInSystem.get(itemToAdd.getId()).setSold(true);
         }
 
         return currentInventory;

@@ -1,105 +1,94 @@
 package appController;
 
-import DtoObjects.DtoConvertor;
-import Exceptions.DuplicateValueException;
-import Exceptions.InvalidValueException;
-import Exceptions.ItemNotSoldException;
+import Home.HomeController;
 import StoreManager.StoreManager;
-import header.HeaderController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import Jaxb.JaxbClassToStoreManager;
-import Jaxb.XmlToObject;
 import optionsMenu.OptionsMenuController;
+import orderScreen.OrderScreenController;
+import showStores.ShowStoresController;
 
-
-
-import java.io.File;
 import java.io.IOException;
 
 public class AppController {
     private StoreManager storeManager;
 
-    @FXML private VBox headerComponent;
-    @FXML private HeaderController headerComponentController;
-    @FXML private ScrollPane optionsMenuComponent;
+    @FXML private VBox optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
+    @FXML private SplitPane showStoresComponent;
+    @FXML private ShowStoresController showStoresComponentController;
+    @FXML private AnchorPane homeComponent;
+    @FXML private HomeController homeComponentController;
+    @FXML private SplitPane orderScreen;
+    @FXML private OrderScreenController orderScreenController;
+
+    @FXML
+    public void initialize() throws IOException {
+/*        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/showStores/showStores.fxml"));
+        fxmlLoader.setController(new ShowStoresController());
+        fxmlLoader.load();*/
+/*        FXMLLoader fxmlLoader1 = new FXMLLoader((getClass().getResource("/Home/home.fxml")));
+        fxmlLoader1.setController(new HomeController());
+        fxmlLoader1.load();*/
+        optionsMenuComponentController.setAppController(this);
+        homeComponentController.setAppController(this);
+        //orderScreenComponentController.setAppController(this);
+    }
+
+
 
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
+
+    public SplitPane getOrderScreenComponent() {
+        return orderScreen;
+    }
+
+    public void setOrderScreenComponent(SplitPane orderScreenComponent) {
+        this.orderScreen = orderScreenComponent;
+    }
+
+    public OrderScreenController getOrderScreenComponentController() {
+        return orderScreenController;
+    }
+
+    public void setOrderScreenComponentController(OrderScreenController orderScreenComponentController) {
+        this.orderScreenController = orderScreenComponentController;
+    }
+
+    public SplitPane getShowStoresComponent() {
+        return showStoresComponent;
+    }
+
+    public ShowStoresController getShowStoresComponentController() {
+        return showStoresComponentController;
+    }
+
+    public void setShowStoresComponent(SplitPane showStoresComponent) {
+        this.showStoresComponent = showStoresComponent;
+    }
+
+    public AnchorPane getHomeComponent() {
+        return homeComponent;
+    }
+
+    public void setHomeComponent(AnchorPane homeComponent) {
+        this.homeComponent = homeComponent;
+    }
 
     public BooleanProperty getXmlLoaded() {
         return xmlLoaded;
     }
 
-    public void setXmlLoaded(BooleanProperty xmlLoaded) {
-        this.xmlLoaded = xmlLoaded;
-    }
-
-    @FXML
-    public void initialize() throws IOException {
-        if(headerComponentController != null && optionsMenuComponentController != null){
-            headerComponentController.setAppController(this);
-            optionsMenuComponentController.setAppController(this);
-            // bind buttons to enable them if xml is loaded
-            optionsMenuComponentController.getShowStoresButton().disableProperty().bind(xmlLoaded);
-            optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(xmlLoaded);
-            optionsMenuComponentController.getShowItemsButton().disableProperty().bind(xmlLoaded);
-        }
-
-
-
-    }
-
-
-    public HeaderController getHeaderComponentController() {
-        return headerComponentController;
-    }
-
-    public void setHeaderComponentController(HeaderController headerComponentController) {
-        this.headerComponentController = headerComponentController;
-    }
-
-    public OptionsMenuController getOptionsMenuComponentController() {
-        return optionsMenuComponentController;
-    }
-
-    public void setOptionsMenuComponentController(OptionsMenuController optionsMenuComponentController) {
-        this.optionsMenuComponentController = optionsMenuComponentController;
-    }
-
-    public void loadXmlAction() {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(headerComponent.getScene().getWindow());
-        if (file != null){
-            JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
-            try {
-                storeManager = jaxbClassToStoreManager.convertJaxbClassToStoreManager(XmlToObject.fromXmlFileToObject(file));
-            } catch (DuplicateValueException e) {
-                e.printStackTrace();
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            } catch (ItemNotSoldException e) {
-                e.printStackTrace();
-            }
-            getXmlLoaded().setValue(false);
-            headerComponentController.getLoadActionText().setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
-        }
-        else
-            headerComponentController.getLoadActionText().setText("Error! no file loaded");
-
-    }
-
-
     public StoreManager getStoreManager() {
         return storeManager;
     }
 
+    public void setStoreManager(StoreManager convertJaxbClassToStoreManager) {
+        this.storeManager = convertJaxbClassToStoreManager;
+    }
 }

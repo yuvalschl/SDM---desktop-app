@@ -182,10 +182,10 @@ public class StoreManager {
         for(Integer key : allItems.keySet()){
             Item currentItem = allItems.get(key);
             if(currentItem instanceof UnitItem){
-                allDtoItems.put(key, new DtoUnitItem(currentItem.getSerialNumber(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
+                allDtoItems.put(key, new DtoUnitItem(currentItem.getId(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
             }
             else {
-                allDtoItems.put(key, new DtoWeightItem(currentItem.getSerialNumber(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
+                allDtoItems.put(key, new DtoWeightItem(currentItem.getId(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
             }
         }
         return allDtoItems;
@@ -295,7 +295,7 @@ public class StoreManager {
         float minPrice = Integer.MAX_VALUE;
         for(Map.Entry<Integer, Store> store : allStores.entrySet()){
             for(Map.Entry<Integer, Item> item : store.getValue().getInventory().entrySet()){
-                if(item.getValue().getSerialNumber() == itemId){
+                if(item.getValue().getId() == itemId){
                     if (item.getValue().getPrice() < minPrice){
                         minPrice = item.getValue().getPrice();
                         cheapestItem = item.getValue();
