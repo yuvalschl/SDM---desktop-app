@@ -1,5 +1,6 @@
 package appController;
 
+import StoreManager.StoreManager;
 import appController.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +35,5 @@ public class Main extends Application {
         return primaryStage;
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String[] args) { launch(args);}
 }

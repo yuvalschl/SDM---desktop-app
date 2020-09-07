@@ -208,6 +208,7 @@ public class StoreManager {
         return new Order(date, items.size(), totalPriceOfItems, shippingCost, totalCost, allStoresInOrder, items, shippingCostByStore);
     }
 
+
     private HashMap<Integer, Float> calcShippingCostByStore(ArrayList<ItemAmountAndStore> allItems, Point customerLocation){
         HashMap<Integer, Float> shippingCostMap = new HashMap<>();
         for(ItemAmountAndStore item : allItems){
@@ -335,8 +336,8 @@ public class StoreManager {
     }
 
     /**
-     * deletes item
-     * @return a string that will hold the information about wheter the item to delete was a part of a discount, if not null is returned
+     * deletes item from store
+     * @return a string that will hold the information about whether the item to delete was a part of a discount, if not null is returned
      */
     public String deleteItemFromStore(DtoStore storeToDeleteFrom, int itemId){
         String stringToReturn = null;
@@ -351,5 +352,33 @@ public class StoreManager {
         }
         storeToUpdate.getInventory().remove(itemId);
         return stringToReturn;
+    }
+
+    /**
+     * looks if any of the items id and quantity  matches any of the stores discounts
+     * @return an arrayList with all the relevant discounts
+     */
+    public ArrayList<Discount> getEntitledDiscounts(int storeID, ArrayList<ItemAmountAndStore> itemAmountAndStores) {
+        Store store = getAllStores().get(storeID);
+        ArrayList<Discount> discounts = new ArrayList<Discount>();
+        for (ItemAmountAndStore itemAndAmount : itemAmountAndStores) {//loop through the items and check if the amount and id matches any of the stores discounts
+            for (Discount discount : store.getAllDiscounts()) {
+                if (itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getAmount() == discount.getIfYouBuy().getQuantity()) {
+                    discounts.add(discount);
+                }
+            }
+        }
+        return discounts;
+    }
+
+    /**
+     * takes orders and discounts and add the discount items to the order
+     * @param discounts an array with all the discounts to add to order
+     * @param order the order to add the items to
+     */
+    public void AddDiscountItemsToOrder(ArrayList<Discount> discounts, Order order){
+        for (Discount discount: discounts){
+            discount.getThenYouGet().getAllOffers()
+        }
     }
 }

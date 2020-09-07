@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
-<BorderPane fx:id="appWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appController.AppController">
-   <top>
-      <fx:include fx:id="headerComponent" source="../header/header.fxml" />
-   </top>
-   <left>
-      <fx:include fx:id="optionsMenuComponent" source="../optionsMenu/optionsMenu.fxml" />
-   </left>
-   <center>
-      <TextField fx:id="infoField" prefHeight="340.0" prefWidth="494.0">
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </TextField>
-   </center>
-</BorderPane>
+<SplitPane dividerPositions="0.16118935837245696" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appController.AppController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="246.0">
+         <children>
+            <fx:include fx:id="optionsMenuComponent" source="../optionsMenu/optionsMenu.fxml" />
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="1020.0">
+         <children>
+            <StackPane prefHeight="798.0" prefWidth="1069.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </StackPane>
+            <fx:include fx:id="showStoresComponent" source="../showStores/showStores.fxml" />
+            <fx:include fx:id="orderScreen" source="../orderScreen/orderScreen.fxml" />
+            <fx:include fx:id="homeComponent" source="../Home/home.fxml" />
+         </children></AnchorPane>
+  </items>
+</SplitPane>

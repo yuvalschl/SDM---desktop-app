@@ -17,7 +17,6 @@ public class Store {
     private String name;
     private int serialNumber;
     private Map<Integer, Item> inventory;
-
     private Set<Discount> allDiscounts;
     private Set<StoreOrder> allOrders;
     private Point location;
