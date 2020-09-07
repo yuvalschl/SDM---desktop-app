@@ -1,14 +1,20 @@
 package orderScreen;
 
 import Costumer.Customer;
-import Item.Item;
+import DtoObjects.DtoConvertor;
+import Item.*;
+import ItemPair.ItemAmountAndStore;
 import Order.Order;
 import Store.Store;
 import appController.AppController;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,11 +25,14 @@ import listCells.storeCell.StoreListViewCell;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class OrderScreenController {
 
     private AppController appController;
     private Order order = new Order();
+    private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
+    private IntegerBinding listSizeBinding = Bindings.size(orderItems);
 
     @FXML
     private DatePicker datePicker;
@@ -50,51 +59,85 @@ public class OrderScreenController {
     private TableColumn<Item, Float> priceCol;
 
     @FXML
+    private Label itemNameLabel;
+
+    @FXML
+    private TextArea itemAmountTextField;
+
+    @FXML
     private Button clearButton;
 
     @FXML
     private Button addButton;
 
     @FXML
-    void addAction(ActionEvent event) {
+    private TableView<ItemAmountAndStore> orderSummaryTable;
+
+    @FXML
+    private TableColumn<ItemAmountAndStore, Integer> itemSummaryId;
+
+    @FXML
+    private TableColumn<ItemAmountAndStore, String> itemSummaryName;
+
+    @FXML
+    private TableColumn<ItemAmountAndStore, Float> itemSummaryAmount;
+
+
+    @FXML
+    void addAction() {
+        float amount = Float.parseFloat(itemAmountTextField.getText());
+        Item item = itemsTable.getSelectionModel().getSelectedItem();
+        ItemAmountAndStore itemToAdd;
+        if (dynamicOrderCB.isSelected()){
+            itemToAdd = appController.getStoreManager().getCheapestItem(item.getId());
+            itemToAdd.setAmount(amount);
+        }
+        else {
+            itemToAdd = new ItemAmountAndStore(DtoConvertor.itemToDtoItem(item), amount, storeCB.getValue());
+        }
+
+        if(orderItems.containsKey(item.getId())){
+            ItemAmountAndStore currentItem = orderItems.get(item.getId());
+            currentItem.setAmount(currentItem.getAmount() + itemToAdd.getAmount());
+            orderSummaryTable.getItems()
+                    .stream()
+                    .filter(e -> e.getItemId() == currentItem.getItemId())
+                    .collect(Collectors.toSet())
+                    .forEach(e -> e.setAmount(currentItem.getAmount()));
+        }
+        else {
+            orderItems.put(item.getId(), itemToAdd);
+            orderSummaryTable.getItems().add(itemToAdd);
+        }
+        orderSummaryTable.refresh();
+        itemNameLabel.setText(" ");
+        itemAmountTextField.clear();
+        itemsTable.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    public void placeOrderAction(){
 
     }
 
     @FXML
     void clearAction(ActionEvent event) {
-
+        orderItems.clear();
+        orderSummaryTable.getItems().clear();
     }
 
-    public OrderScreenController(){}
-
-    public OrderScreenController(AppController appController) {
-        this.appController = appController;
-    }
-
-    public AppController getAppController() {
-        return appController;
-    }
-
-    public void setAppController(AppController appController) {
-        this.appController = appController;
-    }
-
-    public void setData(AppController appController){
-        this.appController = appController;
+    @FXML
+    public void initialize(){
         //set the columns from the items
         nameCol.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         idCol.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
         priceCol.setCellValueFactory(new PropertyValueFactory<Item, Float>("price"));
-        // sets the comboboxes values
-        storeCB.getItems().addAll(appController.getStoreManager().getAllStores().values());
-        storeCB.setCellFactory(e -> new StoreListViewCell());
-        //TODO check why the color is changing after selection
-        storeCB.setButtonCell(new StoreListViewCell());
-        // sets the comboboxes values
-        customerCB.getItems().addAll(appController.getStoreManager().getAllCustomers().values());
-        customerCB.setCellFactory(e -> new CustomerListViewCell());
-        //TODO check why the color is changing after selection
-        customerCB.setButtonCell(new CustomerListViewCell());
+
+        //set column for the summary
+        itemSummaryName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        itemSummaryAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        itemSummaryId.setCellValueFactory(new PropertyValueFactory<>("itemId"));
+
         //set combobox selection of store
         storeCB.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Store>() {
             @Override
@@ -114,6 +157,84 @@ public class OrderScreenController {
                 order.setCustomer(newValue);
             }
         });
+
+        itemsTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Item>() {
+            @Override
+            public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
+                if(newValue != null){
+                    itemNameLabel.setText(newValue.getName());
+                }
+            }
+        });
+
+        dynamicOrderCB.disableProperty().bind(listSizeBinding.greaterThan(0));
+
+        //set binding for the amount text field
+        BooleanBinding textFieldBindToItemsTable =
+                Bindings.createBooleanBinding(() -> {
+                    boolean result = itemsTable.getSelectionModel().getSelectedItems().size() != 1;
+                    return result;
+                }, itemsTable.getSelectionModel().selectedItemProperty());
+
+        itemAmountTextField.disableProperty().bind(textFieldBindToItemsTable);
+
+        //set bindings for the items table
+        BooleanBinding datePickerBind =
+                Bindings.createBooleanBinding(() -> {
+                    return datePicker.getValue() == null;
+                }, datePicker.valueProperty());
+
+        BooleanBinding customerBind =
+                Bindings.createBooleanBinding(() -> {
+                    return customerCB.getValue() == null;
+                }, customerCB.valueProperty());
+
+        BooleanBinding storeBind =
+                Bindings.createBooleanBinding(() -> {
+                    return storeCB.getValue() == null;
+                }, storeCB.valueProperty());
+
+        BooleanBinding dynamicOrderBind =
+                Bindings.createBooleanBinding(() -> {
+                    return dynamicOrderCB.isSelected();
+                }, dynamicOrderCB.selectedProperty());
+
+        BooleanBinding andBinding1 = Bindings.and(dynamicOrderBind, storeBind);
+        BooleanBinding andBinding2 = Bindings.or(customerBind, datePickerBind);
+
+        itemsTable.disableProperty().bind(Bindings.or(andBinding1, andBinding2));
+    }
+
+    public OrderScreenController(){}
+
+    public OrderScreenController(AppController appController) {
+        this.appController = appController;
+    }
+
+    public AppController getAppController() {
+        return appController;
+    }
+
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
+
+    public void setData(AppController appController){
+
+        this.appController = appController;
+
+        // sets the comboboxes values
+        storeCB.getItems().addAll(appController.getStoreManager().getAllStores().values());
+        storeCB.setCellFactory(e -> new StoreListViewCell());
+        //TODO check why the color is changing after selection
+        storeCB.setButtonCell(new StoreListViewCell());
+
+        // sets the comboboxes values
+        customerCB.getItems().addAll(appController.getStoreManager().getAllCustomers().values());
+        customerCB.setCellFactory(e -> new CustomerListViewCell());
+        //TODO check why the color is changing after selection
+        customerCB.setButtonCell(new CustomerListViewCell());
+
     }
 
     @FXML
