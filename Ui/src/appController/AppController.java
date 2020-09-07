@@ -76,6 +76,14 @@ public class AppController {
         return homeComponent;
     }
 
+    public OptionsMenuController getOptionsMenuComponentController() {
+        return optionsMenuComponentController;
+    }
+
+    public void setOptionsMenuComponentController(OptionsMenuController optionsMenuComponentController) {
+        this.optionsMenuComponentController = optionsMenuComponentController;
+    }
+
     public void setHomeComponent(AnchorPane homeComponent) {
         this.homeComponent = homeComponent;
     }

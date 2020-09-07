@@ -77,13 +77,13 @@ public class HomeController {
         ArrayList<ItemAmountAndStore> itemAmountAndStores = new ArrayList<ItemAmountAndStore>();
 
        // itemAmountAndStores item1 = appController.getStoreManager().getCheapestItem(1);
-        Store store = appController.getStoreManager().getAllStores().get(1);
+        /*Store store = appController.getStoreManager().getAllStores().get(1);
         ItemAmountAndStore itemAmountAndStore1 = new ItemAmountAndStore(new DtoUnitItem(1,"Toilet Paper",10,0),store);
         itemAmountAndStore1.setAmount(1);
         ArrayList<ItemAmountAndStore> itemList = new ArrayList<ItemAmountAndStore>();
         itemList.add(itemAmountAndStore1);
         Order order = appController.getStoreManager().createOrder(new Point(2,3), getDateOfOrder(),itemList);//TODO: delete this
-        ArrayList<Discount> discount = appController.getStoreManager().getEntitledDiscounts(1,order.getItemAmountAndStores());
+        ArrayList<Discount> discount = appController.getStoreManager().getEntitledDiscounts(1,order.getItemAmountAndStores());*/
         //up til hereeeeeeeee
     }
 

@@ -23,6 +23,7 @@ import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
 
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -117,13 +118,24 @@ public class OrderScreenController {
 
     @FXML
     public void placeOrderAction(){
-
+        Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
+        appController.getStoreManager().placeOrder(order);
+        clearAction();
+        //TODO remove this
+        appController.getStoreManager().getAllOrders().forEach(order1 -> System.out.println(order1.getAmountOfItems()));
+        appController.getOptionsMenuComponentController().homeButtonAction();
     }
 
     @FXML
-    void clearAction(ActionEvent event) {
+    void clearAction() {
         orderItems.clear();
         orderSummaryTable.getItems().clear();
+        orderItems.clear();
+        dynamicOrderCB.setSelected(false);
+        datePicker.setValue(null);
+        storeCB.setValue(null);
+        customerCB.setValue(null);
     }
 
     @FXML
@@ -142,12 +154,14 @@ public class OrderScreenController {
         storeCB.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Store>() {
             @Override
             public void changed(ObservableValue<? extends Store> observable, Store oldValue, Store newValue) {
-                HashMap<Integer, Store> newStore = new HashMap<Integer, Store>();
-                newStore.put(newValue.getSerialNumber(), newValue);
-                itemsTable.getItems().clear();
-                ObservableList<Item> items = FXCollections.observableArrayList(newValue.getInventory().values());
-                itemsTable.getItems().addAll(items);
-                order.setStores(newStore);
+                if (newValue != null){
+                    HashMap<Integer, Store> newStore = new HashMap<Integer, Store>();
+                    newStore.put(newValue.getSerialNumber(), newValue);
+                    itemsTable.getItems().clear();
+                    ObservableList<Item> items = FXCollections.observableArrayList(newValue.getInventory().values());
+                    itemsTable.getItems().addAll(items);
+                    order.setStores(newStore);
+                }
             }
         });
         //set combobox selection of customer
@@ -167,6 +181,8 @@ public class OrderScreenController {
             }
         });
 
+        //bind the store combo box so it cant change mid order
+        storeCB.disableProperty().bind(Bindings.or(listSizeBinding.greaterThan(0), dynamicOrderCB.selectedProperty()));
         dynamicOrderCB.disableProperty().bind(listSizeBinding.greaterThan(0));
 
         //set binding for the amount text field
@@ -196,13 +212,14 @@ public class OrderScreenController {
 
         BooleanBinding dynamicOrderBind =
                 Bindings.createBooleanBinding(() -> {
-                    return dynamicOrderCB.isSelected();
+                    return !dynamicOrderCB.isSelected();
                 }, dynamicOrderCB.selectedProperty());
 
-        BooleanBinding andBinding1 = Bindings.and(dynamicOrderBind, storeBind);
-        BooleanBinding andBinding2 = Bindings.or(customerBind, datePickerBind);
+        BooleanBinding storeSelectionBinding = Bindings.and(dynamicOrderBind, storeBind);
+        BooleanBinding andBind = Bindings.or(customerBind, datePickerBind);
 
-        itemsTable.disableProperty().bind(Bindings.or(andBinding1, andBinding2));
+        itemsTable.disableProperty().bind(Bindings.or(storeSelectionBinding, andBind));
+        orderSummaryTable.disableProperty().bind(Bindings.or(storeSelectionBinding, andBind));
     }
 
     public OrderScreenController(){}
@@ -234,17 +251,18 @@ public class OrderScreenController {
         customerCB.setCellFactory(e -> new CustomerListViewCell());
         //TODO check why the color is changing after selection
         customerCB.setButtonCell(new CustomerListViewCell());
-
     }
 
     @FXML
     public void datePickerSelection(){
-        order.setDateOfOrder(Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        if (datePicker.getValue() != null){
+            order.setDateOfOrder(Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        }
+
     }
 
     @FXML
     public void dynamicOrderCBAction(){
-        storeCB.setDisable(dynamicOrderCB.isSelected());
         order.setStores(null);
         //if dynamic order is selected then all items are displayed
         if(dynamicOrderCB.isSelected()){
