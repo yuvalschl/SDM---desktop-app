@@ -25,8 +25,7 @@ public class Order {
     private static int staticId = 0;
     private Customer customer;
     private ArrayList<ItemAmountAndStore> itemAmountAndStores;
-
-    private HashMap<Integer,String> storeIdAndName = new HashMap<>();;
+    private HashMap<Integer,String> storeIdAndName = new HashMap<>();
 
     public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, ArrayList<ItemAmountAndStore> itemAmountAndStores, float distance, HashMap<Integer, Store> store) {
         this.dateOfOrder = dateOfOrder;

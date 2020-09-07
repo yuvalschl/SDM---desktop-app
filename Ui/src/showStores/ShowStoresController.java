@@ -104,10 +104,12 @@ public class ShowStoresController {
                 itemsTable.scrollTo(0);
 
                 //set the order list view
-                //TODO this may not work, check when place order is done
+                //TODO: this may not work, check when place order is done
                 ordersTable.getItems().clear();
                 ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders()));
                 itemsTable.scrollTo(0);
+
+
             }
         });
     }

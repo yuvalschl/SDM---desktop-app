@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public abstract class Item {
     boolean isSold;
+    boolean isPartOfDiscount;
     private int id;
     private String name;
     private float price;
@@ -16,6 +17,7 @@ public abstract class Item {
         this.name = name;
         this.price = price;
         isSold = false;
+        isPartOfDiscount= false;
     }
 
 
@@ -31,6 +33,10 @@ public abstract class Item {
         this.id = id;
         this.name = name;
     }
+
+    public boolean isPartOfDiscount() { return isPartOfDiscount;}
+
+    public void setPartOfDiscount(boolean partOfDiscount) {isPartOfDiscount = partOfDiscount;}
 
     public int getId() {
         return id;

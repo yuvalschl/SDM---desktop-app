@@ -47,6 +47,10 @@ public class Store {
 
     public Store(){}
 
+    public Set<Discount> getAllDiscounts() { return allDiscounts; }
+
+    public void setAllDiscounts(Set<Discount> allDiscounts) { this.allDiscounts = allDiscounts; }
+
     public float getTotalDeliveriesCost() {
         return totalDeliveriesCost;
     }
