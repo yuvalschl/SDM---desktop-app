@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -26,24 +27,45 @@ public class OrderScreenController {
 
     @FXML
     private DatePicker datePicker;
+
     @FXML
     private ComboBox<Customer> customerCB;
+
     @FXML
     private CheckBox dynamicOrderCB;
+
     @FXML
     private ComboBox<Store> storeCB;
+
     @FXML
     private TableView<Item> itemsTable;
-    @FXML
-    private Button clearButton;
-    @FXML
-    private Button addButton;
+
     @FXML
     private TableColumn<Item, Integer> idCol;
+
     @FXML
     private TableColumn<Item, String> nameCol;
+
     @FXML
     private TableColumn<Item, Float> priceCol;
+
+    @FXML
+    private Button clearButton;
+
+    @FXML
+    private Button addButton;
+
+    @FXML
+    void addAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void clearAction(ActionEvent event) {
+
+    }
+
+    public OrderScreenController(){}
 
     public OrderScreenController(AppController appController) {
         this.appController = appController;
@@ -57,8 +79,8 @@ public class OrderScreenController {
         this.appController = appController;
     }
 
-    @FXML
-    public void initialize(){
+    public void setData(AppController appController){
+        this.appController = appController;
         //set the columns from the items
         nameCol.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         idCol.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
@@ -109,22 +131,10 @@ public class OrderScreenController {
             ObservableList<Item> items = FXCollections.observableArrayList(appController.getStoreManager().getAllItems().values());
             itemsTable.getItems().addAll(items);
         }
-        else {
+        else if (storeCB.getValue() != null){
             itemsTable.getItems().clear();
             ObservableList<Item> items = FXCollections.observableArrayList(storeCB.getValue().getInventory().values());
             itemsTable.getItems().addAll(items);
         }
     }
-
-
-    @FXML
-    void addAction() {
-
-    }
-
-    @FXML
-    void clearAction() {
-
-    }
-
 }

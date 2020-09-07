@@ -1,6 +1,11 @@
-/*
-package header;
+package Home;
 
+import Exceptions.DuplicateValueException;
+import Exceptions.InvalidValueException;
+import Exceptions.ItemNotSoldException;
+import Jaxb.JaxbClassToStoreManager;
+import Jaxb.XmlToObject;
+import StoreManager.StoreManager;
 import appController.AppController;
 import appController.Main;
 import javafx.beans.binding.Bindings;
@@ -14,16 +19,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.util.Optional;
 
-public class HeaderController {
+public class HomeController {
 
 
     private AppController appController;
 
     @FXML private Button loadXmlButton;
-    @FXML private Button mainMenuButton;
     @FXML private Text loadActionText;
     @FXML private ProgressBar fileProgressBar;
     @FXML private Label progressPercentText;
@@ -36,11 +42,24 @@ public class HeaderController {
         this.appController = appController;
     }
 
-    @FXML
-    void loadXmlAction() {
-        appController.loadXmlAction();
+    public void loadXmlAction() {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(Main.getPrimaryStage());
+        if (file != null){
+            JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager();
+            try {
+                appController.setStoreManager(jaxbClassToStoreManager.convertJaxbClassToStoreManager(XmlToObject.fromXmlFileToObject(file)));
+            } catch (DuplicateValueException | InvalidValueException | ItemNotSoldException e) {
+                e.printStackTrace();
+            }
+            appController.getXmlLoaded().setValue(false);
+            loadActionText.setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
+        }
+        else
+            loadActionText.setText("Error! no file loaded");
         loadingFileProgress();
-        //appController.getXmlLoaded().setValue(false);
+        appController.getShowStoresComponentController().setData(appController);
+        appController.getOrderScreenComponentController().setData(appController);
     }
 
     @FXML
@@ -74,4 +93,3 @@ public class HeaderController {
         thread.start();
     }
 }
-*/

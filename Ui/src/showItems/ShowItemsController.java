@@ -1,8 +1,6 @@
 package showItems;
 
-import DtoObjects.DtoItem;
 import appController.AppController;
-import header.HeaderController;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
@@ -17,6 +15,7 @@ public class ShowItemsController {
     @FXML
     private VBox headerVBComponent;
 
+
     public ShowItemsController(AppController appController) {
         this.appController = appController;
     }
@@ -30,9 +29,9 @@ public class ShowItemsController {
     }
 
 
-    public void initialize(){
+/*    public void initialize(){
         headerVBComponent = appController.getHeaderComponent();
         for (Map.Entry<Integer, DtoItem> item: appController.getStoreManager().getAllDtoItems().entrySet())
             itemListView.getItems().add(item.getValue().getName());
-    }
+    }*/
 }
