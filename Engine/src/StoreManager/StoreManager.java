@@ -378,7 +378,7 @@ public class StoreManager {
      */
     public void AddDiscountItemsToOrder(ArrayList<Discount> discounts, Order order){
         for (Discount discount: discounts){
-            discount.getThenYouGet().getAllOffers()
+            discount.getThenYouGet().getAllOffers();
         }
     }
 }
