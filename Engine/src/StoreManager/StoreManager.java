@@ -376,9 +376,10 @@ public class StoreManager {
      * @param discounts an array with all the discounts to add to order
      * @param order the order to add the items to
      */
-    public void AddDiscountItemsToOrder(ArrayList<Discount> discounts, Order order){
+    public void AddDiscountItemsToOrderAllOrNothing(ArrayList<Discount> discounts, Order order){
         for (Discount discount: discounts){
             discount.getThenYouGet().getAllOffers();
         }
     }
+    public void AddDiscountItemsToOrderOneOf()
 }
