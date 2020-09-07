@@ -12,6 +12,7 @@ public class ItemAmountAndStore {
     private float amount;
     private DtoItem item;
     private int itemId;
+    private String itemName;
     private int itemStore;
     private Store store;
 
@@ -20,6 +21,7 @@ public class ItemAmountAndStore {
         this.amount = amount;
         this.store = store;
         this.itemId = item.getSerialNumber();
+        this.itemName = item.getName();
         this.itemStore = store.getSerialNumber();
     }
 
@@ -27,11 +29,20 @@ public class ItemAmountAndStore {
     public ItemAmountAndStore(DtoItem item, Store store) {
         this.item = item;
         this.store = store;
+        this.itemName = item.getName();
         this.itemId = item.getSerialNumber();
         this.itemStore = store.getSerialNumber();
     }
 
     public ItemAmountAndStore(){}
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
 
     public int getItemId() {
         return itemId;
