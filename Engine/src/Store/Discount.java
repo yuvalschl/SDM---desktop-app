@@ -8,6 +8,7 @@ public class Discount {
     public Discount(String name, MyIfYouBuy myIfYouBuy, MyThenYouGet myThenYouGet) {
         this.myIfYouBuy = myIfYouBuy;
         this.myThenYouGet = myThenYouGet;
+        this.name = name;
     }
 
     public String getName() {

@@ -51,7 +51,7 @@ public class HeaderController {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                for (int i=0 ; i<100; i++) {
+                for (int i=1 ; i<=100; i++) {
                     Thread.sleep(10);
                     updateProgress(i, 100);
                 }

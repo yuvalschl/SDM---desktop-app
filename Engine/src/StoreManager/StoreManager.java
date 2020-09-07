@@ -1,5 +1,4 @@
 package StoreManager;
-
 import Costumer.Customer;
 import DtoObjects.*;
 import Exceptions.InvalidValueException;
@@ -8,7 +7,7 @@ import ItemPair.ItemAmountAndStore;
 import Order.*;
 import Store.Store;
 import Jaxb.XmlToObject;
-
+import Store.Discount;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -335,8 +334,22 @@ public class StoreManager {
         storeToUpdate.getInventory().get(itemToUpdate.getSerialNumber()).setPrice(price);
     }
 
-    public void deleteItemFromStore(DtoStore storeToDeleteFrom, int itemId){
+    /**
+     * deletes item
+     * @return a string that will hold the information about wheter the item to delete was a part of a discount, if not null is returned
+     */
+    public String deleteItemFromStore(DtoStore storeToDeleteFrom, int itemId){
+        String stringToReturn = null;
         Store storeToUpdate = allStores.get(storeToDeleteFrom.getSerialNumber());
+        Set<Discount> storeDiscounts = allStores.get(storeToDeleteFrom.getSerialNumber()).getAllDiscounts();//get the store discount
+        for (Discount discount: storeDiscounts){//loop through discount and check if the item to be deleted is part of a discount
+            if (discount.getIfYouBuy().getItemId() == itemId){
+                stringToReturn = "Item is part of the discount "+discount.getName()+" the discount will be deleted.";
+                storeDiscounts.remove(discount);
+                break;
+            }
+        }
         storeToUpdate.getInventory().remove(itemId);
+        return stringToReturn;
     }
 }
