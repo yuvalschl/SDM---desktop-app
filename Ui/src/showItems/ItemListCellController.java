@@ -77,12 +77,12 @@ public class ItemListCellController extends ListCell<Item> {
             }
             storesSelling.setText(String.valueOf(appController.getStoreManager().NumberOfStoresSellingItem(item)));
             avgPrice.setText(String.valueOf(appController.getStoreManager().getAveragePrice(item)));
-            FloatBinding amountSoldBind = Bindings.createFloatBinding(() -> {
+/*            FloatBinding amountSoldBind = Bindings.createFloatBinding(() -> {
                 Float result = item.getAmountSold();
                 return result;
             }, itemsTable.getSelectionModel().selectedItemProperty());)
 
-            amountSold.textProperty().bind(item.getAmountSold());
+            amountSold.textProperty().bind(item.getAmountSold());*/
 
             setText(null);
             setGraphic(cellBox);
