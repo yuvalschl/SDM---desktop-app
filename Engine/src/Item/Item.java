@@ -1,6 +1,7 @@
 package Item;
 
 import Exceptions.InvalidValueException;
+import javafx.beans.property.FloatProperty;
 
 import java.util.Objects;
 
@@ -33,6 +34,7 @@ public abstract class Item {
         this.id = id;
         this.name = name;
     }
+
 
     public boolean isPartOfDiscount() { return isPartOfDiscount;}
 
@@ -83,9 +85,7 @@ public abstract class Item {
                 getName().equals(item.getName());
     }
 
-
-
-    public abstract float getAmountSold();
+    public abstract FloatProperty getAmountSold();
 
     @Override
     public int hashCode() {

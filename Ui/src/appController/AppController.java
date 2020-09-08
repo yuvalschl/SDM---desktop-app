@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import optionsMenu.OptionsMenuController;
 import orderScreen.OrderScreenController;
+import showItems.ShowItemsController;
 import showStores.ShowStoresController;
 
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class AppController {
     @FXML private HomeController homeComponentController;
     @FXML private SplitPane orderScreen;
     @FXML private OrderScreenController orderScreenController;
+    @FXML private ShowItemsController showItemsController;
+    @FXML private VBox showItems;
 
     @FXML
     public void initialize() throws IOException {
@@ -43,6 +46,22 @@ public class AppController {
 
 
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
+
+    public VBox getShowItems() {
+        return showItems;
+    }
+
+    public void setShowItems(VBox showItems) {
+        this.showItems = showItems;
+    }
+
+    public ShowItemsController getShowItemsController() {
+        return showItemsController;
+    }
+
+    public void setShowItemsController(ShowItemsController showItemsController) {
+        this.showItemsController = showItemsController;
+    }
 
     public SplitPane getOrderScreenComponent() {
         return orderScreen;
@@ -74,6 +93,14 @@ public class AppController {
 
     public AnchorPane getHomeComponent() {
         return homeComponent;
+    }
+
+    public OptionsMenuController getOptionsMenuComponentController() {
+        return optionsMenuComponentController;
+    }
+
+    public void setOptionsMenuComponentController(OptionsMenuController optionsMenuComponentController) {
+        this.optionsMenuComponentController = optionsMenuComponentController;
     }
 
     public void setHomeComponent(AnchorPane homeComponent) {

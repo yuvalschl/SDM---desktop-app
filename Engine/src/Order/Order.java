@@ -41,7 +41,9 @@ public class Order {
 
         updateStoreIdAndName(itemAmountAndStores);
     }
-    public Order(int ID, Date date,int amountOfItems, float totalPriceOfItems,float shippingCost, float totalCost, ArrayList<ItemAmountAndStore> itemAmountAndStores)//Constructor for an order loaded from file
+
+    //Constructor for an order loaded from file
+    public Order(int ID, Date date,int amountOfItems, float totalPriceOfItems,float shippingCost, float totalCost, ArrayList<ItemAmountAndStore> itemAmountAndStores)
     {
         this.orderId = ID;
         this.dateOfOrder = date;
@@ -50,13 +52,6 @@ public class Order {
         this.shippingCost = shippingCost;
         this.totalCost = totalCost;
         this.itemAmountAndStores = itemAmountAndStores;
-    }
-    private void updateStoreIdAndName(ArrayList<ItemAmountAndStore> itemAmountAndStores) {
-        for (ItemAmountAndStore store: itemAmountAndStores){
-            int key = store.getStore().getSerialNumber();
-            String name = store.getStore().getName();
-            storeIdAndName.put(key,name);
-        }
     }
 
 
@@ -74,6 +69,14 @@ public class Order {
         updateStoreIdAndName(itemAmountAndStores);
     }
     public Order(){}
+
+    private void updateStoreIdAndName(ArrayList<ItemAmountAndStore> itemAmountAndStores) {
+        for (ItemAmountAndStore store: itemAmountAndStores){
+            int key = store.getStore().getSerialNumber();
+            String name = store.getStore().getName();
+            storeIdAndName.put(key,name);
+        }
+    }
 
     public Customer getCustomer() {
         return customer;

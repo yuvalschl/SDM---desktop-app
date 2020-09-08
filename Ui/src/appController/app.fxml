@@ -18,9 +18,10 @@
                   <Insets top="10.0" />
                </padding>
             </StackPane>
+            <fx:include fx:id="homeComponent" source="../Home/home.fxml" />
             <fx:include fx:id="showStoresComponent" source="../showStores/showStores.fxml" />
             <fx:include fx:id="orderScreen" source="../orderScreen/orderScreen.fxml" />
-            <fx:include fx:id="homeComponent" source="../Home/home.fxml" />
+            <fx:include fx:id="showItems" source="../showItems/showItems.fxml" />
          </children></AnchorPane>
   </items>
 </SplitPane>
