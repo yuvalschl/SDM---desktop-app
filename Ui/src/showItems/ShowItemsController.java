@@ -13,7 +13,7 @@ public class ShowItemsController {
 
     public void setData(AppController appController){
         this.appController = appController;
-
+        itemsList.getItems().clear();
         itemsList.getItems().addAll(appController.getStoreManager().getAllItems().values());
         itemsList.setCellFactory(e -> new ItemListCellController(appController));
     }

@@ -10,7 +10,7 @@ public class DtoConvertor {
         Item itemToReturn;
 
         if(item instanceof DtoUnitItem){
-            itemToReturn = new UnitItem(item.getSerialNumber(),item.getName(),item.getAmountSold(), item.getPrice());
+            itemToReturn = new UnitItem(item.getSerialNumber(),item.getName(),(int)item.getAmountSold(), item.getPrice());
         }
         else {
             itemToReturn = new WeightItem(item.getSerialNumber(),item.getName(),item.getAmountSold() ,item.getPrice());
@@ -22,10 +22,10 @@ public class DtoConvertor {
         DtoItem itemToReturn;
 
         if(item instanceof UnitItem){
-            itemToReturn = new DtoUnitItem(item.getId(),item.getName(),item.getPrice(),item.getAmountSold());
+            itemToReturn = new DtoUnitItem(item.getId(),item.getName(),item.getPrice(),item.getAmountSold().getValue());
         }
         else {
-            itemToReturn = new DtoWeightItem(item.getId(),item.getName(),item.getPrice(),item.getAmountSold());
+            itemToReturn = new DtoWeightItem(item.getId(),item.getName(),item.getPrice(),item.getAmountSold().getValue());
         }
         return itemToReturn;
     }

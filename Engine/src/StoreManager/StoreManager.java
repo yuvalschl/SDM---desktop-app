@@ -155,10 +155,10 @@ public class StoreManager {
         for(Integer key : store.getInventory().keySet()){
             Item currentItem = store.getInventory().get(key);
             if(currentItem instanceof UnitItem){
-                currentDtoInventory.put(key, new DtoUnitItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold()));
+                currentDtoInventory.put(key, new DtoUnitItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold().getValue()));
             }
             else {
-                currentDtoInventory.put(key, new DtoWeightItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold()));
+                currentDtoInventory.put(key, new DtoWeightItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold().getValue()));
             }
         }
 
@@ -182,10 +182,10 @@ public class StoreManager {
         for(Integer key : allItems.keySet()){
             Item currentItem = allItems.get(key);
             if(currentItem instanceof UnitItem){
-                allDtoItems.put(key, new DtoUnitItem(currentItem.getId(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
+                allDtoItems.put(key, new DtoUnitItem(currentItem.getId(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold().getValue()));
             }
             else {
-                allDtoItems.put(key, new DtoWeightItem(currentItem.getId(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold()));
+                allDtoItems.put(key, new DtoWeightItem(currentItem.getId(), currentItem.getName(), currentItem.getPrice(),currentItem.getAmountSold().getValue()));
             }
         }
         return allDtoItems;
@@ -249,7 +249,7 @@ public class StoreManager {
             allItems.get(itemID).setAmountSold(item.getAmount());
 
             Store currentStore = order.getStores().get(item.getStore().getSerialNumber());
-            order.getStores().get(currentStore.getSerialNumber()).getInventory().get(itemID).setAmountSold((int) (currentStore.getInventory().get(itemID).getAmountSold()+ item.getAmount()));//update amount sold
+            order.getStores().get(currentStore.getSerialNumber()).getInventory().get(itemID).setAmountSold((int) (currentStore.getInventory().get(itemID).getAmountSold().getValue()+ item.getAmount()));//update amount sold
             order.getStores().get(item.getStore().getSerialNumber()).setTotalPayment(calcTotalPayment(currentStore, item));
         }
         for(Map.Entry<Integer, Float> shippingCosts : order.getShippingCostByStore().entrySet()){

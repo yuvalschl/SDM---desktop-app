@@ -122,8 +122,8 @@ public class OrderScreenController {
         Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
         appController.getStoreManager().placeOrder(order);
         clearAction();
-        //TODO remove this
-        appController.getStoreManager().getAllOrders().forEach(order1 -> System.out.println(order1.getAmountOfItems()));
+        //TODO find better way, if binding in item cell factory is working
+        appController.getShowItemsController().setData(appController);
         appController.getOptionsMenuComponentController().homeButtonAction();
     }
 

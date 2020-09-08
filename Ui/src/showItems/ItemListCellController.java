@@ -47,6 +47,11 @@ public class ItemListCellController extends ListCell<Item> {
 
     @Override
     protected void updateItem(Item item, boolean empty) {
+        Object oldItem = getItem();
+        if (oldItem != null) {
+            amountSold.textProperty().unbind();
+        }
+
         super.updateItem(item, empty);
 
         if(empty || item == null) {
@@ -77,15 +82,10 @@ public class ItemListCellController extends ListCell<Item> {
             }
             storesSelling.setText(String.valueOf(appController.getStoreManager().NumberOfStoresSellingItem(item)));
             avgPrice.setText(String.valueOf(appController.getStoreManager().getAveragePrice(item)));
-/*            FloatBinding amountSoldBind = Bindings.createFloatBinding(() -> {
-                Float result = item.getAmountSold();
-                return result;
-            }, itemsTable.getSelectionModel().selectedItemProperty());)
-
-            amountSold.textProperty().bind(item.getAmountSold());*/
 
             setText(null);
             setGraphic(cellBox);
+            amountSold.textProperty().bind(item.getAmountSold().asString());
         }
 
     }
