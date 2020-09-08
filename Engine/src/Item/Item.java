@@ -34,6 +34,7 @@ public abstract class Item {
         this.name = name;
     }
 
+
     public boolean isPartOfDiscount() { return isPartOfDiscount;}
 
     public void setPartOfDiscount(boolean partOfDiscount) {isPartOfDiscount = partOfDiscount;}

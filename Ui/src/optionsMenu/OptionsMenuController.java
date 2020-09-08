@@ -81,18 +81,15 @@ public class OptionsMenuController {
 
     @FXML
     public void showItemsAction()throws IOException{
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/showItems/showItems.fxml"));
-        fxmlLoader.setController(new ShowItemsController(appController));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root, 600, 400);
-        Main.getPrimaryStage().setScene(scene);
+        disablePanes();
+        appController.getShowItems().setVisible(true);
     }
 
     private void disablePanes(){
         appController.getHomeComponent().setVisible(false);
         appController.getShowStoresComponent().setVisible(false);
         appController.getOrderScreenComponent().setVisible(false);
+        appController.getShowItems().setVisible(false);
 
     }
 }

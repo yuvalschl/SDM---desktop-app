@@ -73,6 +73,7 @@ public class HomeController {
         loadingFileProgress();
         appController.getShowStoresComponentController().setData(appController);
         appController.getOrderScreenComponentController().setData(appController);
+        appController.getShowItemsController().setData(appController);
         //deleteeeeeeeeeee from here
         ArrayList<ItemAmountAndStore> itemAmountAndStores = new ArrayList<ItemAmountAndStore>();
 
