@@ -15,6 +15,8 @@ public class ItemAmountAndStore {
     private String itemName;
     private int itemStore;
     private Store store;
+    boolean isPartOfDiscount = false;
+
 
     public ItemAmountAndStore(DtoItem item, float amount, Store store) {
         this.item = item;
@@ -36,6 +38,13 @@ public class ItemAmountAndStore {
 
     public ItemAmountAndStore(){}
 
+    public boolean getIsPartOfDiscount() {
+        return isPartOfDiscount;
+    }
+
+    public void setPartOfDiscount(boolean partOfDiscount) {
+        isPartOfDiscount = partOfDiscount;
+    }
     public String getItemName() {
         return itemName;
     }

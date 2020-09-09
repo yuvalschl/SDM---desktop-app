@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.awt.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 @XmlRootElement
 public class Store {
@@ -43,6 +44,7 @@ public class Store {
         this.PPK = PPK;
         this.allOrders = new HashSet<StoreOrder>();
         this.allDiscounts = discounts;
+        allDiscounts.stream().forEach(discount -> discount.setStoreId(serialNumber));
     }
 
     public Store(){}

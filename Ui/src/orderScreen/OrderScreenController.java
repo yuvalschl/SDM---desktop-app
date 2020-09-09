@@ -1,5 +1,5 @@
 package orderScreen;
-
+import Store.Discount;
 import Costumer.Customer;
 import DtoObjects.DtoConvertor;
 import Item.*;
@@ -35,53 +35,22 @@ public class OrderScreenController {
     private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
 
-    @FXML
-    private DatePicker datePicker;
-
-    @FXML
-    private ComboBox<Customer> customerCB;
-
-    @FXML
-    private CheckBox dynamicOrderCB;
-
-    @FXML
-    private ComboBox<Store> storeCB;
-
-    @FXML
-    private TableView<Item> itemsTable;
-
-    @FXML
-    private TableColumn<Item, Integer> idCol;
-
-    @FXML
-    private TableColumn<Item, String> nameCol;
-
-    @FXML
-    private TableColumn<Item, Float> priceCol;
-
-    @FXML
-    private Label itemNameLabel;
-
-    @FXML
-    private TextArea itemAmountTextField;
-
-    @FXML
-    private Button clearButton;
-
-    @FXML
-    private Button addButton;
-
-    @FXML
-    private TableView<ItemAmountAndStore> orderSummaryTable;
-
-    @FXML
-    private TableColumn<ItemAmountAndStore, Integer> itemSummaryId;
-
-    @FXML
-    private TableColumn<ItemAmountAndStore, String> itemSummaryName;
-
-    @FXML
-    private TableColumn<ItemAmountAndStore, Float> itemSummaryAmount;
+    @FXML private DatePicker datePicker;
+    @FXML private ComboBox<Customer> customerCB;
+    @FXML private CheckBox dynamicOrderCB;
+    @FXML private ComboBox<Store> storeCB;
+    @FXML private TableView<Item> itemsTable;
+    @FXML private TableColumn<Item, Integer> idCol;
+    @FXML private TableColumn<Item, String> nameCol;
+    @FXML private TableColumn<Item, Float> priceCol;
+    @FXML private Label itemNameLabel;
+    @FXML private TextArea itemAmountTextField;
+    @FXML private Button clearButton;
+    @FXML private Button addButton;
+    @FXML private TableView<ItemAmountAndStore> orderSummaryTable;
+    @FXML private TableColumn<ItemAmountAndStore, Integer> itemSummaryId;
+    @FXML private TableColumn<ItemAmountAndStore, String> itemSummaryName;
+    @FXML private TableColumn<ItemAmountAndStore, Float> itemSummaryAmount;
 
 
     @FXML
@@ -120,9 +89,12 @@ public class OrderScreenController {
     public void placeOrderAction(){
         Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
+        ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
+        //TODO make a method that shows all discounts and lets the user decide if he wants the discount or not
         appController.getStoreManager().placeOrder(order);
         clearAction();
         //TODO find better way, if binding in item cell factory is working
+        System.out.println();
         appController.getShowItemsController().setData(appController);
         appController.getOptionsMenuComponentController().homeButtonAction();
     }

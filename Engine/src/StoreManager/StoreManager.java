@@ -1,4 +1,5 @@
 package StoreManager;
+import Store.Offer;
 import Costumer.Customer;
 import DtoObjects.*;
 import Exceptions.InvalidValueException;
@@ -192,7 +193,6 @@ public class StoreManager {
     }
 
     public Order createOrder(Point customerLocation, Date date, ArrayList<ItemAmountAndStore> items) {
-
         int totalPriceOfItems = 0;
         HashMap<Integer, Store> allStoresInOrder = getAllStoresInOrder(items);
         float shippingCost = calcShippingCost(items, customerLocation);
@@ -202,7 +202,6 @@ public class StoreManager {
                 totalPriceOfItems += (int)pair.amount() * pair.getItem().getPrice();
             else
                 totalPriceOfItems += pair.amount() * pair.getItem().getPrice();
-
         }
         float totalCost = shippingCost + totalPriceOfItems;
         return new Order(date, items.size(), totalPriceOfItems, shippingCost, totalCost, allStoresInOrder, items, shippingCostByStore);
@@ -246,7 +245,7 @@ public class StoreManager {
         allOrders.add(order);
         for (ItemAmountAndStore item : order.getItemAmountAndStores()) {
             int itemID = item.item().getSerialNumber();
-            allItems.get(itemID).setAmountSold(item.getAmount());
+            allItems.get(itemID).setAmountSold(item.getAmount()+ allItems.get(itemID).getAmountSold().floatValue());
 
             Store currentStore = order.getStores().get(item.getStore().getSerialNumber());
             order.getStores().get(currentStore.getSerialNumber()).getInventory().get(itemID).setAmountSold((int) (currentStore.getInventory().get(itemID).getAmountSold().getValue()+ item.getAmount()));//update amount sold
@@ -354,17 +353,21 @@ public class StoreManager {
         return stringToReturn;
     }
 
+
     /**
      * looks if any of the items id and quantity  matches any of the stores discounts
      * @return an arrayList with all the relevant discounts
      */
-    public ArrayList<Discount> getEntitledDiscounts(int storeID, ArrayList<ItemAmountAndStore> itemAmountAndStores) {
-        Store store = getAllStores().get(storeID);
+    public ArrayList<Discount> getEntitledDiscounts(Order order) {
         ArrayList<Discount> discounts = new ArrayList<Discount>();
-        for (ItemAmountAndStore itemAndAmount : itemAmountAndStores) {//loop through the items and check if the amount and id matches any of the stores discounts
-            for (Discount discount : store.getAllDiscounts()) {
-                if (itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getAmount() == discount.getIfYouBuy().getQuantity()) {
-                    discounts.add(discount);
+        for (Map.Entry<Integer,Store> stores: order.getStores().entrySet()){
+            Store store = stores.getValue();
+            ArrayList<ItemAmountAndStore> itemAmountAndStores = order.getItemAmountAndStores();
+            for (ItemAmountAndStore itemAndAmount : itemAmountAndStores) {//loop through the items and check if the amount and id matches any of the stores discounts
+                for (Discount discount : store.getAllDiscounts()) {
+                    if (itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getAmount() >= discount.getIfYouBuy().getQuantity()) {
+                        discounts.add(discount);
+                    }
                 }
             }
         }
@@ -372,13 +375,34 @@ public class StoreManager {
     }
 
     /**
-     * takes orders and discounts and add the discount items to the order
-     * @param discounts an array with all the discounts to add to order
+     * takes order and discounts and adds all the discount items to the order
+     * @param discount a discount to add to order
      * @param order the order to add the items to
      */
-    public void AddDiscountItemsToOrder(ArrayList<Discount> discounts, Order order){
-        for (Discount discount: discounts){
-            discount.getThenYouGet().getAllOffers();
-        }
+    public void addDiscountItemsToOrderAllOrNothing(Order order, Discount discount){
+        discount.getThenYouGet().getAllOffers().stream().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
     }
+    /**
+     * takes an offer ID, an order and discounts and adds a single discount offer to the order
+     * @param discount a discount to add to order
+     * @param order the order to add the items to
+     */
+    public void addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){
+        Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
+        Store store = allStores.get(discount.getStoreId());
+        DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
+        ItemAmountAndStore itemAmountAndStore = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
+        itemAmountAndStore.setPartOfDiscount(true);
+        order.getItemAmountAndStores().add(itemAmountAndStore);
+        order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
+        order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
+        order.setTotalCost(order.getTotalCost()+ offer.getForAdditional());
+    }
+
+    /*public ArrayList<Discount> updateDiscountEntitled(ItemAmountAndStore itemChosenInDiscount, ArrayList<Discount> discounts){
+      for (Discount discount : discounts){
+          //if(discount.get)
+      }
+    }*/
+
 }
