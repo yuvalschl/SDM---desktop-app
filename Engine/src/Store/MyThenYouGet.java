@@ -10,7 +10,13 @@ public class MyThenYouGet {
         this.discountOperator = discountOperator;
         this.allOffers = allOffers;
     }
-
+    public Offer getOfferByID(int ID){
+        for (Offer offer: allOffers){
+            if (offer.getItemId() == ID)
+                return offer;
+        }
+        return null;
+    }
     public DiscountOperator getDiscountOperator() {
         return discountOperator;
     }

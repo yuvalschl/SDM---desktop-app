@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import orderScreen.OrderScreenController;
 import showItems.ShowItemsController;
@@ -86,10 +87,7 @@ public class OptionsMenuController {
     }
 
     private void disablePanes(){
-        appController.getHomeComponent().setVisible(false);
-        appController.getShowStoresComponent().setVisible(false);
-        appController.getOrderScreenComponent().setVisible(false);
-        appController.getShowItems().setVisible(false);
-
+         StackPane stackPane =  (StackPane)appController.getOrderScreenComponent().getParent();
+        stackPane.getChildren().forEach(c -> c.setVisible(false));
     }
 }
