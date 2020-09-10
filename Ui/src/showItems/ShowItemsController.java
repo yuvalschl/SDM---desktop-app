@@ -17,4 +17,20 @@ public class ShowItemsController {
         itemsList.getItems().addAll(appController.getStoreManager().getAllItems().values());
         itemsList.setCellFactory(e -> new ItemListCellController(appController));
     }
+
+    public ListView<Item> getItemsList() {
+        return itemsList;
+    }
+
+    public void setItemsList(ListView<Item> itemsList) {
+        this.itemsList = itemsList;
+    }
+
+    public AppController getAppController() {
+        return appController;
+    }
+
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
 }

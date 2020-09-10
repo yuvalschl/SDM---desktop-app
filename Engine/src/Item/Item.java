@@ -10,12 +10,22 @@ public abstract class Item {
     private int id;
     private String name;
     private float price;
+    private float amountSold;
 
 
     public Item(int id, String name, float price) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.amountSold = 0;
+        isSold = false;
+    }
+
+    public Item(int id, String name, float price, float amountSold) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.amountSold = amountSold;
         isSold = false;
     }
 
@@ -79,12 +89,17 @@ public abstract class Item {
                 getName().equals(item.getName());
     }
 
-    public abstract FloatProperty getAmountSold();
+    public float getAmountSold(){return this.amountSold;}
+
+
 
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getName(), getPrice());
     }
 
-    public abstract void setAmountSold(float amountSold);
+    public void setAmountSold(float amountSold){
+        this.amountSold = amountSold;
+    };
+
 }
