@@ -26,11 +26,13 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class OrderScreenController {
 
     private AppController appController;
+    private DiscountScreenController discountScreenController = new DiscountScreenController();
     private Order order = new Order();
     private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
@@ -51,7 +53,7 @@ public class OrderScreenController {
     @FXML private TableColumn<ItemAmountAndStore, Integer> itemSummaryId;
     @FXML private TableColumn<ItemAmountAndStore, String> itemSummaryName;
     @FXML private TableColumn<ItemAmountAndStore, Float> itemSummaryAmount;
-
+    @FXML private SplitPane dateNitemSplitPane;
 
     @FXML
     void addAction() {
@@ -96,7 +98,8 @@ public class OrderScreenController {
         //TODO find better way, if binding in item cell factory is working
         System.out.println();
         appController.getShowItemsController().setData(appController);
-        appController.getOptionsMenuComponentController().homeButtonAction();
+        dateNitemSplitPane.setVisible(false);
+        discountScreenController.setData(discounts);
     }
 
     @FXML
