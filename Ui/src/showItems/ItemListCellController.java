@@ -85,7 +85,6 @@ public class ItemListCellController extends ListCell<Item> {
 
             setText(null);
             setGraphic(cellBox);
-            amountSold.textProperty().bind(item.getAmountSold().asString());
         }
 
     }
