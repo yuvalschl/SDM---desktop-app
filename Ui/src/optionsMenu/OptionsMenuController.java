@@ -58,14 +58,10 @@ public class OptionsMenuController {
     @FXML
     public void showStoresAction() throws IOException {
         disablePanes();
+        appController.getShowStoresComponentController().getItemsTable().getSelectionModel().clearSelection();
+        appController.getShowStoresComponentController().getItemsTable().refresh();
+        appController.getShowStoresComponentController().getStoresListView().getSelectionModel().clearSelection();
         appController.getShowStoresComponent().setVisible(true);
-
-
-/*        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/showStores/showStores.fxml"));
-        fxmlLoader.setController(new ShowStoresController(appController));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root, 600, 400);
-        Main.getPrimaryStage().setScene(scene);*/
     }
     @FXML
     public void homeButtonAction(){

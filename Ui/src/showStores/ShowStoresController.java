@@ -12,13 +12,20 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import listCells.storeCell.StoreListViewCell;
+import showStores.tableCellFactory.AmountSoldCell;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class ShowStoresController {
 
@@ -44,7 +51,7 @@ public class ShowStoresController {
     private TableView<StoreOrder> ordersTable;
 
     @FXML
-    private TableColumn<Order, Date> orderDateCol;
+    private TableColumn<StoreOrder, Date> orderDateCol;
 
     @FXML
     private TableColumn<StoreOrder, Integer> orderIdCol;
@@ -64,6 +71,13 @@ public class ShowStoresController {
     @FXML
     private ListView<Store> storesListView;
 
+    public TableView<Item> getItemsTable() {
+        return itemsTable;
+    }
+
+    public ListView<Store> getStoresListView() {
+        return storesListView;
+    }
 
     public void setData(AppController appController){
         this.appController = appController;
@@ -83,8 +97,24 @@ public class ShowStoresController {
         itemPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         itemAmountSoldCol.setCellValueFactory(new PropertyValueFactory<>("amountSold"));
 
-        //set the order table
         orderDateCol.setCellValueFactory(new PropertyValueFactory<>("dateOfOrder"));
+        orderDateCol.setCellFactory(column -> {
+                    TableCell<StoreOrder, Date> cell = new TableCell<StoreOrder, Date>() {
+                        private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+
+                        @Override
+                        protected void updateItem(Date item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty || item == null) {
+                                setText(null);
+                            } else {
+                                setText(format.format(item));
+                            }
+                        }
+                    };
+
+                    return cell;
+                });
         orderIdCol.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         amountOfItemsCol.setCellValueFactory(new PropertyValueFactory<>("amountOfItemsCol"));
         totalCostCol.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
@@ -99,9 +129,11 @@ public class ShowStoresController {
             @Override
             public void changed(ObservableValue<? extends Store> observable, Store oldValue, Store newValue) {
                 //set the items table
-                itemsTable.getItems().clear();
-                itemsTable.getItems().addAll(newValue.getInventory().values());
-                itemsTable.scrollTo(0);
+                if(newValue != null){
+                    itemsTable.getItems().clear();
+                    itemsTable.getItems().addAll(newValue.getInventory().values());
+                    itemsTable.scrollTo(0);
+                }
 
                 //set the order list view
                 //TODO: this may not work, check when place order is done

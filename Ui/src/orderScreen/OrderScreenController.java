@@ -19,13 +19,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
+import javafx.util.converter.FloatStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
+import orderScreen.filters.FloatFilter;
+import orderScreen.filters.IntFilter;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class OrderScreenController {
@@ -34,6 +41,7 @@ public class OrderScreenController {
     private Order order = new Order();
     private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
+    private final IntFilter intFilter = new IntFilter();
 
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<Customer> customerCB;
@@ -94,7 +102,6 @@ public class OrderScreenController {
         appController.getStoreManager().placeOrder(order);
         clearAction();
         //TODO find better way, if binding in item cell factory is working
-        System.out.println();
         appController.getShowItemsController().setData(appController);
         appController.getOptionsMenuComponentController().homeButtonAction();
     }
@@ -149,6 +156,13 @@ public class OrderScreenController {
             public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
                 if(newValue != null){
                     itemNameLabel.setText(newValue.getName());
+                    if (newValue instanceof UnitItem){
+                        itemAmountTextField.setTextFormatter(intFilter.getIntegerTextFormatter());
+                    }
+                    else {
+                        itemAmountTextField.setTextFormatter(new FloatFilter().getTextFormatter());
+                    }
+
                 }
             }
         });

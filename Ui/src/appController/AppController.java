@@ -29,23 +29,17 @@ public class AppController {
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
     @FXML private VBox showItems;
+    private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
 
     @FXML
     public void initialize() throws IOException {
-/*        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/showStores/showStores.fxml"));
-        fxmlLoader.setController(new ShowStoresController());
-        fxmlLoader.load();*/
-/*        FXMLLoader fxmlLoader1 = new FXMLLoader((getClass().getResource("/Home/home.fxml")));
-        fxmlLoader1.setController(new HomeController());
-        fxmlLoader1.load();*/
         optionsMenuComponentController.setAppController(this);
         homeComponentController.setAppController(this);
-        //orderScreenComponentController.setAppController(this);
+        optionsMenuComponentController.getShowItemsButton().disableProperty().bind(getXmlLoaded());
+        optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(getXmlLoaded());
+        optionsMenuComponentController.getShowStoresButton().disableProperty().bind(getXmlLoaded());
     }
 
-
-
-    private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
 
     public VBox getShowItems() {
         return showItems;

@@ -82,6 +82,7 @@ public class ItemListCellController extends ListCell<Item> {
             }
             storesSelling.setText(String.valueOf(appController.getStoreManager().NumberOfStoresSellingItem(item)));
             avgPrice.setText(String.valueOf(appController.getStoreManager().getAveragePrice(item)));
+            amountSold.setText(String.valueOf(item.getAmountSold()));
 
             setText(null);
             setGraphic(cellBox);
