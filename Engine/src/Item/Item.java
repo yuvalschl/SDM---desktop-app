@@ -79,7 +79,7 @@ public abstract class Item {
                 getName().equals(item.getName());
     }
 
-    public abstract FloatProperty getAmountSold();
+    public abstract float getAmountSold();
 
     @Override
     public int hashCode() {
