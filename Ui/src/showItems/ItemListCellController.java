@@ -20,26 +20,19 @@ public class ItemListCellController extends ListCell<Item> {
     private FXMLLoader fxmlLoader;
     private AppController appController;
 
-    @FXML
-    private Label name;
+    @FXML private Label name;
 
-    @FXML
-    private Label id;
+    @FXML private Label id;
 
-    @FXML
-    private Label sellBy;
+    @FXML private Label sellBy;
 
-    @FXML
-    private Label storesSelling;
+    @FXML private Label storesSelling;
 
-    @FXML
-    private Label avgPrice;
+    @FXML private Label avgPrice;
 
-    @FXML
-    private Label amountSold;
+    @FXML private Label amountSold;
 
-    @FXML
-    private AnchorPane cellBox;
+    @FXML private AnchorPane cellBox;
 
     public ItemListCellController(AppController appController) {
         this.appController = appController;

@@ -73,6 +73,7 @@ public class OptionsMenuController {
     @FXML
     public void placeOrderAction() throws IOException {
         disablePanes();
+        appController.getOrderScreenComponentController().getDiscountScreen().setVisible(false);
         appController.getOrderScreenComponent().setVisible(true);
     }
 

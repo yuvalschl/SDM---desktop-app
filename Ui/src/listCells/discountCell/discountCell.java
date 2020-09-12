@@ -13,13 +13,8 @@ import java.io.IOException;
 public class discountCell extends ListCell<Discount>{
 
 
-        @FXML
-        private VBox cellVbox;
-
-        @FXML
-        private Label discountNameLabel;
-
-
+        @FXML private VBox cellVbox;
+        @FXML private Label discountNameLabel;
         private FXMLLoader fxmlLoader;
 
         @Override
