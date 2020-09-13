@@ -384,15 +384,21 @@ public class StoreManager {
      * @param discount a discount to add to order
      * @param order the order to add the items to
      */
-    public void addDiscountItemsToOrderAllOrNothing(Order order, Discount discount){
-        discount.getThenYouGet().getAllOffers().stream().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
+    public Map<Integer,ItemAmountAndStore> addDiscountItemsToOrderAllOrNothing(Order order, Discount discount){
+        Map<Integer, ItemAmountAndStore> itemsMap = new HashMap<Integer, ItemAmountAndStore>();
+        for(Offer offer : discount.getThenYouGet().getAllOffers()){
+            itemsMap.put(offer.getItemId(), new ItemAmountAndStore(getAllDtoItems().get(offer.getItemId()), offer.getQuantity(), allStores.get(discount.getStoreId())));
+        }
+        discount.getThenYouGet().getAllOffers().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
+        return itemsMap;
+
     }
     /**
      * takes an offer ID, an order and discounts and adds a single discount offer to the order
      * @param discount a discount to add to order
      * @param order the order to add the items to
      */
-    public void addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){
+    public ItemAmountAndStore addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){
         Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
         Store store = allStores.get(discount.getStoreId());
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
@@ -402,6 +408,7 @@ public class StoreManager {
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
         order.setTotalCost(order.getTotalCost()+ offer.getForAdditional());
+        return itemAmountAndStore;
     }
 
     /*public ArrayList<Discount> updateDiscountEntitled(ItemAmountAndStore itemChosenInDiscount, ArrayList<Discount> discounts){

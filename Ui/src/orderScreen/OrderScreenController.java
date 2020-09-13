@@ -59,6 +59,14 @@ public class OrderScreenController {
         return discountScreen;
     }
 
+    public TableView<ItemAmountAndStore> getOrderSummaryTable() {
+        return orderSummaryTable;
+    }
+
+    public void setOrderSummaryTable(TableView<ItemAmountAndStore> orderSummaryTable) {
+        this.orderSummaryTable = orderSummaryTable;
+    }
+
     @FXML
     private void addAction() {
         float amount = Float.parseFloat(itemAmountTextField.getText());

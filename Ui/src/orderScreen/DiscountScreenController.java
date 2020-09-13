@@ -1,6 +1,7 @@
 package orderScreen;
 
 import Item.Item;
+import ItemPair.ItemAmountAndStore;
 import Order.Order;
 import Store.Discount;
 import Store.Offer;
@@ -17,6 +18,9 @@ import listCells.discountCell.discountCell;
 import listCells.discountCell.offerCell;
 import Store.DiscountOperator;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import Store.MyThenYouGet;
 
 
@@ -39,6 +43,7 @@ public class DiscountScreenController {
         this.order = order;
         this.discountScreen = discountScreen;
         discountScreen.setVisible(true);
+
         /*discountListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Discount>() {
             @Override
             public void changed(ObservableValue<? extends Discount> observable, Discount oldValue, Discount newValue) {
@@ -48,6 +53,7 @@ public class DiscountScreenController {
         });*/
 
     }
+
 
     @FXML//displays the information of the clicked discount in the discount list view
     public void displaySelectedDiscount(javafx.scene.input.MouseEvent mouseEvent) {
@@ -80,12 +86,14 @@ public class DiscountScreenController {
     public void addToOrderButtonAction(ActionEvent actionEvent) {
         Offer offer = offerListView.getSelectionModel().getSelectedItem();
         Discount discount = discountListView.getSelectionModel().getSelectedItem();
+        Map<Integer, ItemAmountAndStore> itemToAdd = new HashMap<>();
         if(oneOf){
-            appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount);
+             itemToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
         }
         else {
-            appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
+            itemToAdd = appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
         }
+        appController.getOrderScreenComponentController().getOrderSummaryTable().getItems().addAll(itemToAdd.values());
         discountScreen.setVisible(false);
     }
 
