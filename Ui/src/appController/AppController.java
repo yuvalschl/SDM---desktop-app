@@ -3,6 +3,7 @@ package appController;
 import Home.HomeController;
 import ShowHistory.ShowOrdersController;
 import StoreManager.StoreManager;
+import addStore.AddStoreController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -32,6 +33,8 @@ public class AppController {
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
     @FXML private VBox showItems;
+    @FXML private AnchorPane addStoreComponent;
+    @FXML private AddStoreController addStoreComponentController;
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
 
     @FXML
@@ -44,7 +47,6 @@ public class AppController {
         optionsMenuComponentController.getShowStoresButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowOrderHistory().disableProperty().bind(getXmlLoaded());
     }
-
 
     public VBox getShowItems() {
         return showItems;
@@ -104,6 +106,22 @@ public class AppController {
 
     public void setShowStoresComponent(SplitPane showStoresComponent) {
         this.showStoresComponent = showStoresComponent;
+    }
+
+    public AnchorPane getAddStoreComponent() {
+        return addStoreComponent;
+    }
+
+    public void setAddStoreComponent(AnchorPane addStoreComponent) {
+        this.addStoreComponent = addStoreComponent;
+    }
+
+    public AddStoreController getAddStoreComponentController() {
+        return addStoreComponentController;
+    }
+
+    public void setAddStoreComponentController(AddStoreController addStoreComponentController) {
+        this.addStoreComponentController = addStoreComponentController;
     }
 
     public AnchorPane getHomeComponent() {

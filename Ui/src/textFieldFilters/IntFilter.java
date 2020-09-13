@@ -1,9 +1,8 @@
-package orderScreen.filters;
+package textFieldFilters;
 
 import javafx.scene.control.TextFormatter;
 import javafx.util.converter.IntegerStringConverter;
 
-import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class IntFilter {
