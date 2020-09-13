@@ -6,7 +6,6 @@ import addStore.AddStoreController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -41,6 +40,7 @@ public class AppController {
         optionsMenuComponentController.getShowItemsButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowStoresButton().disableProperty().bind(getXmlLoaded());
+        optionsMenuComponentController.getAddStoreButton().disableProperty().bind(getXmlLoaded());
     }
 
     public VBox getShowItems() {
@@ -127,7 +127,8 @@ public class AppController {
         return storeManager;
     }
 
-    public void setStoreManager(StoreManager convertJaxbClassToStoreManager) {
-        this.storeManager = convertJaxbClassToStoreManager;
+
+    public void setStoreManager(StoreManager storeManager) {
+        this.storeManager = storeManager;
     }
 }

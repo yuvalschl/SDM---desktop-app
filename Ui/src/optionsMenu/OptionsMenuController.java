@@ -68,6 +68,14 @@ public class OptionsMenuController {
 
     }
 
+    public Button getAddStoreButton() {
+        return addStoreButton;
+    }
+
+    public void setAddStoreButton(Button addStoreButton) {
+        this.addStoreButton = addStoreButton;
+    }
+
     @FXML
     void addStoreAction() {
         disablePanes();
