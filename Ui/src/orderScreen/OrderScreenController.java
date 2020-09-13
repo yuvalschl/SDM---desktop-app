@@ -36,6 +36,7 @@ public class OrderScreenController {
     private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
     private final IntFilter intFilter = new IntFilter();
+    @FXML   private SplitPane orderScreenSplitPane;
     @FXML private SplitPane discountScreen;
     @FXML private DiscountScreenController discountScreenController;
     @FXML private DatePicker datePicker;
@@ -107,9 +108,10 @@ public class OrderScreenController {
         appController.getShowItemsController().setData(appController);
         if(discounts.size() != 0){
             discountScreenController.setData(discounts, appController, order,discountScreen);
-           // discountScreen.setVisible(true);
         }
-        appController.getStoreManager().placeOrder(order);
+        else
+            orderScreenSplitPane.setVisible(false);
+      //  appController.getStoreManager().placeOrder(order);
 
         //TODO add a screen that presents the order details and ask for approval
 
