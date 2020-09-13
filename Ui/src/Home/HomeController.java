@@ -125,6 +125,8 @@ public class HomeController {
         appController.getOrderScreenComponentController().setData(appController);
         appController.getShowItemsController().setData(appController);
         appController.getAddStoreComponentController().setData(appController);
+        appController.getShowOrdersController().setData(appController);
+
     }
 
 

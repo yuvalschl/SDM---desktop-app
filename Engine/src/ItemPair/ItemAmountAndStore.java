@@ -15,7 +15,11 @@ public class ItemAmountAndStore {
     private String itemName;
     private int itemStore;
     private Store store;
+    private float discountItemAmount;//this represents the amount of the item bought in order to check if a discount is entitled for this amount
     boolean isPartOfDiscount = false;
+
+
+
 
 
     public ItemAmountAndStore(DtoItem item, float amount, Store store) {
@@ -25,6 +29,7 @@ public class ItemAmountAndStore {
         this.itemId = item.getSerialNumber();
         this.itemName = item.getName();
         this.itemStore = store.getSerialNumber();
+        this.discountItemAmount =amount;
     }
 
 
@@ -34,10 +39,18 @@ public class ItemAmountAndStore {
         this.itemName = item.getName();
         this.itemId = item.getSerialNumber();
         this.itemStore = store.getSerialNumber();
+        this.discountItemAmount =amount;
     }
 
     public ItemAmountAndStore(){}
 
+    public float getDiscountItemAmount() {
+        return discountItemAmount;
+    }
+
+    public void setDiscountItemAmount(float discountItemAmount) {
+        this.discountItemAmount = discountItemAmount;
+    }
     public boolean getIsPartOfDiscount() {
         return isPartOfDiscount;
     }

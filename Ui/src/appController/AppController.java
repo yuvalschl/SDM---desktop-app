@@ -1,6 +1,7 @@
 package appController;
 
 import Home.HomeController;
+import ShowHistory.ShowOrdersController;
 import StoreManager.StoreManager;
 import addStore.AddStoreController;
 import javafx.beans.property.BooleanProperty;
@@ -23,6 +24,8 @@ public class AppController {
     @FXML private OptionsMenuController optionsMenuComponentController;
     @FXML private SplitPane showStoresComponent;
     @FXML private ShowStoresController showStoresComponentController;
+    @FXML private SplitPane ShowOrdersScreenComponent;
+    @FXML private ShowOrdersController ShowOrdersScreenComponentController;
     @FXML private AnchorPane homeComponent;
     @FXML private HomeController homeComponentController;
     @FXML private SplitPane orderScreen;
@@ -37,6 +40,7 @@ public class AppController {
     public void initialize() throws IOException {
         optionsMenuComponentController.setAppController(this);
         homeComponentController.setAppController(this);
+        ShowOrdersScreenComponentController.setAppController(this);
         optionsMenuComponentController.getShowItemsButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowStoresButton().disableProperty().bind(getXmlLoaded());
@@ -45,6 +49,22 @@ public class AppController {
 
     public VBox getShowItems() {
         return showItems;
+    }
+
+    public SplitPane getShowOrdersScreen() {
+        return ShowOrdersScreenComponent;
+    }
+
+    public void setShowOrdersScreen(SplitPane showOrdersScreen) {
+        ShowOrdersScreenComponent = showOrdersScreen;
+    }
+
+    public ShowOrdersController getShowOrdersController() {
+        return ShowOrdersScreenComponentController;
+    }
+
+    public void setShowOrdersController(ShowOrdersController showOrdersController) {
+        this.ShowOrdersScreenComponentController = showOrdersController;
     }
 
     public void setShowItems(VBox showItems) {

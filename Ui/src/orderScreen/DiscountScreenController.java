@@ -36,8 +36,10 @@ public class DiscountScreenController {
     private Order order;
     private boolean oneOf;
     private SplitPane discountScreen;
+    private ArrayList<Discount> discounts;
     public void setData(ArrayList<Discount> discounts, AppController appController, Order order, SplitPane discountScreen){
         this.appController = appController;
+        this.discounts = discounts;
         discountListView.getItems().addAll(discounts);
         discountListView.setCellFactory(e -> new discountCell());
         this.order = order;
@@ -80,10 +82,10 @@ public class DiscountScreenController {
     //method to display quantity when clicking on an offer
     public void displayQuantity(MouseEvent mouseEvent) {
        Offer offer = offerListView.getSelectionModel().getSelectedItem();
-        forAdditionalLabel.textProperty().set(Float.toString(offer.getQuantity())+" Shekels");
+        forAdditionalLabel.textProperty().set(Float.toString(offer.getForAdditional())+" Shekels");
     }
 
-    public void addToOrderButtonAction(ActionEvent actionEvent) {
+    public void addToOrderButtonAction(ActionEvent actionEvent) {//TODO: add an update for the discount entiteled list after choosing an offer
         Offer offer = offerListView.getSelectionModel().getSelectedItem();
         Discount discount = discountListView.getSelectionModel().getSelectedItem();
         Map<Integer, ItemAmountAndStore> itemToAdd = new HashMap<>();
