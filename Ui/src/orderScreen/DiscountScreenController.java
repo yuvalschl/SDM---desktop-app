@@ -88,9 +88,7 @@ public class DiscountScreenController {
         else {
             appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
         }
-        for (Discount currDiscount: discounts){
-        /*    if(discount.getIfYouBuy().getItemId() == offer.getItemId())*/
-        }
+        discounts = appController.getStoreManager().getEntitledDiscounts(order);
         //discountScreen.setVisible(false);
     }
 
