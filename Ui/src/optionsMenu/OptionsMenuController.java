@@ -28,7 +28,6 @@ public class OptionsMenuController {
     @FXML private Button showItemsButton;
     @FXML private Button addStoreButton;
     @FXML private Button showOrderHistory;
-    @FXML private Button addStoreButton;
     public Button getShowOrderHistory() { return showOrderHistory; }
 
     public void setShowOrderHistory(Button showOrderHistory) { this.showOrderHistory = showOrderHistory; }

@@ -18,36 +18,7 @@
       </AnchorPane>
       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="750.0" spacing="5.0">
          <children>
-            <Label text="Items">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-            <TableView fx:id="itemsTable" prefHeight="284.0" prefWidth="750.0">
-               <columns>
-                  <TableColumn fx:id="itemIdCol" prefWidth="75.0" text="Id" />
-                  <TableColumn fx:id="itemNameCol" prefWidth="75.0" text="Name" />
-                  <TableColumn fx:id="itemSellByCol" prefWidth="96.0" text="Sell by" />
-                  <TableColumn fx:id="itemAmountSoldCol" prefWidth="120.0" text="Amont sold" />
-                  <TableColumn fx:id="itemPriceCol" prefWidth="101.0" text="Price" />
-                  <TableColumn fx:id="itemTotalPriceCol" prefWidth="148.0" text="Total Price" />
-                  <TableColumn fx:id="itemPartOfDiscountCol" prefWidth="132.0" text="part of disccount" />
-               </columns>
-            </TableView>
-            <Label text="Stores">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-            <TableView fx:id="storesTable" prefHeight="412.0" prefWidth="750.0">
-               <columns>
-                  <TableColumn fx:id="storeIdCol" prefWidth="75.0" text="Id" />
-                  <TableColumn fx:id="storeNameCol" prefWidth="145.0" text="Name" />
-                  <TableColumn fx:id="storePkkCol" prefWidth="137.0" text="price per KM" />
-                  <TableColumn fx:id="storeDistanceToClientcol" prefWidth="215.0" text="distance to client" />
-                  <TableColumn fx:id="storeShippingCostCol" prefWidth="176.0" text="Shipping cost" />
-               </columns>
-            </TableView>
+            <fx:include fx:id="displaySingleOrderComponent" source="displaySinglOrder.fxml" />
          </children>
       </VBox>
    </items>
