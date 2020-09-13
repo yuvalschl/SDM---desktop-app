@@ -32,8 +32,10 @@ public class DiscountScreenController {
     private Order order;
     private boolean oneOf;
     private SplitPane discountScreen;
+    private ArrayList<Discount> discounts;
     public void setData(ArrayList<Discount> discounts, AppController appController, Order order, SplitPane discountScreen){
         this.appController = appController;
+        this.discounts = discounts;
         discountListView.getItems().addAll(discounts);
         discountListView.setCellFactory(e -> new discountCell());
         this.order = order;
@@ -74,7 +76,7 @@ public class DiscountScreenController {
     //method to display quantity when clicking on an offer
     public void displayQuantity(MouseEvent mouseEvent) {
        Offer offer = offerListView.getSelectionModel().getSelectedItem();
-        forAdditionalLabel.textProperty().set(Float.toString(offer.getQuantity())+" Shekels");
+        forAdditionalLabel.textProperty().set(Float.toString(offer.getForAdditional())+" Shekels");
     }
 
     public void addToOrderButtonAction(ActionEvent actionEvent) {//TODO: add an update for the discount entiteled list after choosing an offer
@@ -86,7 +88,10 @@ public class DiscountScreenController {
         else {
             appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
         }
-        discountScreen.setVisible(false);
+        for (Discount currDiscount: discounts){
+        /*    if(discount.getIfYouBuy().getItemId() == offer.getItemId())*/
+        }
+        //discountScreen.setVisible(false);
     }
 
     public void notInterestedBtnAction(ActionEvent actionEvent) {

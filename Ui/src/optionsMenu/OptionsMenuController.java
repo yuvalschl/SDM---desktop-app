@@ -88,6 +88,7 @@ public class OptionsMenuController {
     @FXML
     public void showOrderHistoryAction(ActionEvent actionEvent) {
         disablePanes();
+        //showOrderHistory.
         appController.getShowOrdersScreen().setVisible(true);
 
     }

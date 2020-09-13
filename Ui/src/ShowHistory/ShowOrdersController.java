@@ -39,17 +39,16 @@ public class ShowOrdersController {
     @FXML private TableColumn<Store, Float> storePkkCol;
     @FXML private TableColumn<Store, Float> storeShippingCostCol;
 
-   // private ObservableSet<Integer, Store> storesObservableMap;
+    // private ObservableSet<Integer, Store> storesObservableMap;
     private AppController appController;
 
-    public ShowOrdersController(Order orders){
-        OrderView.getItems().addAll(orders);
+    public void setData(AppController appController){
+        this.appController = appController ;
+        OrderView.getItems().addAll(appController.getStoreManager().getAllOrders());
         OrderView.setCellFactory(e -> new OrderHistoryListViewCell());
     }
 
-    public ShowOrdersController(){
 
-    }
 
     public ObservableList<ItemCell> getItemsCells(ArrayList<ItemAmountAndStore> itemAmountAndStores){
 
@@ -61,4 +60,7 @@ public class ShowOrdersController {
         return  itemCells;
     }
 
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
 }

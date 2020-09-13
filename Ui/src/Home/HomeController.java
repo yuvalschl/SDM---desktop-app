@@ -74,6 +74,8 @@ public class HomeController {
         appController.getShowStoresComponentController().setData(appController);
         appController.getOrderScreenComponentController().setData(appController);
         appController.getShowItemsController().setData(appController);
+        appController.getShowOrdersController().setData(appController);
+
     }
 
     private Date getDateOfOrder() {//TODO: delete this

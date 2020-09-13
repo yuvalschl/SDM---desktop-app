@@ -366,7 +366,7 @@ public class StoreManager {
             ArrayList<ItemAmountAndStore> itemAmountAndStores = order.getItemAmountAndStores();
             for (ItemAmountAndStore itemAndAmount : itemAmountAndStores) {//loop through the items and check if the amount and id matches any of the stores discounts
                 for (Discount discount : store.getAllDiscounts()) {
-                    if (itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getAmount() >= discount.getIfYouBuy().getQuantity()) {
+                    if (itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getDiscountItemAmount() >= discount.getIfYouBuy().getQuantity()) {
                         discounts.add(discount);
                     }
                 }
@@ -394,6 +394,7 @@ public class StoreManager {
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
         ItemAmountAndStore itemAmountAndStore = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
         itemAmountAndStore.setPartOfDiscount(true);
+        itemAmountAndStore.setDiscountItemAmount(itemAmountAndStore.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());//substract the amount
         order.getItemAmountAndStores().add(itemAmountAndStore);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
