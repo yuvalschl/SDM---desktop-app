@@ -2,6 +2,7 @@ package optionsMenu;
 
 import appController.AppController;
 import appController.Main;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,14 +23,15 @@ public class OptionsMenuController {
         this.appController = appController;
     }
 
-    @FXML
-    private Button showStoresButton;
+    @FXML private Button showStoresButton;
+    @FXML private Button placeOrderButton;
+    @FXML private Button showItemsButton;
+    @FXML private Button showOrderHistory;
 
-    @FXML
-    private Button placeOrderButton;
 
-    @FXML
-    private Button showItemsButton;
+    public Button getShowOrderHistory() { return showOrderHistory; }
+
+    public void setShowOrderHistory(Button showOrderHistory) { this.showOrderHistory = showOrderHistory; }
 
     public Button getShowItemsButton() {
         return showItemsButton;
@@ -83,8 +85,17 @@ public class OptionsMenuController {
         appController.getShowItems().setVisible(true);
     }
 
+    @FXML
+    public void showOrderHistoryAction(ActionEvent actionEvent) {
+        disablePanes();
+        appController.getShowOrdersScreen().setVisible(true);
+
+    }
+
     private void disablePanes(){
          StackPane stackPane =  (StackPane)appController.getOrderScreenComponent().getParent();
         stackPane.getChildren().forEach(c -> c.setVisible(false));
     }
+
+
 }

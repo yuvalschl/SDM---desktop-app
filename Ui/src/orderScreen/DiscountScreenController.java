@@ -77,7 +77,7 @@ public class DiscountScreenController {
         forAdditionalLabel.textProperty().set(Float.toString(offer.getQuantity())+" Shekels");
     }
 
-    public void addToOrderButtonAction(ActionEvent actionEvent) {
+    public void addToOrderButtonAction(ActionEvent actionEvent) {//TODO: add an update for the discount entiteled list after choosing an offer
         Offer offer = offerListView.getSelectionModel().getSelectedItem();
         Discount discount = discountListView.getSelectionModel().getSelectedItem();
         if(oneOf){
