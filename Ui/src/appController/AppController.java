@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import optionsMenu.OptionsMenuController;
 import orderScreen.OrderScreenController;
@@ -28,7 +29,7 @@ public class AppController {
     @FXML private ShowOrdersController ShowOrdersScreenComponentController;
     @FXML private AnchorPane homeComponent;
     @FXML private HomeController homeComponentController;
-    @FXML private SplitPane orderScreen;
+    @FXML private StackPane orderScreen;
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
     @FXML private VBox showItems;
@@ -45,6 +46,7 @@ public class AppController {
         optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowStoresButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getAddStoreButton().disableProperty().bind(getXmlLoaded());
+        optionsMenuComponentController.getShowOrderHistory().disableProperty().bind(getXmlLoaded());
     }
 
     public VBox getShowItems() {
@@ -79,11 +81,11 @@ public class AppController {
         this.showItemsController = showItemsController;
     }
 
-    public SplitPane getOrderScreenComponent() {
+    public StackPane getOrderScreenComponent() {
         return orderScreen;
     }
 
-    public void setOrderScreenComponent(SplitPane orderScreenComponent) {
+    public void setOrderScreenComponent(StackPane orderScreenComponent) {
         this.orderScreen = orderScreenComponent;
     }
 

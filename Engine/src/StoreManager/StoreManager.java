@@ -370,7 +370,7 @@ public class StoreManager {
             ArrayList<ItemAmountAndStore> itemAmountAndStores = order.getItemAmountAndStores();
             for (ItemAmountAndStore itemAndAmount : itemAmountAndStores) {//loop through the items and check if the amount and id matches any of the stores discounts
                 for (Discount discount : store.getAllDiscounts()) {
-                    if (itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getDiscountItemAmount() >= discount.getIfYouBuy().getQuantity()) {
+                    if ( itemAndAmount.getIsPartOfDiscount()==false &&  itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getDiscountItemAmount() >= discount.getIfYouBuy().getQuantity()) {
                         discounts.add(discount);
                     }
                 }
@@ -404,7 +404,7 @@ public class StoreManager {
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
         ItemAmountAndStore itemAmountAndStore = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
         itemAmountAndStore.setPartOfDiscount(true);
-        itemAmountAndStore.setDiscountItemAmount(itemAmountAndStore.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());//substract the amount
+        updateEntitledDiscountAmount(offerItemIDToAdd, order, discount);
         order.getItemAmountAndStores().add(itemAmountAndStore);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
@@ -412,6 +412,13 @@ public class StoreManager {
         return itemAmountAndStore;
     }
 
+    private void updateEntitledDiscountAmount(int itemID,Order order,Discount discount){
+        for (ItemAmountAndStore item: order.getItemAmountAndStores()){
+            if (item.getItem().getSerialNumber() == itemID){
+                item.setDiscountItemAmount(item.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());
+            }
+        }
+    }
     /*public ArrayList<Discount> updateDiscountEntitled(ItemAmountAndStore itemChosenInDiscount, ArrayList<Discount> discounts){
       for (Discount discount : discounts){
           //if(discount.get)

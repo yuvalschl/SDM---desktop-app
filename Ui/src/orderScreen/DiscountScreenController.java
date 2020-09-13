@@ -86,16 +86,18 @@ public class DiscountScreenController {
     }
 
     public void addToOrderButtonAction(ActionEvent actionEvent) {//TODO: add an update for the discount entiteled list after choosing an offer
-        Offer offer = offerListView.getSelectionModel().getSelectedItem();
         Discount discount = discountListView.getSelectionModel().getSelectedItem();
         Map<Integer, ItemAmountAndStore> itemToAdd = new HashMap<>();
         if(oneOf){
-             itemToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
+            Offer offer = offerListView.getSelectionModel().getSelectedItem();
+            itemToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
         }
         else {
             itemToAdd = appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
         }
         appController.getOrderScreenComponentController().getOrderSummaryTable().getItems().addAll(itemToAdd.values());
+        discountScreen.setVisible(false);
+        discounts = appController.getStoreManager().getEntitledDiscounts(order);
         discountScreen.setVisible(false);
     }
 
