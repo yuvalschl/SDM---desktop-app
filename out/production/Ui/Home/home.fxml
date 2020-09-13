@@ -17,7 +17,7 @@
             <HBox alignment="CENTER" spacing="60.0">
                <children>
                   <Button fx:id="loadXmlButton" mnemonicParsing="false" onAction="#loadXmlAction" text="Load XML" />
-                  <Button lineSpacing="10.0" mnemonicParsing="false" text="Chosse File" />
+                  <Button fx:id="chooseFileButton" lineSpacing="10.0" mnemonicParsing="false" onAction="#chooseFileAction" text="Chosse File" />
                </children>
             </HBox>
             <HBox prefHeight="26.0" prefWidth="260.0">

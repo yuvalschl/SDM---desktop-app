@@ -186,8 +186,7 @@ public class OrderScreenController {
         //set binding for the amount text field
         BooleanBinding textFieldBindToItemsTable =
                 Bindings.createBooleanBinding(() -> {
-                    boolean result = itemsTable.getSelectionModel().getSelectedItems().size() != 1;
-                    return result;
+                    return itemsTable.getSelectionModel().getSelectedItems().size() != 1;
                 }, itemsTable.getSelectionModel().selectedItemProperty());
 
         itemAmountTextField.disableProperty().bind(textFieldBindToItemsTable);
