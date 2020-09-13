@@ -26,6 +26,23 @@ public class Store {
     private float totalPayment;
     private int numberOfItemsSold;
 
+    /**
+     * constructor used in the addNewStore method
+     */
+    public Store(String storeName, Point storeLocation, Map<Integer, Item> storeInventory, float storePPK, int storeId) {
+        this.name = storeName;
+        this.serialNumber = storeId;
+        this.location = storeLocation;
+        this.inventory = storeInventory;
+        this.PPK = storePPK;
+        this.totalDeliveriesCost = 0;
+        this.totalPayment = 0;
+        this.numberOfItemsSold = 0;
+        this.allOrders = new HashSet<StoreOrder>();
+        this.allDiscounts = new HashSet<Discount>();
+
+    }
+
     public int getNumberOfItemsSold() {
         return numberOfItemsSold;
     }

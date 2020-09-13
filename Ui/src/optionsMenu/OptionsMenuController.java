@@ -22,14 +22,12 @@ public class OptionsMenuController {
         this.appController = appController;
     }
 
-    @FXML
-    private Button showStoresButton;
+    @FXML private Button showStoresButton;
+    @FXML private Button placeOrderButton;
+    @FXML private Button showItemsButton;
+    @FXML private Button addStoreButton;
 
-    @FXML
-    private Button placeOrderButton;
 
-    @FXML
-    private Button showItemsButton;
 
     public Button getShowItemsButton() {
         return showItemsButton;
@@ -71,6 +69,12 @@ public class OptionsMenuController {
     }
 
     @FXML
+    void addStoreAction() {
+        disablePanes();
+        appController.getAddStoreComponent().setVisible(true);
+    }
+
+    @FXML
     public void placeOrderAction() throws IOException {
         disablePanes();
         appController.getOrderScreenComponent().setVisible(true);
@@ -83,7 +87,7 @@ public class OptionsMenuController {
     }
 
     private void disablePanes(){
-         StackPane stackPane =  (StackPane)appController.getOrderScreenComponent().getParent();
+        StackPane stackPane = (StackPane)appController.getOrderScreenComponent().getParent();
         stackPane.getChildren().forEach(c -> c.setVisible(false));
     }
 }

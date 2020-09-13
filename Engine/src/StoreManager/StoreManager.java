@@ -287,7 +287,11 @@ public class StoreManager {
         return storeDetails;
     }
 
-
+    /**
+     * this method find the cheapest item in the system by id
+     * @param itemId searched item id
+     * @return the cheapest item in the system
+     */
     public ItemAmountAndStore getCheapestItem(int itemId){
         Item cheapestItem = null;
         Store cheapestStore = null;
@@ -404,5 +408,17 @@ public class StoreManager {
           //if(discount.get)
       }
     }*/
+
+    /**
+     * used to add a new store from user input
+     * @param storeId new store id
+     * @param storeName new store name
+     * @param storeLocation new store location
+     * @param storeInventory new store inventory
+     * @param PPK new store PPK
+     */
+    public void addNewStore(int storeId, String storeName, Point storeLocation, Map<Integer, Item> storeInventory, int PPK){
+        allStores.put(storeId, new Store(storeName, storeLocation, storeInventory,PPK, storeId));
+    }
 
 }

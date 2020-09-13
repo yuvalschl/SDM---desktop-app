@@ -15,24 +15,18 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
-import javafx.util.converter.FloatStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
-import orderScreen.filters.FloatFilter;
-import orderScreen.filters.IntFilter;
+import textFieldFilters.FloatFilter;
+import textFieldFilters.IntFilter;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class OrderScreenController {
@@ -244,7 +238,6 @@ public class OrderScreenController {
         if (datePicker.getValue() != null){
             order.setDateOfOrder(Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         }
-
     }
 
     @FXML
