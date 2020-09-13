@@ -32,44 +32,19 @@ public class ShowStoresController {
     private ObservableMap<Integer, Store> storesObservableMap;
     private AppController appController;
 
-    @FXML
-    private TableColumn<Item, String> itemNameCol;
-
-    @FXML
-    private TableColumn<Item, Integer> itemIdCol;
-
-    @FXML
-    private TableColumn<Item, Float> itemPriceCol;
-
-    @FXML
-    private TableColumn<Item, Integer> itemAmountSoldCol;
-
-    @FXML
-    private TableView<Item> itemsTable;
-
-    @FXML
-    private TableView<StoreOrder> ordersTable;
-
-    @FXML
-    private TableColumn<StoreOrder, Date> orderDateCol;
-
-    @FXML
-    private TableColumn<StoreOrder, Integer> orderIdCol;
-
-    @FXML
-    private TableColumn<StoreOrder, Integer> amountOfItemsCol;
-
-    @FXML
-    private TableColumn<StoreOrder, Float> itemsCostCol;
-
-    @FXML
-    private TableColumn<StoreOrder, Float> shippingCostCol;
-
-    @FXML
-    private TableColumn<StoreOrder, Float> totalCostCol;
-
-    @FXML
-    private ListView<Store> storesListView;
+    @FXML private TableColumn<Item, String> itemNameCol;
+    @FXML private TableColumn<Item, Integer> itemIdCol;
+    @FXML private TableColumn<Item, Float> itemPriceCol;
+    @FXML private TableColumn<Item, Integer> itemAmountSoldCol;
+    @FXML private TableView<Item> itemsTable;
+    @FXML private TableView<StoreOrder> ordersTable;
+    @FXML private TableColumn<StoreOrder, Date> orderDateCol;
+    @FXML private TableColumn<StoreOrder, Integer> orderIdCol;
+    @FXML private TableColumn<StoreOrder, Integer> amountOfItemsCol;
+    @FXML private TableColumn<StoreOrder, Float> itemsCostCol;
+    @FXML private TableColumn<StoreOrder, Float> shippingCostCol;
+    @FXML private TableColumn<StoreOrder, Float> totalCostCol;
+    @FXML private ListView<Store> storesListView;
 
     public TableView<Item> getItemsTable() {
         return itemsTable;

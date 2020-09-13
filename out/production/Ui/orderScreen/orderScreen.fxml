@@ -89,6 +89,7 @@
                       </AnchorPane>
                </items>
             </SplitPane>
+            <fx:include fx:id="discountScreen" source="discountScreen.fxml" />
          </children>
       </StackPane>
         <AnchorPane prefHeight="200.0" prefWidth="227.0">

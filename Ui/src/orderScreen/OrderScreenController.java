@@ -36,7 +36,8 @@ public class OrderScreenController {
     private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
     private final IntFilter intFilter = new IntFilter();
-
+    @FXML private SplitPane discountScreen;
+    @FXML private DiscountScreenController discountScreenController;
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<Customer> customerCB;
     @FXML private CheckBox dynamicOrderCB;
@@ -54,9 +55,12 @@ public class OrderScreenController {
     @FXML private TableColumn<ItemAmountAndStore, String> itemSummaryName;
     @FXML private TableColumn<ItemAmountAndStore, Float> itemSummaryAmount;
 
+    public SplitPane getDiscountScreen() {
+        return discountScreen;
+    }
 
     @FXML
-    void addAction() {
+    private void addAction() {
         float amount = Float.parseFloat(itemAmountTextField.getText());
         Item item = itemsTable.getSelectionModel().getSelectedItem();
         ItemAmountAndStore itemToAdd;
@@ -92,12 +96,16 @@ public class OrderScreenController {
         Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
         ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
-        //TODO make a method that shows all discounts and lets the user decide if he wants the discount or not
-        appController.getStoreManager().placeOrder(order);
-        clearAction();
-        //TODO find better way, if binding in item cell factory is working
         appController.getShowItemsController().setData(appController);
-        appController.getOptionsMenuComponentController().homeButtonAction();
+        if(discounts.size() != 0){
+            discountScreenController.setData(discounts, appController, order,discountScreen);
+           // discountScreen.setVisible(true);
+        }
+        appController.getStoreManager().placeOrder(order);
+
+        //TODO add a screen that presents the order details and ask for approval
+
+       // clearAction();
     }
 
     @FXML

@@ -12,14 +12,11 @@ import java.io.IOException;
 
 public class StoreListViewCell extends ListCell<Store> {
 
-    @FXML
-    private Label storeNameLabel;
+    @FXML private Label storeNameLabel;
 
-    @FXML
-    private Label storeIdLabel;
+    @FXML private Label storeIdLabel;
 
-    @FXML
-    private VBox cellVbox;
+    @FXML private VBox cellVbox;
 
     private FXMLLoader fxmlLoader;
 
