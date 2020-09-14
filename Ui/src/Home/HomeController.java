@@ -2,17 +2,22 @@ package Home;
 
 
 import Jaxb.JaxbClassToStoreManager;
+import StoreManager.StoreManager;
 import appController.AppController;
 import appController.Main;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 public class HomeController {
 
@@ -39,8 +44,16 @@ public class HomeController {
     }
 
     public void loadXmlAction() throws InterruptedException {
-        JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager(file, appController.getXmlLoaded());
-        Thread thread = new Thread(jaxbClassToStoreManager);
+        StoreManager storeManager = new StoreManager();
+        Task<StoreManager> jaxbClassToStoreManager = new JaxbClassToStoreManager(storeManager,file, appController.getXmlLoaded());
+        jaxbClassToStoreManager.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                appController.setStoreManager(jaxbClassToStoreManager.getValue());
+                updateData();
+            }
+        });
+
         loadActionText.textProperty().unbind();
         fileProgressBar.progressProperty().unbind();
         progressPercentText.textProperty().unbind();
@@ -53,7 +66,8 @@ public class HomeController {
                                 jaxbClassToStoreManager.progressProperty(),
                                 100)),
                 " %"));
-        thread.setDaemon(true);
+
+        Thread thread = new Thread(jaxbClassToStoreManager);
         thread.start();
     }
 
