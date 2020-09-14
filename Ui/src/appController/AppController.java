@@ -49,6 +49,10 @@ public class AppController {
         optionsMenuComponentController.getShowOrderHistory().disableProperty().bind(getXmlLoaded());
     }
 
+    public HomeController getHomeComponentController() {
+        return homeComponentController;
+    }
+
     public VBox getShowItems() {
         return showItems;
     }
@@ -153,4 +157,5 @@ public class AppController {
     public void setStoreManager(StoreManager storeManager) {
         this.storeManager = storeManager;
     }
+
 }

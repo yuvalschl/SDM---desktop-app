@@ -1,22 +1,23 @@
 package Home;
 
 
-import Exceptions.DuplicateValueException;
-import Exceptions.InvalidValueException;
-import Exceptions.ItemNotSoldException;
 import Jaxb.JaxbClassToStoreManager;
-import Jaxb.XmlToObject;
+import StoreManager.StoreManager;
 import appController.AppController;
 import appController.Main;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 public class HomeController {
 
@@ -42,9 +43,17 @@ public class HomeController {
         this.appController = appController;
     }
 
-    public void loadXmlAction() throws InterruptedException, DuplicateValueException, ItemNotSoldException, InvalidValueException {
-       /* JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager(file, appController.getXmlLoaded());
-        Thread thread = new Thread(jaxbClassToStoreManager);
+    public void loadXmlAction() throws InterruptedException {
+        StoreManager storeManager = new StoreManager();
+        Task<StoreManager> jaxbClassToStoreManager = new JaxbClassToStoreManager(storeManager,file, appController.getXmlLoaded());
+        jaxbClassToStoreManager.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                appController.setStoreManager(jaxbClassToStoreManager.getValue());
+                updateData();
+            }
+        });
+
         loadActionText.textProperty().unbind();
         fileProgressBar.progressProperty().unbind();
         progressPercentText.textProperty().unbind();
@@ -57,13 +66,9 @@ public class HomeController {
                                 jaxbClassToStoreManager.progressProperty(),
                                 100)),
                 " %"));
-        thread.setDaemon(true);
-        thread.start();*/
-        File file = new File("C:/Users/Dani/Desktop/ex2-big.xml");
-        JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager(file, appController.getXmlLoaded());
-        appController.setStoreManager(jaxbClassToStoreManager.convertJaxbClassToStoreManager(XmlToObject.fromXmlFileToObject(file))); //;
-        appController.getXmlLoaded().setValue(false);
-        this.updateData();
+
+        Thread thread = new Thread(jaxbClassToStoreManager);
+        thread.start();
     }
 
     public String getMessageFileProperty() {
@@ -167,7 +172,7 @@ public class HomeController {
         fileProgressBar.progressProperty().unbind();
         progressPercentText.setText(" ");
         fileProgressBar.setProgress(0);
-//        loadActionText.setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
+        loadActionText.setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
     }
     @FXML
     void goToMainMenuAction(){

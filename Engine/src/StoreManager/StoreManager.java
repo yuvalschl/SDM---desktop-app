@@ -1,4 +1,5 @@
 package StoreManager;
+import Jaxb.JaxbClassToStoreManager;
 import Store.Offer;
 import Costumer.Customer;
 import DtoObjects.*;
@@ -9,12 +10,16 @@ import Order.*;
 import Store.Store;
 import Jaxb.XmlToObject;
 import Store.Discount;
+import javafx.beans.property.BooleanProperty;
+import javafx.concurrent.Task;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class StoreManager {
     private Map<Integer, Store> allStores;
@@ -22,6 +27,7 @@ public class StoreManager {
     private Set<Order> allOrders = new HashSet<Order>();
     private String currentFilePath;
     private Map<Integer, Customer> allCustomers;
+    private Task<Boolean> currentTask;
 
 
     public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems, Map<Integer, Customer> allCustomers) {
@@ -29,6 +35,17 @@ public class StoreManager {
         this.allItems = allItems;
         this.allCustomers = allCustomers;
         this.currentFilePath = " ";
+    }
+
+    public StoreManager(){
+        allStores = new HashMap<Integer, Store>();
+        allItems = new HashMap<Integer, Item>();
+        allCustomers = new HashMap<Integer, Customer>();
+    }
+
+
+    public Task<Boolean> getCurrentTask() {
+        return currentTask;
     }
 
     public void setAllOrders(Set<Order> allOrders) {
