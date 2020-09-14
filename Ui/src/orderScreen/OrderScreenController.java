@@ -119,7 +119,7 @@ public class OrderScreenController {
     }
 
     @FXML
-    void clearAction() {
+    public void clearAction() {
         orderItems.clear();
         orderSummaryTable.getItems().clear();
         orderItems.clear();

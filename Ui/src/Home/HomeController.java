@@ -1,7 +1,11 @@
 package Home;
 
 
+import Exceptions.DuplicateValueException;
+import Exceptions.InvalidValueException;
+import Exceptions.ItemNotSoldException;
 import Jaxb.JaxbClassToStoreManager;
+import Jaxb.XmlToObject;
 import appController.AppController;
 import appController.Main;
 import javafx.application.Platform;
@@ -38,8 +42,8 @@ public class HomeController {
         this.appController = appController;
     }
 
-    public void loadXmlAction() throws InterruptedException {
-        JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager(file, appController.getXmlLoaded());
+    public void loadXmlAction() throws InterruptedException, DuplicateValueException, ItemNotSoldException, InvalidValueException {
+       /* JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager(file, appController.getXmlLoaded());
         Thread thread = new Thread(jaxbClassToStoreManager);
         loadActionText.textProperty().unbind();
         fileProgressBar.progressProperty().unbind();
@@ -54,7 +58,12 @@ public class HomeController {
                                 100)),
                 " %"));
         thread.setDaemon(true);
-        thread.start();
+        thread.start();*/
+        File file = new File("C:/Users/Dani/Desktop/ex2-big.xml");
+        JaxbClassToStoreManager jaxbClassToStoreManager = new JaxbClassToStoreManager(file, appController.getXmlLoaded());
+        appController.setStoreManager(jaxbClassToStoreManager.convertJaxbClassToStoreManager(XmlToObject.fromXmlFileToObject(file))); //;
+        appController.getXmlLoaded().setValue(false);
+        this.updateData();
     }
 
     public String getMessageFileProperty() {
@@ -158,7 +167,7 @@ public class HomeController {
         fileProgressBar.progressProperty().unbind();
         progressPercentText.setText(" ");
         fileProgressBar.setProgress(0);
-        loadActionText.setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
+//        loadActionText.setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
     }
     @FXML
     void goToMainMenuAction(){
