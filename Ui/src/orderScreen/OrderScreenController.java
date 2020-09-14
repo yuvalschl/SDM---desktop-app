@@ -15,24 +15,18 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
-import javafx.util.converter.FloatStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
-import orderScreen.filters.FloatFilter;
-import orderScreen.filters.IntFilter;
+import textFieldFilters.FloatFilter;
+import textFieldFilters.IntFilter;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class OrderScreenController {
@@ -42,6 +36,7 @@ public class OrderScreenController {
     private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
     private final IntFilter intFilter = new IntFilter();
+    @FXML   private SplitPane orderScreenSplitPane;
     @FXML private SplitPane discountScreen;
     @FXML private DiscountScreenController discountScreenController;
     @FXML private DatePicker datePicker;
@@ -63,6 +58,14 @@ public class OrderScreenController {
 
     public SplitPane getDiscountScreen() {
         return discountScreen;
+    }
+
+    public TableView<ItemAmountAndStore> getOrderSummaryTable() {
+        return orderSummaryTable;
+    }
+
+    public void setOrderSummaryTable(TableView<ItemAmountAndStore> orderSummaryTable) {
+        this.orderSummaryTable = orderSummaryTable;
     }
 
     @FXML
@@ -105,9 +108,10 @@ public class OrderScreenController {
         appController.getShowItemsController().setData(appController);
         if(discounts.size() != 0){
             discountScreenController.setData(discounts, appController, order,discountScreen);
-           // discountScreen.setVisible(true);
         }
-        appController.getStoreManager().placeOrder(order);
+        else
+            orderScreenSplitPane.setVisible(false);
+      //  appController.getStoreManager().placeOrder(order);
 
         //TODO add a screen that presents the order details and ask for approval
 
@@ -182,8 +186,7 @@ public class OrderScreenController {
         //set binding for the amount text field
         BooleanBinding textFieldBindToItemsTable =
                 Bindings.createBooleanBinding(() -> {
-                    boolean result = itemsTable.getSelectionModel().getSelectedItems().size() != 1;
-                    return result;
+                    return itemsTable.getSelectionModel().getSelectedItems().size() != 1;
                 }, itemsTable.getSelectionModel().selectedItemProperty());
 
         itemAmountTextField.disableProperty().bind(textFieldBindToItemsTable);
@@ -252,7 +255,6 @@ public class OrderScreenController {
         if (datePicker.getValue() != null){
             order.setDateOfOrder(Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         }
-
     }
 
     @FXML

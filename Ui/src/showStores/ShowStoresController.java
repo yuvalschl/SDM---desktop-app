@@ -91,7 +91,7 @@ public class ShowStoresController {
                     return cell;
                 });
         orderIdCol.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-        amountOfItemsCol.setCellValueFactory(new PropertyValueFactory<>("amountOfItemsCol"));
+        amountOfItemsCol.setCellValueFactory(new PropertyValueFactory<>("amountOfItems"));
         totalCostCol.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
         shippingCostCol.setCellValueFactory(new PropertyValueFactory<>("shippingCost"));
         itemsCostCol.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfItems"));

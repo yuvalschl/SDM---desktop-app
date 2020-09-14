@@ -1,13 +1,15 @@
 package appController;
 
 import Home.HomeController;
+import ShowHistory.ShowOrdersController;
 import StoreManager.StoreManager;
+import addStore.AddStoreController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import optionsMenu.OptionsMenuController;
 import orderScreen.OrderScreenController;
@@ -23,26 +25,48 @@ public class AppController {
     @FXML private OptionsMenuController optionsMenuComponentController;
     @FXML private SplitPane showStoresComponent;
     @FXML private ShowStoresController showStoresComponentController;
+    @FXML private SplitPane ShowOrdersScreenComponent;
+    @FXML private ShowOrdersController ShowOrdersScreenComponentController;
     @FXML private AnchorPane homeComponent;
     @FXML private HomeController homeComponentController;
-    @FXML private SplitPane orderScreen;
+    @FXML private StackPane orderScreen;
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
     @FXML private VBox showItems;
+    @FXML private AnchorPane addStoreComponent;
+    @FXML private AddStoreController addStoreComponentController;
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
 
     @FXML
     public void initialize() throws IOException {
         optionsMenuComponentController.setAppController(this);
         homeComponentController.setAppController(this);
+        ShowOrdersScreenComponentController.setAppController(this);
         optionsMenuComponentController.getShowItemsButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowStoresButton().disableProperty().bind(getXmlLoaded());
+        optionsMenuComponentController.getAddStoreButton().disableProperty().bind(getXmlLoaded());
+        optionsMenuComponentController.getShowOrderHistory().disableProperty().bind(getXmlLoaded());
     }
-
 
     public VBox getShowItems() {
         return showItems;
+    }
+
+    public SplitPane getShowOrdersScreen() {
+        return ShowOrdersScreenComponent;
+    }
+
+    public void setShowOrdersScreen(SplitPane showOrdersScreen) {
+        ShowOrdersScreenComponent = showOrdersScreen;
+    }
+
+    public ShowOrdersController getShowOrdersController() {
+        return ShowOrdersScreenComponentController;
+    }
+
+    public void setShowOrdersController(ShowOrdersController showOrdersController) {
+        this.ShowOrdersScreenComponentController = showOrdersController;
     }
 
     public void setShowItems(VBox showItems) {
@@ -57,11 +81,11 @@ public class AppController {
         this.showItemsController = showItemsController;
     }
 
-    public SplitPane getOrderScreenComponent() {
+    public StackPane getOrderScreenComponent() {
         return orderScreen;
     }
 
-    public void setOrderScreenComponent(SplitPane orderScreenComponent) {
+    public void setOrderScreenComponent(StackPane orderScreenComponent) {
         this.orderScreen = orderScreenComponent;
     }
 
@@ -83,6 +107,22 @@ public class AppController {
 
     public void setShowStoresComponent(SplitPane showStoresComponent) {
         this.showStoresComponent = showStoresComponent;
+    }
+
+    public AnchorPane getAddStoreComponent() {
+        return addStoreComponent;
+    }
+
+    public void setAddStoreComponent(AnchorPane addStoreComponent) {
+        this.addStoreComponent = addStoreComponent;
+    }
+
+    public AddStoreController getAddStoreComponentController() {
+        return addStoreComponentController;
+    }
+
+    public void setAddStoreComponentController(AddStoreController addStoreComponentController) {
+        this.addStoreComponentController = addStoreComponentController;
     }
 
     public AnchorPane getHomeComponent() {
@@ -109,7 +149,8 @@ public class AppController {
         return storeManager;
     }
 
-    public void setStoreManager(StoreManager convertJaxbClassToStoreManager) {
-        this.storeManager = convertJaxbClassToStoreManager;
+
+    public void setStoreManager(StoreManager storeManager) {
+        this.storeManager = storeManager;
     }
 }

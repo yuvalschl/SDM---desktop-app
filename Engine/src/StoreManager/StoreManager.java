@@ -288,7 +288,11 @@ public class StoreManager {
         return storeDetails;
     }
 
-
+    /**
+     * this method find the cheapest item in the system by id
+     * @param itemId searched item id
+     * @return the cheapest item in the system
+     */
     public ItemAmountAndStore getCheapestItem(int itemId){
         Item cheapestItem = null;
         Store cheapestStore = null;
@@ -366,7 +370,7 @@ public class StoreManager {
             ArrayList<ItemAmountAndStore> itemAmountAndStores = order.getItemAmountAndStores();
             for (ItemAmountAndStore itemAndAmount : itemAmountAndStores) {//loop through the items and check if the amount and id matches any of the stores discounts
                 for (Discount discount : store.getAllDiscounts()) {
-                    if (itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getAmount() >= discount.getIfYouBuy().getQuantity()) {
+                    if ( itemAndAmount.getIsPartOfDiscount()==false &&  itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getDiscountItemAmount() >= discount.getIfYouBuy().getQuantity()) {
                         discounts.add(discount);
                     }
                 }
@@ -380,30 +384,57 @@ public class StoreManager {
      * @param discount a discount to add to order
      * @param order the order to add the items to
      */
-    public void addDiscountItemsToOrderAllOrNothing(Order order, Discount discount){
-        discount.getThenYouGet().getAllOffers().stream().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
+    public Map<Integer,ItemAmountAndStore> addDiscountItemsToOrderAllOrNothing(Order order, Discount discount){
+        Map<Integer, ItemAmountAndStore> itemsMap = new HashMap<Integer, ItemAmountAndStore>();
+        for(Offer offer : discount.getThenYouGet().getAllOffers()){
+            itemsMap.put(offer.getItemId(), new ItemAmountAndStore(getAllDtoItems().get(offer.getItemId()), offer.getQuantity(), allStores.get(discount.getStoreId())));
+        }
+        discount.getThenYouGet().getAllOffers().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
+        return itemsMap;
+
     }
     /**
      * takes an offer ID, an order and discounts and adds a single discount offer to the order
      * @param discount a discount to add to order
      * @param order the order to add the items to
      */
-    public void addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){
+    public ItemAmountAndStore addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){
         Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
         Store store = allStores.get(discount.getStoreId());
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
         ItemAmountAndStore itemAmountAndStore = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
         itemAmountAndStore.setPartOfDiscount(true);
+        updateEntitledDiscountAmount(offerItemIDToAdd, order, discount);
         order.getItemAmountAndStores().add(itemAmountAndStore);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
         order.setTotalCost(order.getTotalCost()+ offer.getForAdditional());
+        return itemAmountAndStore;
     }
 
+    private void updateEntitledDiscountAmount(int itemID,Order order,Discount discount){
+        for (ItemAmountAndStore item: order.getItemAmountAndStores()){
+            if (item.getItem().getSerialNumber() == itemID){
+                item.setDiscountItemAmount(item.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());
+            }
+        }
+    }
     /*public ArrayList<Discount> updateDiscountEntitled(ItemAmountAndStore itemChosenInDiscount, ArrayList<Discount> discounts){
       for (Discount discount : discounts){
           //if(discount.get)
       }
     }*/
+
+    /**
+     * used to add a new store from user input
+     * @param storeId new store id
+     * @param storeName new store name
+     * @param storeLocation new store location
+     * @param storeInventory new store inventory
+     * @param PPK new store PPK
+     */
+    public void addNewStore(int storeId, String storeName, Point storeLocation, Map<Integer, Item> storeInventory, int PPK){
+        allStores.put(storeId, new Store(storeName, storeLocation, storeInventory,PPK, storeId));
+    }
 
 }

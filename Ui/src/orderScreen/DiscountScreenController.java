@@ -1,6 +1,7 @@
 package orderScreen;
 
 import Item.Item;
+import ItemPair.ItemAmountAndStore;
 import Order.Order;
 import Store.Discount;
 import Store.Offer;
@@ -17,6 +18,9 @@ import listCells.discountCell.discountCell;
 import listCells.discountCell.offerCell;
 import Store.DiscountOperator;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import Store.MyThenYouGet;
 
 
@@ -32,13 +36,16 @@ public class DiscountScreenController {
     private Order order;
     private boolean oneOf;
     private SplitPane discountScreen;
+    private ArrayList<Discount> discounts;
     public void setData(ArrayList<Discount> discounts, AppController appController, Order order, SplitPane discountScreen){
         this.appController = appController;
+        this.discounts = discounts;
         discountListView.getItems().addAll(discounts);
         discountListView.setCellFactory(e -> new discountCell());
         this.order = order;
         this.discountScreen = discountScreen;
         discountScreen.setVisible(true);
+
         /*discountListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Discount>() {
             @Override
             public void changed(ObservableValue<? extends Discount> observable, Discount oldValue, Discount newValue) {
@@ -48,6 +55,7 @@ public class DiscountScreenController {
         });*/
 
     }
+
 
     @FXML//displays the information of the clicked discount in the discount list view
     public void displaySelectedDiscount(javafx.scene.input.MouseEvent mouseEvent) {
@@ -74,18 +82,22 @@ public class DiscountScreenController {
     //method to display quantity when clicking on an offer
     public void displayQuantity(MouseEvent mouseEvent) {
        Offer offer = offerListView.getSelectionModel().getSelectedItem();
-        forAdditionalLabel.textProperty().set(Float.toString(offer.getQuantity())+" Shekels");
+        forAdditionalLabel.textProperty().set(Float.toString(offer.getForAdditional())+" Shekels");
     }
 
-    public void addToOrderButtonAction(ActionEvent actionEvent) {
-        Offer offer = offerListView.getSelectionModel().getSelectedItem();
+    public void addToOrderButtonAction(ActionEvent actionEvent) {//TODO: add an update for the discount entiteled list after choosing an offer
         Discount discount = discountListView.getSelectionModel().getSelectedItem();
+        Map<Integer, ItemAmountAndStore> itemToAdd = new HashMap<>();
         if(oneOf){
-            appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount);
+            Offer offer = offerListView.getSelectionModel().getSelectedItem();
+            itemToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
         }
         else {
-            appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
+            itemToAdd = appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
         }
+        appController.getOrderScreenComponentController().getOrderSummaryTable().getItems().addAll(itemToAdd.values());
+        discountScreen.setVisible(false);
+        discounts = appController.getStoreManager().getEntitledDiscounts(order);
         discountScreen.setVisible(false);
     }
 

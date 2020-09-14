@@ -17,6 +17,8 @@ public class MyThenYouGet {
         }
         return null;
     }
+
+
     public DiscountOperator getDiscountOperator() {
         return discountOperator;
     }
