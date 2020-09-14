@@ -64,6 +64,14 @@ public class Store {
         allDiscounts.stream().forEach(discount -> discount.setStoreId(serialNumber));
     }
 
+    public int getX(){
+        return location.x;
+    }
+
+    public int getY(){
+        return location.y;
+    }
+
     public Store(){}
 
     public Set<Discount> getAllDiscounts() { return allDiscounts; }

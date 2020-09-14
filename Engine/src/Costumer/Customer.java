@@ -13,6 +13,14 @@ public class Customer {
         this.location = location;
     }
 
+    public int getX(){
+        return location.x;
+    }
+
+    public int getY(){
+        return location.y;
+    }
+
     public int getId() {
         return id;
     }
