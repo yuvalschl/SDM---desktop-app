@@ -24,12 +24,9 @@ public class HomeController {
 
     private AppController appController;
     private File file;
-    private SimpleStringProperty messageFileProperty = new SimpleStringProperty();
-    private SimpleDoubleProperty progressFileProperty = new SimpleDoubleProperty();
-    private SimpleBooleanProperty valueFileProperty = new SimpleBooleanProperty();
+    private BooleanProperty fileChosen = new SimpleBooleanProperty(false);
 
-    @FXML
-    private Button chooseFileButton;
+    @FXML private Button chooseFileButton;
     @FXML private Button loadXmlButton;
     @FXML private Text loadActionText;
     @FXML private ProgressBar fileProgressBar;
@@ -41,6 +38,11 @@ public class HomeController {
 
     public void setAppController(AppController appController) {
         this.appController = appController;
+    }
+
+    @FXML
+    public void initialize(){
+        loadXmlButton.disableProperty().bind(fileChosen.not());
     }
 
     public void loadXmlAction() throws InterruptedException {
@@ -71,68 +73,6 @@ public class HomeController {
         thread.start();
     }
 
-    public String getMessageFileProperty() {
-        return messageFileProperty.get();
-    }
-
-    public SimpleStringProperty messageFilePropertyProperty() {
-        return messageFileProperty;
-    }
-
-    public void setMessageFileProperty(String messageFileProperty) {
-        this.messageFileProperty.set(messageFileProperty);
-    }
-
-    public double getProgressFileProperty() {
-        return progressFileProperty.get();
-    }
-
-    public SimpleDoubleProperty progressFilePropertyProperty() {
-        return progressFileProperty;
-    }
-
-    public void setProgressFileProperty(double progressFileProperty) {
-        this.progressFileProperty.set(progressFileProperty);
-    }
-
-    public boolean isValueFileProperty() {
-        return valueFileProperty.get();
-    }
-
-    public SimpleBooleanProperty valueFilePropertyProperty() {
-        return valueFileProperty;
-    }
-
-    public void setValueFileProperty(boolean valueFileProperty) {
-        this.valueFileProperty.set(valueFileProperty);
-    }
-
-    private void loadingFileProgress(){
-
-/*        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    loadingFileProgress();
-                    appController.setStoreManager(jaxbClassToStoreManager.convertJaxbClassToStoreManager(Objects.requireNonNull(XmlToObject.fromXmlFileToObject(file))));
-                } catch (DuplicateValueException | InvalidValueException | ItemNotSoldException e) {
-                    loadActionText.setText(e.getMessage());
-                }
-                for (int i=0 ; i<101; i++) {
-                    Thread.sleep(10);
-                    updateProgress(i, 100);
-                }
-                return null;
-            }
-        };*/
-
-/*        fileProgressBar.progressProperty().unbind();
-        fileProgressBar.progressProperty().bind(task.progressProperty());
-
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();*/
-    }
 
     public void updateData(){
         appController.getShowStoresComponentController().setData(appController);
@@ -142,6 +82,7 @@ public class HomeController {
         appController.getShowOrdersController().setData(appController);
 
     }
+
 
 
 /*    private Date getDateOfOrder() {//TODO: delete this
@@ -167,17 +108,14 @@ public class HomeController {
     public void chooseFileAction(){
         FileChooser fileChooser = new FileChooser();
         this.file = fileChooser.showOpenDialog(Main.getPrimaryStage());
-        loadActionText.textProperty().unbind();
-        progressPercentText.textProperty().unbind();
-        fileProgressBar.progressProperty().unbind();
-        progressPercentText.setText(" ");
-        fileProgressBar.setProgress(0);
-        loadActionText.setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
+        if (file != null){
+            loadActionText.textProperty().unbind();
+            progressPercentText.textProperty().unbind();
+            fileProgressBar.progressProperty().unbind();
+            progressPercentText.setText(" ");
+            fileProgressBar.setProgress(0);
+            loadActionText.setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
+            this.fileChosen.setValue(true);
+        }
     }
-    @FXML
-    void goToMainMenuAction(){
-        Main.getPrimaryStage().setScene(Main.getMainMenu());
-    }
-
-
 }
