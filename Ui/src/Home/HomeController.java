@@ -15,10 +15,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -40,6 +37,7 @@ public class HomeController {
     @FXML private Label progressPercentText;
     @FXML private GridPane mapGrid;
     @FXML private ScrollPane mapScrollPane;
+    @FXML private AnchorPane mapAnchorPane;
     @FXML private MapController mapGridController;
 
     public Text getLoadActionText() {
@@ -52,6 +50,8 @@ public class HomeController {
 
     @FXML
     public void initialize(){
+        mapScrollPane.prefHeightProperty().bind(mapGrid.heightProperty());
+        mapScrollPane.prefWidthProperty().bind(mapGrid.widthProperty());
         mapScrollPane.setVisible(false);
         mapGrid.visibleProperty().setValue(false);
         loadXmlButton.disableProperty().bind(fileChosen.not());
@@ -65,6 +65,7 @@ public class HomeController {
             public void handle(WorkerStateEvent event) {
                 appController.setStoreManager(jaxbClassToStoreManager.getValue());
                 updateData();
+                mapScrollPane.layout();
             }
         });
 
@@ -85,7 +86,21 @@ public class HomeController {
         thread.start();
     }
 
+    /**
+     * clear the old data when loading a new file
+     */
+    public void clearData(){
+        appController.setStoreManager(new StoreManager());
+        appController.getShowStoresComponentController().setData(appController);
+        appController.getOrderScreenComponentController().setData(appController);
+        appController.getShowItemsController().setData(appController);
+        appController.getAddStoreComponentController().setData(appController);
+        appController.getShowOrdersController().setData(appController);
+    }
 
+    /**
+     * update the data when loading a new file
+     */
     public void updateData(){
         appController.getShowStoresComponentController().setData(appController);
         appController.getOrderScreenComponentController().setData(appController);
@@ -94,33 +109,11 @@ public class HomeController {
         appController.getShowOrdersController().setData(appController);
         try {
             mapGridController.setSize(appController.getStoreManager());
-            mapScrollPane.setVisible(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        mapScrollPane.setVisible(true);
     }
-
-
-
-/*    private Date getDateOfOrder() {//TODO: delete this
-        Scanner scanner = new Scanner(System.in);
-
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM-hh:mm");
-        Date dateOfOrder;
-        dateFormat.setLenient(false);
-        System.out.println("Please enter the date of the order in dd/mm-hh:mm format");
-        while (true) {
-            String dateString = scanner.next();
-            try {
-                dateOfOrder = dateFormat.parse(dateString);
-                return dateOfOrder;
-            } catch (ParseException e) {
-                System.out.println("Invalid date format, try again");
-            }
-        }
-
-    }*/
 
     @FXML
     public void chooseFileAction(){

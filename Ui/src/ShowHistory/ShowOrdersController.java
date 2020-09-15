@@ -33,6 +33,7 @@ public class ShowOrdersController {
 
     public void setData(AppController appController){
         this.appController = appController ;
+        OrderView.getItems().clear();
         OrderView.getItems().addAll(appController.getStoreManager().getAllOrders());
         OrderView.setCellFactory(e -> new OrderHistoryListViewCell());
     }

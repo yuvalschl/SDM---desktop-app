@@ -56,6 +56,7 @@ public class ShowStoresController {
 
     public void setData(AppController appController){
         this.appController = appController;
+        storesListView.getItems().clear();
         //set listener to the map of stores so the list view updates dynamically
         storesObservableMap = FXCollections.observableMap(appController.getStoreManager().getAllStores());
         storesObservableMap.addListener(new MapChangeListener<Integer, Store>() {
@@ -96,6 +97,7 @@ public class ShowStoresController {
         shippingCostCol.setCellValueFactory(new PropertyValueFactory<>("shippingCost"));
         itemsCostCol.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfItems"));
 
+        storesListView.getItems().clear();
         storesListView.getItems().addAll(appController.getStoreManager().getAllStores().values());
         storesListView.setCellFactory(e -> new StoreListViewCell());
 
