@@ -26,7 +26,7 @@
             <Label layoutX="370.0" layoutY="613.0" prefHeight="21.0" prefWidth="129.0" text="Total shipping cost:" textFill="#1611f5" />
             <Label fx:id="totalShippingCostLabel" layoutX="417.0" layoutY="641.0" text="Label" />
             <Label layoutX="625.0" layoutY="613.0" prefHeight="21.0" prefWidth="129.0" text="Total order cost:" textFill="#1611f5" />
-            <Label fx:id="totalOrderCostLabel" layoutX="672.0" layoutY="641.0" text="Label" />
+            <Label fx:id="totalOrderCostLabel" layoutX="662.0" layoutY="641.0" text="Label" />
          </children>
       </AnchorPane>
   </items>

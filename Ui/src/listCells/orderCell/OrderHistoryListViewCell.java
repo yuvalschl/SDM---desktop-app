@@ -8,8 +8,11 @@ import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class OrderHistoryListViewCell extends ListCell<Order> {
+
+    private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @FXML
     private VBox cellVbox;
@@ -44,7 +47,7 @@ public class OrderHistoryListViewCell extends ListCell<Order> {
 
             }
 
-            orderDateLabel.setText(String.valueOf(order.getDateOfOrder()));
+            orderDateLabel.setText(String.valueOf(format.format(order.getDateOfOrder())));
             orderIdLabel.setText(String.valueOf(order.getOrderId()));
 
             setText(null);

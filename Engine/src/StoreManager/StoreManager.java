@@ -186,7 +186,7 @@ public class StoreManager {
     private Set<DtoStoreOrder> getDtoOrders(Store store){
         Set<DtoStoreOrder> currentOrdersDtoSet = new HashSet<>();
         if(store.getAllOrders() != null){
-            for(StoreOrder order : store.getAllOrders()){
+            for(StoreOrder order : store.getAllOrders().values()){
                 currentOrdersDtoSet.add(new DtoStoreOrder(order.getDateOfOrder(),order.getItems().size(),order.getTotalPriceOfItems(),
                         order.getShippingCost(),order.getTotalCost(),order.getDistance(), store, order.getItems(), order.getOrderId()));
             }
@@ -276,14 +276,14 @@ public class StoreManager {
 
         for(Map.Entry<Integer, Store> store : order.getStores().entrySet()){
             float shippingCost = order.getShippingCostByStore().get(store.getKey());
-            StoreOrder orderToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, order.getDistance(), store.getValue(), order.getOrderId(),store.getValue().getPPK());
+            StoreOrder ordersToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, order.getDistance(), store.getValue(), order.getOrderId(),store.getValue().getPPK());
             for(ItemAmountAndStore item : order.getItemAmountAndStores()){
                 if(item.getStore().getSerialNumber() == store.getValue().getSerialNumber()){
-                    orderToAdd.addItemToOrder(item);
+                    ordersToAdd.addItemToOrder(item);
                 }
             }
 
-            store.getValue().getAllOrders().add(orderToAdd);
+            store.getValue().getAllOrders().put(ordersToAdd.getOrderId(), ordersToAdd);
         }
     }
 

@@ -49,7 +49,6 @@ public class ShowStoresController {
     public TableView<Item> getItemsTable() {
         return itemsTable;
     }
-
     public ListView<Store> getStoresListView() {
         return storesListView;
     }
@@ -115,7 +114,7 @@ public class ShowStoresController {
                 //set the order list view
                 //TODO: this may not work, check when place order is done
                 ordersTable.getItems().clear();
-                ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders()));
+                ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders().values()));
                 itemsTable.scrollTo(0);
 
 
