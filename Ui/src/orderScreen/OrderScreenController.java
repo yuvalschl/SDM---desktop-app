@@ -248,12 +248,14 @@ public class OrderScreenController {
         this.appController = appController;
 
         // sets the comboboxes values
+        storeCB.getItems().clear();
         storeCB.getItems().addAll(appController.getStoreManager().getAllStores().values());
         storeCB.setCellFactory(e -> new StoreListViewCell());
         //TODO check why the color is changing after selection
         storeCB.setButtonCell(new StoreListViewCell());
 
         // sets the comboboxes values
+        customerCB.getItems().clear();
         customerCB.getItems().addAll(appController.getStoreManager().getAllCustomers().values());
         customerCB.setCellFactory(e -> new CustomerListViewCell());
         //TODO check why the color is changing after selection

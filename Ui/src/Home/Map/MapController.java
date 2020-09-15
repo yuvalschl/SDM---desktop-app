@@ -16,6 +16,9 @@ public class MapController {
 
     @FXML private GridPane mapGrid;
 
+    public GridPane getMapGrid() {
+        return mapGrid;
+    }
 
     public void setSize(StoreManager storeManager) throws IOException {
         int mapWidth = calcMapWidth(storeManager);

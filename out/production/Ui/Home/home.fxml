@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1020.0" style="-fx-background-color: #fffffc;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Home.HomeController">
    <children>
-      <VBox layoutX="236.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="500.0" spacing="100.0">
+      <VBox alignment="TOP_CENTER" fillWidth="false" layoutX="236.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="500.0" spacing="100.0">
          <children>
             <VBox alignment="CENTER" spacing="5.0">
                <children>
@@ -40,10 +40,16 @@
                      </font>
                   </Text>
                </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </VBox.margin>
             </VBox>
-            <ScrollPane fx:id="mapScrollPane" prefHeight="480.0" prefWidth="480.0">
+            <ScrollPane id="mapScrollpane" fx:id="mapScrollPane" maxHeight="470.0" maxWidth="470.0" prefHeight="470.0" prefWidth="470.0" style="-fx-background-color: #fffffc;" stylesheets="@map.css">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0">
+                <AnchorPane id="mapAnchorPane" fx:id="mapAnchorPane" minHeight="0.0" minWidth="0.0">
                      <children>
                          <fx:include fx:id="mapGrid" source="Map/map.fxml" />
                      </children>
