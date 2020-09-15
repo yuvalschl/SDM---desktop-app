@@ -24,6 +24,7 @@ public class OrderSummeryController {
     @FXML private DisplaySingleOrderController singleOrderComponentController;
     @FXML private Pane singleOrderComponent;
     @FXML private Label approvedOrCanceledLabel;
+
     public void setData( AppController appController, Order order, Point costumerLocation, SplitPane summeryScreen, SplitPane orderScreen, OrderScreenController orderScreenController){
         this.order = order;
         this.appController = appController;
@@ -33,6 +34,7 @@ public class OrderSummeryController {
         singleOrderComponentController.setData(appController, order.getItemAmountAndStores(), order, costumerLocation);
         orderSummeryScreen.setVisible(true);
         orderScreenController.setInterestedInDiscount(true);
+
     }
 
     public void approveOrderAction(javafx.event.ActionEvent actionEvent) throws InterruptedException {
@@ -41,6 +43,7 @@ public class OrderSummeryController {
         orderScreenController.clearAction();
         orderScreen.setVisible(true);
         appController.getStoreManager().placeOrder(order);
+        appController.getShowOrdersController().setData(appController);
     }
 
     public void cancelOrderAction(javafx.event.ActionEvent actionEvent) {

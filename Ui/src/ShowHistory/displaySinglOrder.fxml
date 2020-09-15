@@ -57,13 +57,13 @@
                   </Label>
                </children>
             </AnchorPane>
-            <ListView fx:id="itemsListView" prefHeight="306.0" prefWidth="944.0" />
+            <ListView fx:id="itemsListView" prefHeight="247.0" prefWidth="946.0" />
             <Label text="Stores">
                <font>
                   <Font size="30.0" />
                </font>
             </Label>
-            <TableView fx:id="storesTable" prefHeight="284.0" prefWidth="870.0">
+            <TableView fx:id="storesTable" prefHeight="206.0" prefWidth="946.0">
                <columns>
                   <TableColumn fx:id="storeIdCol" prefWidth="75.0" text="Id" />
                   <TableColumn fx:id="storeNameCol" prefWidth="145.0" text="Name" />

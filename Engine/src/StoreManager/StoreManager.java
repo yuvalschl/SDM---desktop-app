@@ -326,7 +326,7 @@ public class StoreManager {
                 }
             }
         }
-        return new ItemAmountAndStore(DtoConvertor.itemToDtoItem(cheapestItem), cheapestStore);
+        return new ItemAmountAndStore(DtoConvertor.itemToDtoItem(cheapestItem),cheapestStore);
     }
 
     private int howManyStoresSellItem(DtoItem item) {

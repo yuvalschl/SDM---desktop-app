@@ -85,6 +85,7 @@ public class OrderScreenController {
                 ItemAmountAndStore itemToAdd;
                 if (dynamicOrderCB.isSelected()) {
                     itemToAdd = appController.getStoreManager().getCheapestItem(item.getId());
+                    itemToAdd.setDiscountItemAmount(amount);
                     itemToAdd.setAmount(amount);
                 } else {
                     itemToAdd = new ItemAmountAndStore(DtoConvertor.itemToDtoItem(item), amount, storeCB.getValue());

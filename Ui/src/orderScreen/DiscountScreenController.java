@@ -100,12 +100,14 @@ public class DiscountScreenController {
             Map<Integer, ItemAmountAndStore> itemToAdd = new HashMap<>();
             if (oneOf) {
                 Offer offer = offerListView.getSelectionModel().getSelectedItem();
-                itemToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
+                if(offer != null)
+                    itemToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
             } else {
                 itemToAdd = appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
             }
             appController.getOrderScreenComponentController().getOrderSummaryTable().getItems().addAll(itemToAdd.values());
             discounts = appController.getStoreManager().getEntitledDiscounts(order);
+            offerListView.getItems().clear();
             displayEntitledDiscounts();
         }
     }
