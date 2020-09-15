@@ -18,15 +18,15 @@
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="718.0" prefWidth="868.0">
          <children>
-            <fx:include source="../ShowHistory/displaySinglOrder.fxml" />
+            <fx:include fx:id="singleOrderComponent" source="../ShowHistory/displaySinglOrder.fxml" />
             <Button layoutX="94.0" layoutY="674.0" mnemonicParsing="false" onAction="#approveOrderAction" prefHeight="31.0" prefWidth="266.0" text="approve order" />
             <Button layoutX="508.0" layoutY="674.0" mnemonicParsing="false" onAction="#cancelOrderAction" prefHeight="31.0" prefWidth="266.0" text="cancel order" />
-            <Label fx:id="approvedOrCanceledLabel" layoutX="104.0" layoutY="613.0" prefHeight="21.0" prefWidth="101.0" text="All items price:" textFill="#1611f5" />
-            <Label fx:id="allItemsPrice" layoutX="137.0" layoutY="641.0" text="Label" />
-            <Label fx:id="approvedOrCanceledLabel1" layoutX="370.0" layoutY="613.0" prefHeight="21.0" prefWidth="129.0" text="Total shipping cost:" textFill="#1611f5" />
+            <Label layoutX="104.0" layoutY="613.0" prefHeight="21.0" prefWidth="101.0" text="All items price:" textFill="#1611f5" />
+            <Label fx:id="allItemsPriceLabel" layoutX="137.0" layoutY="641.0" text="Label" />
+            <Label layoutX="370.0" layoutY="613.0" prefHeight="21.0" prefWidth="129.0" text="Total shipping cost:" textFill="#1611f5" />
             <Label fx:id="totalShippingCostLabel" layoutX="417.0" layoutY="641.0" text="Label" />
-            <Label fx:id="approvedOrCanceledLabel11" layoutX="625.0" layoutY="613.0" prefHeight="21.0" prefWidth="129.0" text="Total order cost:" textFill="#1611f5" />
-            <Label fx:id="totalOrderCost" layoutX="672.0" layoutY="641.0" text="Label" />
+            <Label layoutX="625.0" layoutY="613.0" prefHeight="21.0" prefWidth="129.0" text="Total order cost:" textFill="#1611f5" />
+            <Label fx:id="totalOrderCostLabel" layoutX="672.0" layoutY="641.0" text="Label" />
          </children>
       </AnchorPane>
   </items>
