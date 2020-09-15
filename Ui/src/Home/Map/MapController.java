@@ -3,39 +3,42 @@ package Home.Map;
 import Costumer.Customer;
 import Store.Store;
 import StoreManager.StoreManager;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
 
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.Optional;
 
 public class MapController {
 
     @FXML private GridPane mapGrid;
-    @FXML private ColumnConstraints rowScale;
-    @FXML private RowConstraints colScale;
+
 
     public void setSize(StoreManager storeManager) throws IOException {
         int mapWidth = calcMapWidth(storeManager);
         int mapHeight = calcMapHeight(storeManager);
-
-        for(int i = 0 ; i < mapWidth + 2 ; i++){
-            for(int j = 0; j < mapHeight + 2; j++){
-                if(customerInLocation(storeManager,i,j)){
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/customer.fxml"));
+        Customer customer = null;
+        Store store = null;
+        for(int i = 0 ; i < mapWidth + 1 ; i++){
+            for(int j = 0; j < mapHeight + 1; j++){
+                customer = customerInLocation(storeManager,i,j);
+                store = storeInLocation(storeManager,i,j);
+                if(customer != null){
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/Customer/customer.fxml"));
                     Pane pane = fxmlLoader.load();
+                    String customerToolTip = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s)", customer.getName(), customer.getId(), customer.getX(), customer.getY());
+                    Tooltip.install(pane, new Tooltip(customerToolTip));
                     mapGrid.add(pane,i,j);
                 }
-                else if(storeInLocation(storeManager,i,j)){
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/store.fxml"));
+                else if(store != null){
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/Store/store.fxml"));
                     Pane pane = fxmlLoader.load();
+                    String customerToolTip = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n PPK: %5$s \n Total orders %6$s",
+                            store.getName(), store.getSerialNumber(), store.getX(), store.getY(), store.getPPK(), store.getAllOrders().size());
+                    Tooltip.install(pane, new Tooltip(customerToolTip));
                     mapGrid.add(pane,i,j);
                 }
                 else {
@@ -48,11 +51,11 @@ public class MapController {
         mapGrid.visibleProperty().setValue(true);
     }
 
-    private boolean storeInLocation(StoreManager storeManager, int x, int y){
-        boolean storeInLocation = false;
+    private Store storeInLocation(StoreManager storeManager, int x, int y){
+        Store storeInLocation = null;
         for(Store store : storeManager.getAllStores().values()){
             if(store.getX() == x && store.getY() == y){
-                storeInLocation = true;
+                storeInLocation = store;
                 break;
             }
         }
@@ -60,11 +63,11 @@ public class MapController {
         return storeInLocation;
     }
 
-    private boolean customerInLocation(StoreManager storeManager, int x, int y){
-        boolean customerInLocation = false;
+    private Customer customerInLocation(StoreManager storeManager, int x, int y){
+        Customer customerInLocation = null;
         for(Customer customer : storeManager.getAllCustomers().values()){
             if(customer.getX() == x && customer.getY() == y){
-                customerInLocation = true;
+                customerInLocation = customer;
                 break;
             }
         }

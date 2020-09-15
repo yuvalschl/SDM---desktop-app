@@ -39,6 +39,7 @@ public class HomeController {
     @FXML private ProgressBar fileProgressBar;
     @FXML private Label progressPercentText;
     @FXML private GridPane mapGrid;
+    @FXML private ScrollPane mapScrollPane;
     @FXML private MapController mapGridController;
 
     public Text getLoadActionText() {
@@ -51,13 +52,9 @@ public class HomeController {
 
     @FXML
     public void initialize(){
+        mapScrollPane.setVisible(false);
         mapGrid.visibleProperty().setValue(false);
         loadXmlButton.disableProperty().bind(fileChosen.not());
-        mapGrid.getColumnConstraints().forEach(columnConstraints -> columnConstraints.setHgrow(Priority.NEVER));
-        mapGrid.getRowConstraints().forEach(rowConstraints -> rowConstraints.setVgrow(Priority.NEVER));
-        mapGrid.rotateProperty().setValue(270);
-/*        BackgroundImage background = new Background(new Image("jaffaMap.PNG"), )
-        mapGrid.setBackground("-fx-background-image: BEIGE;");*/
     }
 
     public void loadXmlAction() throws InterruptedException {
@@ -97,6 +94,7 @@ public class HomeController {
         appController.getShowOrdersController().setData(appController);
         try {
             mapGridController.setSize(appController.getStoreManager());
+            mapScrollPane.setVisible(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
