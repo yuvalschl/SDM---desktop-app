@@ -16,10 +16,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="orderScreen.OrderScreenController">
    <children>
-      <fx:include source="orderSummeryScreen.fxml" />
+      <fx:include fx:id="orderSummeryScreen" source="orderSummeryScreen.fxml" />
       <SplitPane fx:id="orderScreenSplitPane" dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="870.0">
           <items>
             <StackPane prefHeight="150.0" prefWidth="200.0">
@@ -78,7 +77,16 @@
                                                             <TextArea fx:id="itemAmountTextField" minHeight="-Infinity" prefHeight="31.0" prefWidth="96.0" HBox.hgrow="NEVER" />
                                                         </children>
                                                     </HBox>
-                                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="223.0" spacing="10.0">
+                                          <HBox prefHeight="40.0" prefWidth="244.0">
+                                             <children>
+                                                <Label fx:id="zeroAmountLabel" prefHeight="21.0" prefWidth="173.0" text="Amount cannot be zero!" textFill="#ff0404">
+                                                   <HBox.margin>
+                                                      <Insets left="60.0" top="8.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                                    <HBox alignment="CENTER" prefHeight="61.0" prefWidth="244.0" spacing="10.0">
                                                         <children>
                                                             <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearAction" text="Clear" />
                                                             <Button fx:id="addButton" mnemonicParsing="false" onAction="#addAction" text="Add to cart" />
@@ -100,10 +108,13 @@
                   <children>
                       <VBox layoutX="61.0" layoutY="207.0" prefHeight="798.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <children>
-                              <Label text="Order summary">
+                              <Label text="Items in cart">
                                   <font>
                                       <Font size="41.0" />
                                   </font>
+                           <VBox.margin>
+                              <Insets left="52.0" />
+                           </VBox.margin>
                               </Label>
                               <TableView fx:id="orderSummaryTable" prefHeight="515.0" prefWidth="290.0">
                                   <columns>

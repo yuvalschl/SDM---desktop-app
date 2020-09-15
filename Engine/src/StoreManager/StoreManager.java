@@ -235,7 +235,7 @@ public class StoreManager {
         return  shippingCostMap;
     }
 
-    private float calcShippingCost(ArrayList<ItemAmountAndStore> allItems, Point customerLocation){
+    public float calcShippingCost(ArrayList<ItemAmountAndStore> allItems, Point customerLocation){
         float shippingCost = 0;
         Set<Store> sellingStores = new HashSet<Store>();
         for(ItemAmountAndStore item : allItems){
@@ -276,7 +276,7 @@ public class StoreManager {
 
         for(Map.Entry<Integer, Store> store : order.getStores().entrySet()){
             float shippingCost = order.getShippingCostByStore().get(store.getKey());
-            StoreOrder orderToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, order.getDistance(), store.getValue(), order.getOrderId());
+            StoreOrder orderToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, order.getDistance(), store.getValue(), order.getOrderId(),store.getValue().getPPK());
             for(ItemAmountAndStore item : order.getItemAmountAndStores()){
                 if(item.getStore().getSerialNumber() == store.getValue().getSerialNumber()){
                     orderToAdd.addItemToOrder(item);
@@ -292,7 +292,7 @@ public class StoreManager {
         return store.getTotalPayment() + store.getInventory().get(item.getItem().getSerialNumber()).getPrice();
     }
 
-    private float distanceCalculator(Point point1, Point point2){
+    public float distanceCalculator(Point point1, Point point2){
         return (float) Math.sqrt(Math.pow(point1.x-point2.x, 2)+Math.pow(point1.y-point2.y, 2));
     }
 
@@ -421,7 +421,7 @@ public class StoreManager {
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
         ItemAmountAndStore itemAmountAndStore = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
         itemAmountAndStore.setPartOfDiscount(true);
-        updateEntitledDiscountAmount(offerItemIDToAdd, order, discount);
+        updateEntitledDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
         order.getItemAmountAndStores().add(itemAmountAndStore);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items

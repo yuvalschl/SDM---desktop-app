@@ -1,4 +1,5 @@
 package orderScreen;
+import ShowHistory.DisplaySingleOrderController;
 import Store.Discount;
 import Costumer.Customer;
 import DtoObjects.DtoConvertor;
@@ -36,7 +37,11 @@ public class OrderScreenController {
     private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
     private final IntFilter intFilter = new IntFilter();
-    @FXML   private SplitPane orderScreenSplitPane;
+    private boolean interestedInDiscount = true;
+    @FXML private  Label zeroAmountLabel;
+    @FXML private SplitPane orderSummeryScreen;
+    @FXML private OrderSummeryController orderSummeryScreenController;
+    @FXML  private SplitPane orderScreenSplitPane;
     @FXML private SplitPane discountScreen;
     @FXML private DiscountScreenController discountScreenController;
     @FXML private DatePicker datePicker;
@@ -70,52 +75,55 @@ public class OrderScreenController {
 
     @FXML
     private void addAction() {
-        float amount = Float.parseFloat(itemAmountTextField.getText());
         Item item = itemsTable.getSelectionModel().getSelectedItem();
-        ItemAmountAndStore itemToAdd;
-        if (dynamicOrderCB.isSelected()){
-            itemToAdd = appController.getStoreManager().getCheapestItem(item.getId());
-            itemToAdd.setAmount(amount);
-        }
-        else {
-            itemToAdd = new ItemAmountAndStore(DtoConvertor.itemToDtoItem(item), amount, storeCB.getValue());
-        }
+        if (item != null) {
+            float amount = Float.parseFloat(itemAmountTextField.getText());
+            if (amount == 0) {
+                zeroAmountLabel.setVisible(true);
+            } else {
+                zeroAmountLabel.setVisible(false);
+                ItemAmountAndStore itemToAdd;
+                if (dynamicOrderCB.isSelected()) {
+                    itemToAdd = appController.getStoreManager().getCheapestItem(item.getId());
+                    itemToAdd.setAmount(amount);
+                } else {
+                    itemToAdd = new ItemAmountAndStore(DtoConvertor.itemToDtoItem(item), amount, storeCB.getValue());
+                }
 
-        if(orderItems.containsKey(item.getId())){
-            ItemAmountAndStore currentItem = orderItems.get(item.getId());
-            currentItem.setAmount(currentItem.getAmount() + itemToAdd.getAmount());
-            orderSummaryTable.getItems()
-                    .stream()
-                    .filter(e -> e.getItemId() == currentItem.getItemId())
-                    .collect(Collectors.toSet())
-                    .forEach(e -> e.setAmount(currentItem.getAmount()));
+                if (orderItems.containsKey(item.getId())) {
+                    ItemAmountAndStore currentItem = orderItems.get(item.getId());
+                    currentItem.setAmount(currentItem.getAmount() + itemToAdd.getAmount());
+                    orderSummaryTable.getItems()
+                            .stream()
+                            .filter(e -> e.getItemId() == currentItem.getItemId())
+                            .collect(Collectors.toSet())
+                            .forEach(e -> e.setAmount(currentItem.getAmount()));
+                } else {
+                    orderItems.put(item.getId(), itemToAdd);
+                    orderSummaryTable.getItems().add(itemToAdd);
+                }
+                orderSummaryTable.refresh();
+                itemNameLabel.setText(" ");
+                itemAmountTextField.clear();
+                itemsTable.getSelectionModel().clearSelection();
+            }
         }
-        else {
-            orderItems.put(item.getId(), itemToAdd);
-            orderSummaryTable.getItems().add(itemToAdd);
-        }
-        orderSummaryTable.refresh();
-        itemNameLabel.setText(" ");
-        itemAmountTextField.clear();
-        itemsTable.getSelectionModel().clearSelection();
     }
 
     @FXML
     public void placeOrderAction(){
-        Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
-        ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
-        appController.getShowItemsController().setData(appController);
-        if(discounts.size() != 0){
-            discountScreenController.setData(discounts, appController, order,discountScreen);
+        if (orderItems.size() != 0) {
+            Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
+            ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
+            appController.getShowItemsController().setData(appController);
+            if (discounts.size() != 0 && interestedInDiscount != false) {
+                discountScreenController.setData(discounts, appController, order, discountScreen, customerCB.getValue().getLocation(), orderSummeryScreen, orderSummeryScreenController, orderScreenSplitPane, this);
+            } else
+                orderScreenSplitPane.setVisible(false);
+            orderSummeryScreenController.setData(appController, order, customerCB.getValue().getLocation(), orderSummeryScreen, orderScreenSplitPane, this);
         }
-        else
-            orderScreenSplitPane.setVisible(false);
-      //  appController.getStoreManager().placeOrder(order);
 
-        //TODO add a screen that presents the order details and ask for approval
-
-       // clearAction();
     }
 
     @FXML
@@ -131,6 +139,7 @@ public class OrderScreenController {
 
     @FXML
     public void initialize(){
+        zeroAmountLabel.setVisible(false);
         //set the columns from the items
         nameCol.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         idCol.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
@@ -271,5 +280,12 @@ public class OrderScreenController {
             ObservableList<Item> items = FXCollections.observableArrayList(storeCB.getValue().getInventory().values());
             itemsTable.getItems().addAll(items);
         }
+    }
+    public boolean isInterestedInDiscount() {
+        return interestedInDiscount;
+    }
+
+    public void setInterestedInDiscount(boolean interestedInDiscount) {
+        this.interestedInDiscount = interestedInDiscount;
     }
 }

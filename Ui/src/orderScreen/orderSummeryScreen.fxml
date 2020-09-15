@@ -16,11 +16,12 @@
                </font>
             </Label>
          </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="705.0" prefWidth="868.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="654.0" prefWidth="868.0">
          <children>
-            <fx:include source="../ShowHistory/displaySinglOrder.fxml" />
+            <fx:include fx:id="singleOrderComponent" source="../ShowHistory/displaySinglOrder.fxml" />
             <Button layoutX="94.0" layoutY="674.0" mnemonicParsing="false" onAction="#approveOrderAction" prefHeight="31.0" prefWidth="266.0" text="approve order" />
             <Button layoutX="508.0" layoutY="674.0" mnemonicParsing="false" onAction="#cancelOrderAction" prefHeight="31.0" prefWidth="266.0" text="cancel order" />
+            <Label fx:id="approvedOrCanceledLabel" layoutX="316.0" layoutY="628.0" prefHeight="21.0" prefWidth="266.0" textFill="#1ef50f" />
          </children>
       </AnchorPane>
   </items>
