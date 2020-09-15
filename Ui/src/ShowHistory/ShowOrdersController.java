@@ -33,21 +33,14 @@ public class ShowOrdersController {
 
     public void setData(AppController appController){
         this.appController = appController ;
+        OrderView.getItems().clear();
         OrderView.getItems().addAll(appController.getStoreManager().getAllOrders());
         OrderView.setCellFactory(e -> new OrderHistoryListViewCell());
     }
 
 
 
-    public ObservableList<ItemCell> getItemsCells(ArrayList<ItemAmountAndStore> itemAmountAndStores){
 
-        ObservableList<ItemCell> itemCells = FXCollections.observableArrayList();
-
-        for (ItemAmountAndStore item: itemAmountAndStores){
-            itemCells.add(new ItemCell(item));
-        }
-        return  itemCells;
-    }
 
     public void setAppController(AppController appController) {
         this.appController = appController;
