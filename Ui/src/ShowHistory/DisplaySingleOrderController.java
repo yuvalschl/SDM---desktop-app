@@ -50,7 +50,8 @@ public class DisplaySingleOrderController {
         storeDistanceToClientcol.setCellValueFactory(new PropertyValueFactory<>("distance"));
         storePkkCol.setCellValueFactory(new PropertyValueFactory<>("pkk"));
         storeShippingCostCol.setCellValueFactory(new PropertyValueFactory<>("shippingCost"));
-    }
+
+       }
 
     public void setData(AppController appController, ArrayList<ItemAmountAndStore> itemAmountAndStore, Order order, Point costumerLocation) {
         //set the item list\

@@ -76,7 +76,6 @@ public class DiscountScreenController {
                 oneOf = true;
             } else {
                 youGetLabel.textProperty().set("You get all of the items below:");
-                appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
                 oneOf = false;
             }
 

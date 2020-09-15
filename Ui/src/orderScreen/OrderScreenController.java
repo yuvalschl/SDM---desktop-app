@@ -1,5 +1,4 @@
 package orderScreen;
-import ShowHistory.DisplaySingleOrderController;
 import Store.Discount;
 import Costumer.Customer;
 import DtoObjects.DtoConvertor;
@@ -38,6 +37,7 @@ public class OrderScreenController {
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
     private final IntFilter intFilter = new IntFilter();
     private boolean interestedInDiscount = true;
+    private Customer customer;
     @FXML private  Label zeroAmountLabel;
     @FXML private SplitPane orderSummeryScreen;
     @FXML private OrderSummeryController orderSummeryScreenController;
@@ -94,6 +94,7 @@ public class OrderScreenController {
                 if (orderItems.containsKey(item.getId())) {
                     ItemAmountAndStore currentItem = orderItems.get(item.getId());
                     currentItem.setAmount(currentItem.getAmount() + itemToAdd.getAmount());
+                    currentItem.setDiscountItemAmount(currentItem.getAmount());
                     orderSummaryTable.getItems()
                             .stream()
                             .filter(e -> e.getItemId() == currentItem.getItemId())
@@ -114,6 +115,7 @@ public class OrderScreenController {
     @FXML
     public void placeOrderAction(){
         if (orderItems.size() != 0) {
+             customer = customerCB.getValue();
             Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
             ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
@@ -291,4 +293,13 @@ public class OrderScreenController {
     public void setInterestedInDiscount(boolean interestedInDiscount) {
         this.interestedInDiscount = interestedInDiscount;
     }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
 }

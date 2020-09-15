@@ -1,6 +1,7 @@
 package orderScreen;
 
 
+import Costumer.Customer;
 import Order.Order;
 import ShowHistory.DisplaySingleOrderController;
 import appController.AppController;
@@ -48,6 +49,10 @@ public class OrderSummeryController {
         orderScreen.setVisible(true);
         appController.getStoreManager().placeOrder(order);
         appController.getShowOrdersController().setData(appController);
+        //update the customer details
+        Customer customer = orderScreenController.getCustomer();
+        customer.setNumberOfOrdersMade(customer.getNumberOfOrdersMade()+1);
+        customer.addShippingCost(order.getShippingCost(), order.getOrderId());
     }
 
     public void cancelOrderAction(javafx.event.ActionEvent actionEvent) {
