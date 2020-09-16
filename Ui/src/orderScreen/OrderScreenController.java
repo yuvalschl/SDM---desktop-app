@@ -117,7 +117,7 @@ public class OrderScreenController {
         if (orderItems.size() != 0) {
              customer = customerCB.getValue();
             Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
+            Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new HashMap<Integer, ItemAmountAndStore>(orderItems));
             ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
             appController.getShowItemsController().setData(appController);
             if (discounts.size() != 0 && interestedInDiscount != false) {
