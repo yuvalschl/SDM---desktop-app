@@ -17,8 +17,6 @@ public class ShowOrdersController {
     @FXML private ListView<Order> orderView;
     @FXML private Pane displaySingleOrderComponent;
     @FXML private DisplaySingleOrderController displaySingleOrderComponentController;
-
-    // private ObservableSet<Integer, Store> storesObservableMap;
     private AppController appController;
 
     public void setData(AppController appController){
@@ -38,7 +36,11 @@ public class ShowOrdersController {
                     }
                 }
                 displaySingleOrderComponentController.getStoresTable().getItems().addAll(storesToAdd);
+                displaySingleOrderComponentController.getItemsListView().getItems().clear();
+                displaySingleOrderComponentController.getItemsListView().getItems().addAll(newValue.getItemAmountAndStores().values());
+                displaySingleOrderComponentController.getItemsListView().setCellFactory(e -> new OrderItemCellController(appController));
                 }
+
             });
 
 /*        displaySingleOrderComponentController.getStoresTable().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StoreOrder>() {

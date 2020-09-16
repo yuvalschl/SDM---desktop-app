@@ -15,9 +15,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
 import textFieldFilters.FloatFilter;
@@ -127,6 +130,13 @@ public class OrderScreenController {
             orderSummeryScreenController.setData(appController, order, customerCB.getValue().getLocation(), orderSummeryScreen, orderScreenSplitPane, this);
         }
 
+    }
+
+    @FXML
+    public void textFieldOnEnter(KeyEvent keyEvent){
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            addAction();
+        }
     }
 
     @FXML

@@ -74,7 +74,7 @@
                                                     <HBox alignment="CENTER" prefHeight="10.0" prefWidth="223.0" spacing="10.0">
                                                         <children>
                                                             <Label fx:id="itemNameLabel" />
-                                                            <TextArea fx:id="itemAmountTextField" minHeight="-Infinity" prefHeight="31.0" prefWidth="96.0" HBox.hgrow="NEVER" />
+                                                            <TextArea fx:id="itemAmountTextField" minHeight="-Infinity" onKeyPressed="#textFieldOnEnter" prefHeight="31.0" prefWidth="96.0" HBox.hgrow="NEVER" />
                                                         </children>
                                                     </HBox>
                                           <HBox prefHeight="40.0" prefWidth="244.0">

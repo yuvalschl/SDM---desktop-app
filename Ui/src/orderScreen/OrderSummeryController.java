@@ -64,6 +64,7 @@ public class OrderSummeryController {
         float ordersWithoutShippingCostAverage = customer.getTotalOrdersWithoutShippingPrice()/customer.getNumberOfOrdersMade();
         customer.setAverageOrdersShippingPrice(shippingCostAverage);
         customer.setAverageOrdersWithoutShippingPrice(ordersWithoutShippingCostAverage);
+        //TODO update show items, items amount
     }
     public void cancelOrderAction(javafx.event.ActionEvent actionEvent) {
         orderSummeryScreen.setVisible(false);
