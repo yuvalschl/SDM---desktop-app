@@ -76,7 +76,7 @@ public class JaxbClassToStoreManager extends Task<StoreManager> {
             Map<Integer, Customer> allCustomers = createAllCustomersMap(xmlStore.getSDMCustomers().getSDMCustomer());
 
             updateMessage("Checking that all items are sold");
-            for (i = i ; i < 90 ; i++){
+            for (i = i ; i < 85 ; i++){
                 updateProgress(i,100);
                 TimeUnit.MILLISECONDS.sleep(SLEEP_TIME);
             }
@@ -86,8 +86,6 @@ public class JaxbClassToStoreManager extends Task<StoreManager> {
             if(!notSoldItems.isEmpty()){
                 throw new ItemNotSoldException("Items with id: " + notSoldItems.toString() + " are not sold by any store");
             }
-            updateMessage("File loaded successfully");
-            updateProgress(100,100);
             return new StoreManager(allStores, allItems, allCustomers);
         }
         catch (Exception e){

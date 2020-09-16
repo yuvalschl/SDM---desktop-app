@@ -53,6 +53,7 @@ public class OrderSummeryController {
         Customer customer = orderScreenController.getCustomer();
         customer.setNumberOfOrdersMade(customer.getNumberOfOrdersMade()+1);
         customer.addShippingCost(order.getShippingCost(), order.getOrderId());
+        //TODO update show items, items amount
     }
 
     public void cancelOrderAction(javafx.event.ActionEvent actionEvent) {

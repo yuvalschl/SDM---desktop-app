@@ -40,6 +40,18 @@ public class HomeController {
     @FXML private AnchorPane mapAnchorPane;
     @FXML private MapController mapGridController;
 
+    public ProgressBar getFileProgressBar() {
+        return fileProgressBar;
+    }
+
+    public Label getProgressPercentText() {
+        return progressPercentText;
+    }
+
+    public ScrollPane getMapScrollPane() {
+        return mapScrollPane;
+    }
+
     public Text getLoadActionText() {
         return loadActionText;
     }
@@ -65,7 +77,6 @@ public class HomeController {
             public void handle(WorkerStateEvent event) {
                 appController.setStoreManager(jaxbClassToStoreManager.getValue());
                 updateData();
-                mapScrollPane.layout();
             }
         });
 
@@ -108,11 +119,10 @@ public class HomeController {
         appController.getAddStoreComponentController().setData(appController);
         appController.getShowOrdersController().setData(appController);
         try {
-            mapGridController.setSize(appController.getStoreManager());
+            mapGridController.setSize(appController);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mapScrollPane.setVisible(true);
     }
 
     @FXML
