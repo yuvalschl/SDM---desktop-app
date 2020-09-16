@@ -1,6 +1,7 @@
 package appController;
 
 import Home.HomeController;
+import ShowCustomer.ShowCustomerController;
 import ShowHistory.ShowOrdersController;
 import StoreManager.StoreManager;
 import addStore.AddStoreController;
@@ -35,6 +36,8 @@ public class AppController {
     @FXML private VBox showItems;
     @FXML private AnchorPane addStoreComponent;
     @FXML private AddStoreController addStoreComponentController;
+    @FXML private SplitPane showCostumerScreen;
+    @FXML private ShowCustomerController showCostumerScreenController;
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
 
     @FXML
@@ -42,12 +45,23 @@ public class AppController {
         optionsMenuComponentController.setAppController(this);
         homeComponentController.setAppController(this);
         ShowOrdersScreenComponentController.setAppController(this);
+        showCostumerScreenController.setAppController(this);
         optionsMenuComponentController.getShowItemsButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowStoresButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getAddStoreButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowOrderHistory().disableProperty().bind(getXmlLoaded());
+        optionsMenuComponentController.getShowCustomersBtn().disableProperty().bind(getXmlLoaded());
     }
+
+
+    public SplitPane getShowCostumerScreen() { return showCostumerScreen; }
+
+    public void setShowCostumerScreen(SplitPane showCostumerScreen) { this.showCostumerScreen = showCostumerScreen; }
+
+    public ShowCustomerController getShowCostumerScreenController() { return showCostumerScreenController; }
+
+    public void setShowCostumerScreenController(ShowCustomerController showCostumerScreenController) { this.showCostumerScreenController = showCostumerScreenController; }
 
     public HomeController getHomeComponentController() {
         return homeComponentController;

@@ -1,5 +1,4 @@
 package StoreManager;
-import Jaxb.JaxbClassToStoreManager;
 import Store.Offer;
 import Costumer.Customer;
 import DtoObjects.*;
@@ -10,7 +9,6 @@ import Order.*;
 import Store.Store;
 import Jaxb.XmlToObject;
 import Store.Discount;
-import javafx.beans.property.BooleanProperty;
 import javafx.concurrent.Task;
 
 import javax.xml.bind.JAXBContext;
@@ -19,14 +17,14 @@ import javax.xml.bind.Marshaller;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StoreManager {
     private Map<Integer, Store> allStores;
     private Map<Integer, Item> allItems;
     private Set<Order> allOrders = new HashSet<Order>();
     private String currentFilePath;
-    private Map<Integer, Customer> allCustomers;
+    private Map<Integer, Customer> allCustomers;//
     private Task<Boolean> currentTask;
 
 
@@ -419,14 +417,37 @@ public class StoreManager {
         Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
         Store store = allStores.get(discount.getStoreId());
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
-        ItemAmountAndStore itemAmountAndStore = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
-        itemAmountAndStore.setPartOfDiscount(true);
+        ItemAmountAndStore itemAmountAndStoreToreturn = null;
+        if(order.getItemAmountAndStores().stream().anyMatch(itemAmountAndStore -> itemAmountAndStore.getItemId() == offerItemIDToAdd && itemAmountAndStore.getIsPartOfDiscount())){
+            updateDiscountItem(order, offerItemIDToAdd, offer);
+            for (ItemAmountAndStore currItem: order.getItemAmountAndStores() ){
+                if(currItem.getItemId() == offerItemIDToAdd && currItem.getIsPartOfDiscount()){
+                    itemAmountAndStoreToreturn = currItem;
+                    break;
+                }
+            }
+        }
+        else{
+             itemAmountAndStoreToreturn = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
+            itemAmountAndStoreToreturn.setPartOfDiscount(true);
+            order.getItemAmountAndStores().add(itemAmountAndStoreToreturn);
+
+        }
+
         updateEntitledDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
-        order.getItemAmountAndStores().add(itemAmountAndStore);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
         order.setTotalCost(order.getTotalCost()+ offer.getForAdditional());
-        return itemAmountAndStore;
+        return itemAmountAndStoreToreturn;
+    }
+
+    private void updateDiscountItem(Order order, int offerItemIDToAdd, Offer offer) {
+        AtomicReference<ItemAmountAndStore> itemToUpdate = new AtomicReference<ItemAmountAndStore>();
+        order.getItemAmountAndStores().forEach(currItem-> {
+            if(currItem.getItemId() == offerItemIDToAdd && currItem.getIsPartOfDiscount())
+                itemToUpdate.set(currItem);
+        });
+        itemToUpdate.get().setAmount(itemToUpdate.get().getAmount()+ offer.getQuantity());
     }
 
     private void updateEntitledDiscountAmount(int itemID,Order order,Discount discount){

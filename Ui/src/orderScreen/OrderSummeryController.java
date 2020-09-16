@@ -51,6 +51,8 @@ public class OrderSummeryController {
         appController.getShowOrdersController().setData(appController);
         //update the customer details with this order
         updateCustomerDetails();
+        appController.getShowCostumerScreenController().updateCustomerToShow();
+        appController.getShowItemsController().updateItemsToShow();
     }
 
     private void updateCustomerDetails(){

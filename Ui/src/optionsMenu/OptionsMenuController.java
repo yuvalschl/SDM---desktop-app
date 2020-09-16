@@ -29,6 +29,8 @@ public class OptionsMenuController {
     @FXML private Button addStoreButton;
     @FXML private Button showOrderHistory;
     @FXML private  Button homeButton;
+    @FXML private  Button showCustomersBtn;
+
 
 
     public Button getShowOrderHistory() { return showOrderHistory; }
@@ -58,6 +60,10 @@ public class OptionsMenuController {
     public void setPlaceOrderButton(Button placeOrderButton) {
         this.placeOrderButton = placeOrderButton;
     }
+
+    public Button getShowCustomersBtn() { return showCustomersBtn;}
+
+    public void setShowCustomersBtn(Button showCustomersBtn) { this.showCustomersBtn = showCustomersBtn;}
 
     @FXML
     public void showStoresAction() throws IOException {
@@ -104,7 +110,6 @@ public class OptionsMenuController {
     @FXML
     public void showOrderHistoryAction(ActionEvent actionEvent) {
         disablePanes();
-        //showOrderHistory.
         appController.getShowOrdersScreen().setVisible(true);
 
     }
@@ -115,4 +120,8 @@ public class OptionsMenuController {
     }
 
 
+    public void showCustomersBtnAction(ActionEvent actionEvent) {
+        disablePanes();
+        appController.getShowCostumerScreen().setVisible(true);
+    }
 }

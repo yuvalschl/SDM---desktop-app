@@ -8,6 +8,7 @@ public class Customer {
     private int id;
     private String name;
     private Point location;
+    private String locationString;
     int numberOfOrdersMade;
     private float totalShippingCost = 0;
     private float totalOrdersWithoutShippingPrice = 0;
@@ -22,10 +23,14 @@ public class Customer {
         numberOfOrdersMade = 0;
         averageOrdersShippingPrice = 0;
         averageOrdersWithoutShippingPrice = 0;
-
+        locationString = "("+location.x+","+location.y+")";
     }
 
 
+
+    public String getLocationString() { return locationString; }
+
+    public void setLocationString(String locationString) { this.locationString = locationString; }
 
     public Float getTotalShippingCost() { return totalShippingCost;}
 
