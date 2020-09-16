@@ -417,8 +417,7 @@ public class StoreManager {
      * @param discount a discount to add to order
      * @param order the order to add the items to
      */
-    public ItemAmountAndStore addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){
-        Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
+    public ItemAmountAndStore addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){ Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
         Store store = allStores.get(discount.getStoreId());
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
         ItemAmountAndStore itemAmountAndStoreToreturn = null;
@@ -434,7 +433,12 @@ public class StoreManager {
         else{
              itemAmountAndStoreToreturn = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
             itemAmountAndStoreToreturn.setPartOfDiscount(true);
-            order.getItemAmountAndStores().put(itemAmountAndStoreToreturn.getItemId() ,itemAmountAndStoreToreturn);
+            int key ;
+            if (order.getItemAmountAndStores().containsKey(itemAmountAndStoreToreturn.getItemId()))//this if is to prevent the case that an item with the same id(it will only happen if on offer item has the same id as an item in item amount and store) is to be entered to the order item amount and store map
+                key = allItems.get(itemAmountAndStoreToreturn.getItemId()).getMaxID();
+            else
+                key = itemAmountAndStoreToreturn.getItemId();
+            order.getItemAmountAndStores().put(key ,itemAmountAndStoreToreturn);
         }
 
         updateEntitledDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
@@ -455,7 +459,7 @@ public class StoreManager {
 
     private void updateEntitledDiscountAmount(int itemID,Order order,Discount discount){
         for (ItemAmountAndStore item: order.getItemAmountAndStores().values()){
-            if (item.getItem().getSerialNumber() == itemID){
+            if (item.getItem().getSerialNumber() == itemID ){
                 item.setDiscountItemAmount(item.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());
             }
         }

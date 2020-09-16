@@ -78,6 +78,7 @@ public class Order {
         }
     }
 
+    public int getStaticID(){ return staticId;}
     public Customer getCustomer() {
         return customer;
     }
