@@ -18,9 +18,9 @@ public class DtoOrder {
     private float distance;
     private HashMap<Integer, Store> stores;
     private int orderId;
-    private ArrayList<ItemAmountAndStore> items;
+    private HashMap<Integer, ItemAmountAndStore> items;
 
-    public DtoOrder(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, float distance, HashMap<Integer, Store> store, ArrayList<ItemAmountAndStore> items) {
+    public DtoOrder(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, float distance, HashMap<Integer, Store> store, HashMap<Integer, ItemAmountAndStore> items) {
         this.dateOfOrder = dateOfOrder;
         this.amountOfItems = amountOfItems;
         this.totalPriceOfItems = totalPriceOfItems;
@@ -64,7 +64,7 @@ public class DtoOrder {
         return orderId;
     }
 
-    public ArrayList<ItemAmountAndStore> getItems() {
+    public HashMap<Integer, ItemAmountAndStore> getItems() {
         return items;
     }
 

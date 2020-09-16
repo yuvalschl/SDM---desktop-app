@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<SplitPane dividerPositions="0.07769423558897243" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="800.0" prefWidth="870.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowCustomer.ShowCustomerController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+         <children>
+            <Label layoutX="274.0" layoutY="7.0" prefHeight="45.0" prefWidth="321.0" text="Our lovely customers ">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+         <children>
+            <TableView fx:id="customerTable" layoutX="2.0" prefHeight="732.0" prefWidth="868.0">
+              <columns>
+                <TableColumn fx:id="IDCol" prefWidth="65.0" text="ID" />
+                <TableColumn fx:id="NameCol" prefWidth="176.0" text="Name" />
+                  <TableColumn fx:id="locationCol" prefWidth="82.0" text="Location" />
+                  <TableColumn fx:id="numOfOrdersCol" prefWidth="152.0" text="Number of orders" />
+                  <TableColumn fx:id="averageItemsCost" prefWidth="202.0" text="Average items cost" />
+                  <TableColumn fx:id="averageShippingCost" prefWidth="187.0" text="Average Shipping cost" />
+              </columns>
+            </TableView>
+         </children></AnchorPane>
+  </items>
+</SplitPane>

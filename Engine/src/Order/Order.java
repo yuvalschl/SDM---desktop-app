@@ -24,10 +24,10 @@ public class Order {
     private int orderId;
     private static int staticId = 0;
     private Customer customer;
-    private ArrayList<ItemAmountAndStore> itemAmountAndStores;
+    private HashMap<Integer, ItemAmountAndStore> itemAmountAndStores;
     private HashMap<Integer,String> storeIdAndName = new HashMap<>();
 
-    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, ArrayList<ItemAmountAndStore> itemAmountAndStores, float distance, HashMap<Integer, Store> store) {
+    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, HashMap<Integer, ItemAmountAndStore> itemAmountAndStores, float distance, HashMap<Integer, Store> store) {
         this.dateOfOrder = dateOfOrder;
         this.amountOfItems = amountOfItems;
         this.totalPriceOfItems = totalPriceOfItems;
@@ -43,7 +43,7 @@ public class Order {
     }
 
     //Constructor for an order loaded from file
-    public Order(int ID, Date date,int amountOfItems, float totalPriceOfItems,float shippingCost, float totalCost, ArrayList<ItemAmountAndStore> itemAmountAndStores)
+    public Order(int ID, Date date, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, HashMap<Integer, ItemAmountAndStore> itemAmountAndStores)
     {
         this.orderId = ID;
         this.dateOfOrder = date;
@@ -56,7 +56,7 @@ public class Order {
 
 
     public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost,
-                 HashMap<Integer, Store> stores, ArrayList<ItemAmountAndStore> items, HashMap<Integer, Float> shippingCostByStore) {
+                 HashMap<Integer, Store> stores, HashMap<Integer, ItemAmountAndStore> items, HashMap<Integer, Float> shippingCostByStore) {
         this.dateOfOrder = dateOfOrder;
         this.amountOfItems = amountOfItems;
         this.totalPriceOfItems = totalPriceOfItems;
@@ -70,8 +70,8 @@ public class Order {
     }
     public Order(){}
 
-    private void updateStoreIdAndName(ArrayList<ItemAmountAndStore> itemAmountAndStores) {
-        for (ItemAmountAndStore store: itemAmountAndStores){
+    private void updateStoreIdAndName(HashMap<Integer, ItemAmountAndStore> itemAmountAndStores) {
+        for (ItemAmountAndStore store: itemAmountAndStores.values()){
             int key = store.getStore().getSerialNumber();
             String name = store.getStore().getName();
             storeIdAndName.put(key,name);
@@ -105,7 +105,7 @@ public class Order {
     }
 
 
-    public void setItemAmountAndStores(ArrayList<ItemAmountAndStore> itemAmountAndStores) {
+    public void setItemAmountAndStores(HashMap<Integer, ItemAmountAndStore> itemAmountAndStores) {
         this.itemAmountAndStores = itemAmountAndStores;
     }
 
@@ -134,7 +134,7 @@ public class Order {
         return distance;
     }
 
-    public ArrayList<ItemAmountAndStore> getItemAmountAndStores() {
+    public HashMap<Integer, ItemAmountAndStore> getItemAmountAndStores() {
         return itemAmountAndStores;
     }
 

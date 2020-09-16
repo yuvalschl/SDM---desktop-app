@@ -96,15 +96,31 @@ public class DiscountScreenController {
     public void addToCartButtonAction(ActionEvent actionEvent) {
         Discount discount = discountListView.getSelectionModel().getSelectedItem();
         if(discount != null) {
-            Map<Integer, ItemAmountAndStore> itemToAdd = new HashMap<>();
+            Map<Integer, ItemAmountAndStore> itemsToAdd = new HashMap<>();
             if (oneOf) {
                 Offer offer = offerListView.getSelectionModel().getSelectedItem();
                 if(offer != null)
-                    itemToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
+                    itemsToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
             } else {
-                itemToAdd = appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
+                itemsToAdd = appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
             }
-            appController.getOrderScreenComponentController().getOrderSummaryTable().getItems().addAll(itemToAdd.values());
+
+            ArrayList<ItemAmountAndStore> itemsToPutInTheList = new ArrayList<>();
+            for(ItemAmountAndStore offerItem : itemsToAdd.values()){
+                boolean itemInList = false;
+                for(ItemAmountAndStore item : orderScreenController.getOrderSummaryTable().getItems()){
+                    //if the offer item is already in the order summery
+                    if(offerItem.getItemId() == item.getItemId() && item.getIsPartOfDiscount()){
+                        item.setAmount(offerItem.getAmount());
+                        itemInList = true;
+                    }
+                }
+                if(!itemInList){
+                    itemsToPutInTheList.add(offerItem);
+                }
+            }
+            orderScreenController.getOrderSummaryTable().getItems().addAll(itemsToPutInTheList);
+            orderScreenController.getOrderSummaryTable().refresh();
             discounts = appController.getStoreManager().getEntitledDiscounts(order);
             offerListView.getItems().clear();
             displayEntitledDiscounts();

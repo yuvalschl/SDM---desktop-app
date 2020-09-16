@@ -118,6 +118,7 @@ public class HomeController {
         appController.getShowItemsController().setData(appController);
         appController.getAddStoreComponentController().setData(appController);
         appController.getShowOrdersController().setData(appController);
+        appController.getShowCostumerScreenController().setData(appController);
         try {
             mapGridController.setSize(appController);
         } catch (IOException e) {

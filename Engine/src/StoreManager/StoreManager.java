@@ -1,5 +1,4 @@
 package StoreManager;
-import Jaxb.JaxbClassToStoreManager;
 import Store.Offer;
 import Costumer.Customer;
 import DtoObjects.*;
@@ -10,7 +9,6 @@ import Order.*;
 import Store.Store;
 import Jaxb.XmlToObject;
 import Store.Discount;
-import javafx.beans.property.BooleanProperty;
 import javafx.concurrent.Task;
 
 import javax.xml.bind.JAXBContext;
@@ -19,14 +17,14 @@ import javax.xml.bind.Marshaller;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StoreManager {
     private Map<Integer, Store> allStores;
     private Map<Integer, Item> allItems;
     private Set<Order> allOrders = new HashSet<Order>();
     private String currentFilePath;
-    private Map<Integer, Customer> allCustomers;
+    private Map<Integer, Customer> allCustomers;//
     private Task<Boolean> currentTask;
 
 
@@ -91,7 +89,7 @@ public class StoreManager {
     public void loadOrder(File file) throws JAXBException {
         OrderWrapper orderWrapper = XmlToObject.fromXmlFileToOrder(file);
         for (Order order: orderWrapper.getOrders()){
-            for (ItemAmountAndStore itemAmountAndStore: order.getItemAmountAndStores()) {//This loop recreates the lost data from the history load
+            for (ItemAmountAndStore itemAmountAndStore: order.getItemAmountAndStores().values()) {//This loop recreates the lost data from the history load
                 int itemID = itemAmountAndStore.getItemId();
                 Store store = allStores.get(itemAmountAndStore.getItemStore());
                 itemAmountAndStore.setItem(DtoConvertor.itemToDtoItem(allItems.get(itemID)));
@@ -209,12 +207,12 @@ public class StoreManager {
         return allDtoItems;
     }
 
-    public Order createOrder(Point customerLocation, Date date, ArrayList<ItemAmountAndStore> items) {
+    public Order createOrder(Point customerLocation, Date date, HashMap<Integer, ItemAmountAndStore> items) {
         int totalPriceOfItems = 0;
         HashMap<Integer, Store> allStoresInOrder = getAllStoresInOrder(items);
         float shippingCost = calcShippingCost(items, customerLocation);
         HashMap<Integer, Float> shippingCostByStore = calcShippingCostByStore(items, customerLocation);
-        for (ItemAmountAndStore pair: items) {
+        for (ItemAmountAndStore pair: items.values()) {
             if (pair.item() instanceof DtoUnitItem)
                 totalPriceOfItems += (int)pair.amount() * pair.getItem().getPrice();
             else
@@ -225,9 +223,9 @@ public class StoreManager {
     }
 
 
-    private HashMap<Integer, Float> calcShippingCostByStore(ArrayList<ItemAmountAndStore> allItems, Point customerLocation){
+    private HashMap<Integer, Float> calcShippingCostByStore(HashMap<Integer, ItemAmountAndStore> allItems, Point customerLocation){
         HashMap<Integer, Float> shippingCostMap = new HashMap<>();
-        for(ItemAmountAndStore item : allItems){
+        for(ItemAmountAndStore item : allItems.values()){
             float distance = distanceCalculator(customerLocation, item.getStore().getLocation());
             shippingCostMap.put(item.getStore().getSerialNumber(), distance * item.getStore().getPPK());
         }
@@ -235,10 +233,10 @@ public class StoreManager {
         return  shippingCostMap;
     }
 
-    public float calcShippingCost(ArrayList<ItemAmountAndStore> allItems, Point customerLocation){
+    public float calcShippingCost(HashMap<Integer, ItemAmountAndStore> allItems, Point customerLocation){
         float shippingCost = 0;
         Set<Store> sellingStores = new HashSet<Store>();
-        for(ItemAmountAndStore item : allItems){
+        for(ItemAmountAndStore item : allItems.values()){
             if(!sellingStores.contains(item.getStore())){
                 float distance = distanceCalculator(customerLocation, item.getStore().getLocation());
                 shippingCost += distance * item.getStore().getPPK();
@@ -249,9 +247,9 @@ public class StoreManager {
         return shippingCost;
     }
 
-    private HashMap<Integer, Store> getAllStoresInOrder(ArrayList<ItemAmountAndStore> allItems){
+    private HashMap<Integer, Store> getAllStoresInOrder(HashMap<Integer, ItemAmountAndStore> allItems){
         HashMap<Integer, Store> allStores = new HashMap<Integer, Store>();
-        for(ItemAmountAndStore item : allItems){
+        for(ItemAmountAndStore item : allItems.values()){
             allStores.put(item.getStore().getSerialNumber(), item.getStore());
         }
 
@@ -261,7 +259,7 @@ public class StoreManager {
     public void placeOrder(Order order) {//finilaize the order after final approval, in this method we add the order to the order set and update the amount sold in allitems
 
         allOrders.add(order);
-        for (ItemAmountAndStore item : order.getItemAmountAndStores()) {
+        for (ItemAmountAndStore item : order.getItemAmountAndStores().values()) {
             int itemID = item.item().getSerialNumber();
             allItems.get(itemID).setAmountSold(item.getAmount()+ allItems.get(itemID).getAmountSold());
 
@@ -277,7 +275,7 @@ public class StoreManager {
         for(Map.Entry<Integer, Store> store : order.getStores().entrySet()){
             float shippingCost = order.getShippingCostByStore().get(store.getKey());
             StoreOrder ordersToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, order.getDistance(), store.getValue(), order.getOrderId(),store.getValue().getPPK());
-            for(ItemAmountAndStore item : order.getItemAmountAndStores()){
+            for(ItemAmountAndStore item : order.getItemAmountAndStores().values()){
                 if(item.getStore().getSerialNumber() == store.getValue().getSerialNumber()){
                     ordersToAdd.addItemToOrder(item);
                 }
@@ -342,7 +340,7 @@ public class StoreManager {
         int timesSold = 0;
         if(allOrders != null)
             for (Order order: allOrders) {
-                for (ItemAmountAndStore pair:order.getItemAmountAndStores())
+                for (ItemAmountAndStore pair:order.getItemAmountAndStores().values())
                     if(pair.item().equals(item)) {
                         timesSold += pair.amount();
                     }
@@ -384,8 +382,8 @@ public class StoreManager {
         ArrayList<Discount> discounts = new ArrayList<Discount>();
         for (Map.Entry<Integer,Store> stores: order.getStores().entrySet()){
             Store store = stores.getValue();
-            ArrayList<ItemAmountAndStore> itemAmountAndStores = order.getItemAmountAndStores();
-            for (ItemAmountAndStore itemAndAmount : itemAmountAndStores) {//loop through the items and check if the amount and id matches any of the stores discounts
+            HashMap<Integer, ItemAmountAndStore> itemAmountAndStores = order.getItemAmountAndStores();
+            for (ItemAmountAndStore itemAndAmount : itemAmountAndStores.values()) {//loop through the items and check if the amount and id matches any of the stores discounts
                 for (Discount discount : store.getAllDiscounts()) {
                     if ( itemAndAmount.getIsPartOfDiscount()==false &&  itemAndAmount.getItemId() == discount.getIfYouBuy().getItemId() && itemAndAmount.getDiscountItemAmount() >= discount.getIfYouBuy().getQuantity()) {
                         discounts.add(discount);
@@ -405,8 +403,12 @@ public class StoreManager {
         Map<Integer, ItemAmountAndStore> itemsMap = new HashMap<Integer, ItemAmountAndStore>();
         for(Offer offer : discount.getThenYouGet().getAllOffers()){
             itemsMap.put(offer.getItemId(), new ItemAmountAndStore(getAllDtoItems().get(offer.getItemId()), offer.getQuantity(), allStores.get(discount.getStoreId())));
+            itemsMap.get(offer.getItemId()).setPartOfDiscount(true);
         }
         discount.getThenYouGet().getAllOffers().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
+    //    for (itemsMap.values())
+        //itemsMap.values().forEach(itemAmountAndStore -> itemAmountAndStore.setAmount(order.getItemAmountAndStores().);
+        itemsMap.values().forEach(itemAmountAndStore -> itemAmountAndStore.setAmount(order.getItemAmountAndStores().get(itemAmountAndStore.getItemId()).getAmount()));
         return itemsMap;
 
     }
@@ -419,18 +421,40 @@ public class StoreManager {
         Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
         Store store = allStores.get(discount.getStoreId());
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
-        ItemAmountAndStore itemAmountAndStore = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
-        itemAmountAndStore.setPartOfDiscount(true);
+        ItemAmountAndStore itemAmountAndStoreToreturn = null;
+        if(order.getItemAmountAndStores().values().stream().anyMatch(itemAmountAndStore -> itemAmountAndStore.getItemId() == offerItemIDToAdd && itemAmountAndStore.getIsPartOfDiscount())){
+            updateDiscountItem(order, offerItemIDToAdd, offer);
+            for (ItemAmountAndStore currItem: order.getItemAmountAndStores().values() ){
+                if(currItem.getItemId() == offerItemIDToAdd && currItem.getIsPartOfDiscount()){
+                    itemAmountAndStoreToreturn = currItem;
+                    break;
+                }
+            }
+        }
+        else{
+             itemAmountAndStoreToreturn = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
+            itemAmountAndStoreToreturn.setPartOfDiscount(true);
+            order.getItemAmountAndStores().put(itemAmountAndStoreToreturn.getItemId() ,itemAmountAndStoreToreturn);
+        }
+
         updateEntitledDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
-        order.getItemAmountAndStores().add(itemAmountAndStore);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
         order.setTotalCost(order.getTotalCost()+ offer.getForAdditional());
-        return itemAmountAndStore;
+        return itemAmountAndStoreToreturn;
+    }
+
+    private void updateDiscountItem(Order order, int offerItemIDToAdd, Offer offer) {
+        AtomicReference<ItemAmountAndStore> itemToUpdate = new AtomicReference<ItemAmountAndStore>();
+        order.getItemAmountAndStores().forEach((ID,currItem)-> {
+            if(currItem.getItemId() == offerItemIDToAdd && currItem.getIsPartOfDiscount())
+                itemToUpdate.set(currItem);
+        });
+        itemToUpdate.get().setAmount(itemToUpdate.get().getAmount()+ offer.getQuantity());
     }
 
     private void updateEntitledDiscountAmount(int itemID,Order order,Discount discount){
-        for (ItemAmountAndStore item: order.getItemAmountAndStores()){
+        for (ItemAmountAndStore item: order.getItemAmountAndStores().values()){
             if (item.getItem().getSerialNumber() == itemID){
                 item.setDiscountItemAmount(item.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());
             }

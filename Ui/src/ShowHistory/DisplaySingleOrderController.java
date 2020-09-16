@@ -53,10 +53,10 @@ public class DisplaySingleOrderController {
 
        }
 
-    public void setData(AppController appController, ArrayList<ItemAmountAndStore> itemAmountAndStore, Order order, Point costumerLocation) {
+    public void setData(AppController appController, HashMap<Integer, ItemAmountAndStore> itemAmountAndStore, Order order, Point costumerLocation) {
         //set the item list\
         itemsListView.getItems().clear();
-        itemsListView.getItems().addAll( itemAmountAndStore);
+        itemsListView.getItems().addAll( itemAmountAndStore.values());
         itemsListView.setCellFactory(e -> new OrderItemCellController(appController));
 
         //goes through the shippingCostByStore and for every store takes the needed values and puts them in the store table

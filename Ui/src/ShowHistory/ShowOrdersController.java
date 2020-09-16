@@ -37,7 +37,7 @@ public class ShowOrdersController {
                 }
                 displaySingleOrderComponentController.getStoresTable().getItems().addAll(storesToAdd);
                 displaySingleOrderComponentController.getItemsListView().getItems().clear();
-                displaySingleOrderComponentController.getItemsListView().getItems().addAll(newValue.getItemAmountAndStores());
+                displaySingleOrderComponentController.getItemsListView().getItems().addAll(newValue.getItemAmountAndStores().values());
                 displaySingleOrderComponentController.getItemsListView().setCellFactory(e -> new OrderItemCellController(appController));
                 }
 
