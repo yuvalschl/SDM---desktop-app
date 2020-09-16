@@ -43,18 +43,26 @@ public class OrderSummeryController {
     }
 
     public void approveOrderAction(javafx.event.ActionEvent actionEvent) throws InterruptedException {
-      //  approvedOrCanceledLabel.textProperty().set("Order was made successfully");
+        //approvedOrCanceledLabel.textProperty().set("Order was made successfully");
         orderSummeryScreen.setVisible(false);
         orderScreenController.clearAction();
         orderScreen.setVisible(true);
         appController.getStoreManager().placeOrder(order);
         appController.getShowOrdersController().setData(appController);
-        //update the customer details
-        Customer customer = orderScreenController.getCustomer();
-        customer.setNumberOfOrdersMade(customer.getNumberOfOrdersMade()+1);
-        customer.addShippingCost(order.getShippingCost(), order.getOrderId());
+        //update the customer details with this order
+        updateCustomerDetails();
     }
 
+    private void updateCustomerDetails(){
+        Customer customer = orderScreenController.getCustomer();
+        customer.setNumberOfOrdersMade(customer.getNumberOfOrdersMade()+1);
+        customer.setTotalShippingCost(customer.getTotalShippingCost()+ order.getShippingCost());
+        customer.setTotalOrdersWithoutShippingPrice(customer.getTotalOrdersWithoutShippingPrice()+order.getTotalPriceOfItems());
+        float shippingCostAverage = customer.getTotalShippingCost()/customer.getNumberOfOrdersMade();
+        float ordersWithoutShippingCostAverage = customer.getTotalOrdersWithoutShippingPrice()/customer.getNumberOfOrdersMade();
+        customer.setAverageOrdersShippingPrice(shippingCostAverage);
+        customer.setAverageOrdersWithoutShippingPrice(ordersWithoutShippingCostAverage);
+    }
     public void cancelOrderAction(javafx.event.ActionEvent actionEvent) {
         orderSummeryScreen.setVisible(false);
         orderScreenController.clearAction();

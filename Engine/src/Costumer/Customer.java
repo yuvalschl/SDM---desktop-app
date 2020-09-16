@@ -2,15 +2,17 @@ package Costumer;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Customer {
     private int id;
     private String name;
     private Point location;
     int numberOfOrdersMade;
-    HashMap<Integer, Float> shippingCosts = new HashMap<>();
-    float averageOrdersWithoutShippingPrice;
-    float averageOrdersShippingPrice;
+    private float totalShippingCost = 0;
+    private float totalOrdersWithoutShippingPrice = 0;
+    private float averageOrdersWithoutShippingPrice;
+    private float averageOrdersShippingPrice;
 
 
     public Customer(int id, String name, Point location) {
@@ -23,12 +25,15 @@ public class Customer {
 
     }
 
-    public void addShippingCost(float shippingCost, int orderID){
-        /*shippingCosts.put(orderID, shippingCost);
-        float totalShippingCosts = 0;
-                shippingCosts.forEach((currOrderID, currShippingCost)-> totalShippingCosts += currShippingCost);
-        //averageOrdersShippingPrice = */
-    }
+
+
+    public Float getTotalShippingCost() { return totalShippingCost;}
+
+    public void setTotalShippingCost(Float totalShippingCost) { this.totalShippingCost = totalShippingCost; }
+
+    public Float getTotalOrdersWithoutShippingPrice() { return totalOrdersWithoutShippingPrice; }
+
+    public void setTotalOrdersWithoutShippingPrice(Float totalOrdersWithoutShippingPrice) { this.totalOrdersWithoutShippingPrice = totalOrdersWithoutShippingPrice; }
 
     public int getNumberOfOrdersMade() { return numberOfOrdersMade; }
 
