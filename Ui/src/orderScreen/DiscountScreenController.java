@@ -95,11 +95,10 @@ public class DiscountScreenController {
             if (oneOf) {
                 Offer offer = offerListView.getSelectionModel().getSelectedItem();
                 if(offer != null)
-                    itemsToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount));
+                    itemsToAdd.put(offer.getItemId(), appController.getStoreManager().addDiscountItemToOrder(offer.getItemId(), order, discount, true));
             } else {
                 itemsToAdd = appController.getStoreManager().addDiscountItemsToOrderAllOrNothing(order, discount);
             }
-
             ArrayList<ItemAmountAndStore> itemsToPutInTheList = new ArrayList<>();
             for(ItemAmountAndStore offerItem : itemsToAdd.values()){
                 boolean itemInList = false;

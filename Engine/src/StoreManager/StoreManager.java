@@ -405,8 +405,10 @@ public class StoreManager {
             itemsMap.put(offer.getItemId(), new ItemAmountAndStore(allItems.get(offer.getItemId()), offer.getQuantity(), allStores.get(discount.getStoreId())));
             itemsMap.get(offer.getItemId()).setPartOfDiscount(true);
         }
-        discount.getThenYouGet().getAllOffers().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
+        discount.getThenYouGet().getAllOffers().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount, false));
+
         itemsMap.values().forEach(itemAmountAndStore -> itemAmountAndStore.setAmount(order.getItemAmountAndStores().get(itemAmountAndStore.getItemId()).getAmount()));
+        updateItemDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
         return itemsMap;
 
     }
@@ -415,7 +417,8 @@ public class StoreManager {
      * @param discount a discount to add to order
      * @param order the order to add the items to
      */
-    public ItemAmountAndStore addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){ Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
+    public ItemAmountAndStore addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount, boolean isOneOf){
+        Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
         Store store = allStores.get(discount.getStoreId());
         Item item = allItems.get(offerItemIDToAdd);
         ItemAmountAndStore itemAmountAndStoreToreturn = null;
@@ -441,7 +444,8 @@ public class StoreManager {
                 key = itemAmountAndStoreToreturn.getItemId();
             order.getItemAmountAndStores().put(key ,itemAmountAndStoreToreturn);
         }
-        updateItemDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
+        if(isOneOf)
+            updateItemDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
         order.setTotalCost(order.getTotalCost()+ offer.getForAdditional());
@@ -467,6 +471,7 @@ public class StoreManager {
         for (ItemAmountAndStore item: order.getItemAmountAndStores().values()){
             if (item.getItem().getId() == itemID ){
                 item.setDiscountItemAmount(item.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());
+                discount.getThenYouGet().setDecreasedFromItemAmount(true);
             }
         }
     }

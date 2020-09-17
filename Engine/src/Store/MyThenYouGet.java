@@ -5,7 +5,7 @@ import java.util.Set;
 public class MyThenYouGet {
     private DiscountOperator discountOperator;
     private Set<Offer> allOffers;
-
+    private boolean decreasedFromItemAmount = false;//this operator indicates if a set of items in the you get has decreased its amount from the itemDiscount amount
     public MyThenYouGet(DiscountOperator discountOperator, Set<Offer> allOffers) {
         this.discountOperator = discountOperator;
         this.allOffers = allOffers;
@@ -18,6 +18,10 @@ public class MyThenYouGet {
         return null;
     }
 
+
+    public boolean isDecreasedFromItemAmount() { return decreasedFromItemAmount; }
+
+    public void setDecreasedFromItemAmount(boolean decreasedFromItemAmount) { this.decreasedFromItemAmount = decreasedFromItemAmount; }
 
     public DiscountOperator getDiscountOperator() {
         return discountOperator;

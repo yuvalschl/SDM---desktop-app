@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<SplitPane dividerPositions="0.03066914498141264" prefHeight="200.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowHistory.ShowOrdersController">
+<SplitPane dividerPositions="0.03066914498141264" prefHeight="800.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowHistory.ShowOrdersController">
    <items>
       <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="89.0">
          <children>
@@ -23,7 +22,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </VBox>
-      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="767.0" spacing="5.0">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="300.0" prefHeight="800.0" prefWidth="767.0" spacing="5.0">
          <children>
             <fx:include fx:id="displaySingleOrderComponent" source="displaySinglOrder.fxml" />
          </children>
