@@ -1,14 +1,11 @@
-.button
+ScrollPane{
+	-fx-background-color : #61ddff;
+}
+GridPane
 {
 	-fx-background-color : #61ddff;
-	-fx-text-fill : #000000;
-	-fx-font-size : 13
+}
+VBox{
+	-fx-background-color : #61ddff;
+}
 
-}
-.button:hover{
-	-fx-background-color : #00beed;
-}
-.button:pressed
-{
-	-fx-background-color : #1620A1;
-}
