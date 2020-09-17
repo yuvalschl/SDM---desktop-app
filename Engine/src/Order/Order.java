@@ -19,7 +19,7 @@ public class Order {
     private float shippingCost;
     private HashMap<Integer, Float> shippingCostByStore;
     private float totalCost;
-    private float distance;
+    private float distance;//TODO: delete this attribute
     private HashMap<Integer, Store> stores = new HashMap<>();
     private int orderId;
     private static int staticId = 0;
@@ -27,7 +27,7 @@ public class Order {
     private HashMap<Integer, ItemAmountAndStore> itemAmountAndStores;
     private HashMap<Integer,String> storeIdAndName = new HashMap<>();
 
-    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, HashMap<Integer, ItemAmountAndStore> itemAmountAndStores, float distance, HashMap<Integer, Store> store) {
+    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, HashMap<Integer, ItemAmountAndStore> itemAmountAndStores, float distance, HashMap<Integer, Store> store, Customer customer) {
         this.dateOfOrder = dateOfOrder;
         this.amountOfItems = amountOfItems;
         this.totalPriceOfItems = totalPriceOfItems;
@@ -56,7 +56,7 @@ public class Order {
 
 
     public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost,
-                 HashMap<Integer, Store> stores, HashMap<Integer, ItemAmountAndStore> items, HashMap<Integer, Float> shippingCostByStore) {
+                 HashMap<Integer, Store> stores, HashMap<Integer, ItemAmountAndStore> items, HashMap<Integer, Float> shippingCostByStore, Customer customer) {
         this.dateOfOrder = dateOfOrder;
         this.amountOfItems = amountOfItems;
         this.totalPriceOfItems = totalPriceOfItems;
@@ -66,6 +66,7 @@ public class Order {
         this.orderId = ++staticId;
         this.itemAmountAndStores = items;
         this.shippingCostByStore = shippingCostByStore;
+        this.customer = customer;
         updateStoreIdAndName(itemAmountAndStores);
     }
     public Order(){}

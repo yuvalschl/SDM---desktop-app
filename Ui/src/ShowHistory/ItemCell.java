@@ -1,12 +1,7 @@
 package ShowHistory;
 
-import DtoObjects.DtoUnitItem;
-import Item.Item;
 import Item.UnitItem;
-
 import ItemPair.ItemAmountAndStore;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
 
 public class ItemCell {
     private  String itemNameCol;
@@ -18,7 +13,7 @@ public class ItemCell {
 
     public ItemCell(ItemAmountAndStore item){
         itemNameCol = item.getItemName() ;
-        if(item.getItem() instanceof DtoUnitItem) {
+        if(item.getItem() instanceof UnitItem) {
             itemSellByCol = "Unit";
         }
         else

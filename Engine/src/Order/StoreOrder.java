@@ -1,14 +1,11 @@
 package Order;
 
-import DtoObjects.DtoStoreOrder;
-import DtoObjects.DtoUnitItem;
-import Item.Item;
+import Item.UnitItem;
 import ItemPair.ItemAmountAndStore;
 import Store.Store;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 
 public class StoreOrder {
     private Date dateOfOrder;
@@ -46,7 +43,7 @@ public class StoreOrder {
         this.items.add(item);
         totalCost += item.getStore().getInventory().get(item.getItemId()).getPrice() * item.getAmount();
         totalPriceOfItems += item.getStore().getInventory().get(item.getItemId()).getPrice() * item.getAmount();
-        if(item.getItem() instanceof DtoUnitItem){
+        if(item.getItem() instanceof UnitItem){
             amountOfItems += item.getAmount();
         }
         else {

@@ -11,7 +11,7 @@ public abstract class Item {
     private String name;
     private float price;
     private float amountSold;
-    private int maxID = 0;
+    private  static int maxID = 0;
 
     public Item(int id, String name, float price) {
         this.id = id;
