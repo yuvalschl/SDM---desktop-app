@@ -16,52 +16,56 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <HBox spacing="25.0">
+      <VBox alignment="CENTER">
          <children>
-            <Label text="Name">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
-            <Label text="ID">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
-            <Label text="Sell by">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
-            <Label text="Amount">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
-            <Label text="Price Per unit">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
-            <Label text="Total item price">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
-            <Label prefHeight="25.0" prefWidth="129.0" text="Part of Discount">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
+            <HBox alignment="CENTER" spacing="25.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="Name">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label text="ID">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label text="Sell by">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label text="Amount">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label text="Price Per unit">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label text="Total item price">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="25.0" prefWidth="129.0" text="Part of Discount">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <ListView fx:id="itemsListView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="244.0" prefWidth="731.0" />
          </children>
-      </HBox>
-      <ListView fx:id="itemsListView" prefHeight="244.0" prefWidth="731.0" />
+      </VBox>
       <Label text="Stores">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <TableView fx:id="storesTable" prefHeight="206.0" prefWidth="706.0">
+      <TableView fx:id="storesTable" prefHeight="206.0" prefWidth="706.0" VBox.vgrow="ALWAYS">
          <columns>
             <TableColumn fx:id="storeIdCol" prefWidth="75.0" text="Id" />
             <TableColumn fx:id="storeNameCol" prefWidth="145.0" text="Name" />

@@ -21,7 +21,7 @@ import java.io.IOException;
 public class AppController {
     private StoreManager storeManager;
 
-    @FXML private ScrollPane optionsMenuComponent;
+    @FXML private VBox optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
     @FXML private SplitPane showStoresComponent;
     @FXML private ShowStoresController showStoresComponentController;
@@ -29,7 +29,7 @@ public class AppController {
     @FXML private ShowOrdersController ShowOrdersScreenComponentController;
     @FXML private Pane homeComponent;
     @FXML private HomeController homeComponentController;
-    @FXML private StackPane orderScreen;
+    @FXML private ScrollPane orderScreen;
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
     @FXML private VBox showItems;
@@ -98,11 +98,11 @@ public class AppController {
         this.showItemsController = showItemsController;
     }
 
-    public StackPane getOrderScreenComponent() {
+    public ScrollPane getOrderScreenComponent() {
         return orderScreen;
     }
 
-    public void setOrderScreenComponent(StackPane orderScreenComponent) {
+    public void setOrderScreenComponent(ScrollPane orderScreenComponent) {
         this.orderScreen = orderScreenComponent;
     }
 

@@ -18,18 +18,22 @@
       </Label>
       <SplitPane dividerPositions="0.47388059701492535" prefHeight="714.0" prefWidth="538.0">
         <items>
-            <VBox>
+            <VBox alignment="TOP_CENTER">
                <children>
                   <Label prefHeight="33.0" prefWidth="110.0" text="Discount name" />
-                  <ListView fx:id="discountListView" onMouseClicked="#displaySelectedDiscount" prefHeight="516.0" prefWidth="250.0" />
+                  <ListView fx:id="discountListView" onMouseClicked="#displaySelectedDiscount" prefHeight="516.0" prefWidth="250.0" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </ListView>
                </children>
             </VBox>
-            <VBox>
+            <VBox alignment="TOP_CENTER" spacing="10.0">
                <children>
                   <Label prefHeight="33.0" prefWidth="150.0" text="Discount description" />
-                  <VBox prefHeight="613.0" prefWidth="285.0">
+                  <VBox prefHeight="613.0" prefWidth="285.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="330.0">
+                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="330.0">
                            <children>
                               <VBox>
                                  <children>
@@ -39,23 +43,23 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <HBox prefHeight="349.0" prefWidth="285.0">
+                        <HBox alignment="TOP_CENTER" prefHeight="349.0" prefWidth="285.0" VBox.vgrow="ALWAYS">
                            <children>
                               <VBox>
                                  <children>
                                     <Label fx:id="youGetLabel" prefHeight="21.0" prefWidth="250.0" />
-                                    <ListView fx:id="offerListView" onMouseClicked="#displayQuantity" prefHeight="200.0" prefWidth="250.0" />
+                                    <ListView fx:id="offerListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#displayQuantity" prefHeight="200.0" prefWidth="250.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                            </children>
                         </HBox>
-                        <VBox>
+                        <VBox alignment="TOP_CENTER">
                            <children>
                               <Label prefHeight="21.0" prefWidth="110.0" text="For additionial:" />
                               <Label fx:id="forAdditionalLabel" prefHeight="21.0" prefWidth="234.0" />
                            </children>
                         </VBox>
-                        <HBox prefHeight="32.0" prefWidth="285.0">
+                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="285.0" spacing="20.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#addToCartButtonAction" prefHeight="31.0" prefWidth="135.0" text="add to cart" />
                               <Button mnemonicParsing="false" onAction="#notInterestedBtnAction" prefHeight="31.0" prefWidth="135.0" text="not intrested">
@@ -72,6 +76,9 @@
                   </VBox>
                   <Button mnemonicParsing="false" onAction="#placeOrderBtnAction" prefHeight="31.0" prefWidth="192.0" text="Place order" />
                </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
             </VBox>
         </items>
       </SplitPane>
