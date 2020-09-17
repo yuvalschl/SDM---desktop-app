@@ -4,7 +4,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
-
 <BorderPane minHeight="200.0" minWidth="300.0" prefHeight="800.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appController.AppController">
    <center>
       <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="200.0" minWidth="300.0">
@@ -24,6 +23,6 @@
       </ScrollPane>
    </center>
    <left>
-      <fx:include fx:id="optionsMenuComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="300.0" source="../optionsMenu/optionsMenu.fxml" />
+      <fx:include fx:id="optionsMenuComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="../optionsMenu/optionsMenu.fxml" />
    </left>
 </BorderPane>

@@ -21,18 +21,18 @@ import java.io.IOException;
 public class AppController {
     private StoreManager storeManager;
 
-    @FXML private VBox optionsMenuComponent;
+    @FXML private GridPane optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
     @FXML private SplitPane showStoresComponent;
     @FXML private ShowStoresController showStoresComponentController;
-    @FXML private SplitPane ShowOrdersScreenComponent;
+    @FXML private ScrollPane ShowOrdersScreenComponent;
     @FXML private ShowOrdersController ShowOrdersScreenComponentController;
-    @FXML private Pane homeComponent;
+    @FXML private ScrollPane homeComponent;
     @FXML private HomeController homeComponentController;
     @FXML private ScrollPane orderScreen;
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
-    @FXML private VBox showItems;
+    @FXML private ScrollPane showItems;
     @FXML private SplitPane addStoreComponent;
     @FXML private AddStoreController addStoreComponentController;
     @FXML private VBox showCostumerScreen;
@@ -66,15 +66,15 @@ public class AppController {
         return homeComponentController;
     }
 
-    public VBox getShowItems() {
+    public ScrollPane getShowItems() {
         return showItems;
     }
 
-    public SplitPane getShowOrdersScreen() {
+    public ScrollPane getShowOrdersScreen() {
         return ShowOrdersScreenComponent;
     }
 
-    public void setShowOrdersScreen(SplitPane showOrdersScreen) {
+    public void setShowOrdersScreen(ScrollPane showOrdersScreen) {
         ShowOrdersScreenComponent = showOrdersScreen;
     }
 
@@ -86,7 +86,7 @@ public class AppController {
         this.ShowOrdersScreenComponentController = showOrdersController;
     }
 
-    public void setShowItems(VBox showItems) {
+    public void setShowItems(ScrollPane showItems) {
         this.showItems = showItems;
     }
 
@@ -142,7 +142,7 @@ public class AppController {
         this.addStoreComponentController = addStoreComponentController;
     }
 
-    public Pane getHomeComponent() {
+    public ScrollPane getHomeComponent() {
         return homeComponent;
     }
 
@@ -154,7 +154,7 @@ public class AppController {
         this.optionsMenuComponentController = optionsMenuComponentController;
     }
 
-    public void setHomeComponent(VBox homeComponent) {
+    public void setHomeComponent(ScrollPane homeComponent) {
         this.homeComponent = homeComponent;
     }
 

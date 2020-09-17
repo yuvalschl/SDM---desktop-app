@@ -112,18 +112,23 @@ public class ShowStoresController {
                     itemsTable.getItems().clear();
                     itemsTable.getItems().addAll(newValue.getInventory().values());
                     itemsTable.scrollTo(0);
+
+                    // this sets the discount information
+                    discountNameListView.getItems().clear();
+                    discountNameListView.getItems().addAll(newValue.getAllDiscounts());
+                    discountNameListView.setCellFactory(e -> new discountCell());
+
+                    //set the order list view
+                    //TODO: this may not work, check when place order is done
+                    ordersTable.getItems().clear();
+                    ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders().values()));
+                    itemsTable.scrollTo(0);
                 }
 
-                //set the order list view
-                //TODO: this may not work, check when place order is done
-                ordersTable.getItems().clear();
-                ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders().values()));
-                itemsTable.scrollTo(0);
 
-// this sets the discount information
-                discountNameListView.getItems().clear();
-                discountNameListView.getItems().addAll(newValue.getAllDiscounts());
-                discountNameListView.setCellFactory(e -> new discountCell());
+
+
+
 
 
             }

@@ -3,55 +3,60 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1020.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="showItems.ShowItemsController">
-   <children>
-      <Label text="Items">
-         <font>
-            <Font size="50.0" />
-         </font>
-      </Label>
-      <fx:include source="infoHbox.fxml" />
-      <AnchorPane prefHeight="39.0" prefWidth="1020.0">
+
+<ScrollPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="showItems.ShowItemsController">
+   <content>
+      <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1020.0" spacing="10.0">
          <children>
-            <Label layoutX="51.0" layoutY="5.0" text="Id">
+            <Label text="Items">
                <font>
-                  <Font size="20.0" />
+                  <Font size="50.0" />
                </font>
             </Label>
-            <Label layoutX="355.0" layoutY="5.0" text="Sell by">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="177.0" layoutY="5.0" text="Name">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="484.0" layoutY="5.0" text="Stores selling">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="655.0" layoutY="5.0" text="Avarage price">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="854.0" layoutY="8.0" text="Amount sold">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
+            <AnchorPane maxWidth="-Infinity" prefHeight="39.0" prefWidth="1020.0">
+               <children>
+                  <Label layoutX="51.0" layoutY="5.0" text="Id">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="355.0" layoutY="5.0" text="Sell by">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="177.0" layoutY="5.0" text="Name">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="484.0" layoutY="5.0" text="Stores selling">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="655.0" layoutY="5.0" text="Avarage price">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="854.0" layoutY="8.0" text="Amount sold">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <ListView fx:id="itemsList" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="640.0" prefWidth="1000.0" VBox.vgrow="ALWAYS" />
          </children>
-      </AnchorPane>
-      <ListView fx:id="itemsList" prefHeight="500.0" prefWidth="1020.0" />
-   </children>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </padding>
-</VBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </content>
+</ScrollPane>
