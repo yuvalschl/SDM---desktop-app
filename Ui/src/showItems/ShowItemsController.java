@@ -18,6 +18,11 @@ public class ShowItemsController {
         itemsList.setCellFactory(e -> new ItemListCellController(appController));
     }
 
+    public void updateItemsToShow(){
+        itemsList.getItems().clear();
+        itemsList.getItems().addAll(appController.getStoreManager().getAllItems().values());
+        itemsList.setCellFactory(e -> new ItemListCellController(appController));
+    }
     public ListView<Item> getItemsList() {
         return itemsList;
     }

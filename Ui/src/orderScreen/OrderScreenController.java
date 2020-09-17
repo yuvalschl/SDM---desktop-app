@@ -1,7 +1,6 @@
 package orderScreen;
 import Store.Discount;
 import Costumer.Customer;
-import DtoObjects.DtoConvertor;
 import Item.*;
 import ItemPair.ItemAmountAndStore;
 import Order.Order;
@@ -18,6 +17,8 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
 import textFieldFilters.FloatFilter;
@@ -36,7 +37,12 @@ public class OrderScreenController {
     private ObservableMap<Integer ,ItemAmountAndStore> orderItems = FXCollections.observableHashMap();
     private IntegerBinding listSizeBinding = Bindings.size(orderItems);
     private final IntFilter intFilter = new IntFilter();
-    @FXML   private SplitPane orderScreenSplitPane;
+    private boolean interestedInDiscount = true;
+    private Customer customer;
+    @FXML private  Label zeroAmountLabel;
+    @FXML private SplitPane orderSummeryScreen;
+    @FXML private OrderSummeryController orderSummeryScreenController;
+    @FXML  private SplitPane orderScreenSplitPane;
     @FXML private SplitPane discountScreen;
     @FXML private DiscountScreenController discountScreenController;
     @FXML private DatePicker datePicker;
@@ -70,56 +76,69 @@ public class OrderScreenController {
 
     @FXML
     private void addAction() {
-        float amount = Float.parseFloat(itemAmountTextField.getText());
         Item item = itemsTable.getSelectionModel().getSelectedItem();
-        ItemAmountAndStore itemToAdd;
-        if (dynamicOrderCB.isSelected()){
-            itemToAdd = appController.getStoreManager().getCheapestItem(item.getId());
-            itemToAdd.setAmount(amount);
-        }
-        else {
-            itemToAdd = new ItemAmountAndStore(DtoConvertor.itemToDtoItem(item), amount, storeCB.getValue());
-        }
+        if (item != null) {
+            float amount = Float.parseFloat(itemAmountTextField.getText());
+            if (amount == 0) {
+                zeroAmountLabel.setVisible(true);
+            } else {
+                zeroAmountLabel.setVisible(false);
+                ItemAmountAndStore itemToAdd;
+                if (dynamicOrderCB.isSelected()) {
+                    itemToAdd = appController.getStoreManager().getCheapestItem(item.getId());
+                    itemToAdd.setDiscountItemAmount(amount);
+                    itemToAdd.setAmount(amount);
+                } else {
+                    itemToAdd = new ItemAmountAndStore(item, amount, storeCB.getValue());
+                }
 
-        if(orderItems.containsKey(item.getId())){
-            ItemAmountAndStore currentItem = orderItems.get(item.getId());
-            currentItem.setAmount(currentItem.getAmount() + itemToAdd.getAmount());
-            orderSummaryTable.getItems()
-                    .stream()
-                    .filter(e -> e.getItemId() == currentItem.getItemId())
-                    .collect(Collectors.toSet())
-                    .forEach(e -> e.setAmount(currentItem.getAmount()));
+                if (orderItems.containsKey(item.getId())) {
+                    ItemAmountAndStore currentItem = orderItems.get(item.getId());
+                    currentItem.setAmount(currentItem.getAmount() + itemToAdd.getAmount());
+                    currentItem.setDiscountItemAmount(currentItem.getAmount());
+                    orderSummaryTable.getItems()
+                            .stream()
+                            .filter(e -> e.getItemId() == currentItem.getItemId())
+                            .collect(Collectors.toSet())
+                            .forEach(e -> e.setAmount(currentItem.getAmount()));
+                } else {
+                    orderItems.put(item.getId(), itemToAdd);
+                    orderSummaryTable.getItems().add(itemToAdd);
+                }
+                orderSummaryTable.refresh();
+                itemNameLabel.setText(" ");
+                itemAmountTextField.clear();
+                itemsTable.getSelectionModel().clearSelection();
+            }
         }
-        else {
-            orderItems.put(item.getId(), itemToAdd);
-            orderSummaryTable.getItems().add(itemToAdd);
-        }
-        orderSummaryTable.refresh();
-        itemNameLabel.setText(" ");
-        itemAmountTextField.clear();
-        itemsTable.getSelectionModel().clearSelection();
     }
 
     @FXML
     public void placeOrderAction(){
-        Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new ArrayList<ItemAmountAndStore>(orderItems.values()));
-        ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
-        appController.getShowItemsController().setData(appController);
-        if(discounts.size() != 0){
-            discountScreenController.setData(discounts, appController, order,discountScreen);
+        if (orderItems.size() != 0) {
+             customer = customerCB.getValue();
+            Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new HashMap<Integer, ItemAmountAndStore>(orderItems), customer);
+            ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
+            appController.getShowItemsController().setData(appController);
+            if (discounts.size() != 0 && interestedInDiscount != false) {
+                discountScreenController.setData(discounts, appController, order, discountScreen, customerCB.getValue().getLocation(), orderSummeryScreen, orderSummeryScreenController, orderScreenSplitPane, this);
+            } else
+                orderScreenSplitPane.setVisible(false);
+            orderSummeryScreenController.setData(appController, order, customerCB.getValue().getLocation(), orderSummeryScreen, orderScreenSplitPane, this);
         }
-        else
-            orderScreenSplitPane.setVisible(false);
-      //  appController.getStoreManager().placeOrder(order);
 
-        //TODO add a screen that presents the order details and ask for approval
-
-       // clearAction();
     }
 
     @FXML
-    void clearAction() {
+    public void textFieldOnEnter(KeyEvent keyEvent){
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            addAction();
+        }
+    }
+
+    @FXML
+    public void clearAction() {
         orderItems.clear();
         orderSummaryTable.getItems().clear();
         orderItems.clear();
@@ -131,6 +150,7 @@ public class OrderScreenController {
 
     @FXML
     public void initialize(){
+        zeroAmountLabel.setVisible(false);
         //set the columns from the items
         nameCol.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         idCol.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
@@ -238,12 +258,14 @@ public class OrderScreenController {
         this.appController = appController;
 
         // sets the comboboxes values
+        storeCB.getItems().clear();
         storeCB.getItems().addAll(appController.getStoreManager().getAllStores().values());
         storeCB.setCellFactory(e -> new StoreListViewCell());
         //TODO check why the color is changing after selection
         storeCB.setButtonCell(new StoreListViewCell());
 
         // sets the comboboxes values
+        customerCB.getItems().clear();
         customerCB.getItems().addAll(appController.getStoreManager().getAllCustomers().values());
         customerCB.setCellFactory(e -> new CustomerListViewCell());
         //TODO check why the color is changing after selection
@@ -272,4 +294,20 @@ public class OrderScreenController {
             itemsTable.getItems().addAll(items);
         }
     }
+    public boolean isInterestedInDiscount() {
+        return interestedInDiscount;
+    }
+
+    public void setInterestedInDiscount(boolean interestedInDiscount) {
+        this.interestedInDiscount = interestedInDiscount;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
 }

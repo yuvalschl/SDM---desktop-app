@@ -19,7 +19,6 @@
 	-fx-background-color: #61ddff;
 }
 
-
 .scroll-bar:horizontal, .scroll-bar:vertical{
     -fx-background-color:transparent;
 }

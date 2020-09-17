@@ -1,6 +1,5 @@
 package Store;
 
-import DtoObjects.*;
 import Item.*;
 import Order.*;
 import StoreManager.StoreManager;
@@ -19,7 +18,7 @@ public class Store {
     private int serialNumber;
     private Map<Integer, Item> inventory;
     private Set<Discount> allDiscounts;
-    private Set<StoreOrder> allOrders;
+    private Map<Integer, StoreOrder> allOrders;
     private Point location;
     private float PPK;
     private float totalDeliveriesCost;
@@ -38,7 +37,7 @@ public class Store {
         this.totalDeliveriesCost = 0;
         this.totalPayment = 0;
         this.numberOfItemsSold = 0;
-        this.allOrders = new HashSet<StoreOrder>();
+        this.allOrders = new HashMap<Integer, StoreOrder>();
         this.allDiscounts = new HashSet<Discount>();
 
     }
@@ -51,7 +50,7 @@ public class Store {
         this.numberOfItemsSold = numberOfItemsSold;
     }
 
-    public Store(String name, int serialNumber, Map<Integer, Item> inventory, Set<StoreOrder> allOrders, Point location, float PPK, Set<Discount> discounts) {
+    public Store(String name, int serialNumber, Map<Integer, Item> inventory, Map<Integer, StoreOrder> allOrders, Point location, float PPK, Set<Discount> discounts) {
         this.name = name;
         this.serialNumber = serialNumber;
         this.inventory = inventory;
@@ -59,9 +58,17 @@ public class Store {
         this.location = location;
         this.totalPayment = 0;
         this.PPK = PPK;
-        this.allOrders = new HashSet<StoreOrder>();
+        this.allOrders = new HashMap<Integer, StoreOrder>();
         this.allDiscounts = discounts;
         allDiscounts.stream().forEach(discount -> discount.setStoreId(serialNumber));
+    }
+
+    public int getX(){
+        return location.x;
+    }
+
+    public int getY(){
+        return location.y;
     }
 
     public Store(){}
@@ -110,11 +117,11 @@ public class Store {
         this.inventory = inventory;
     }
 
-    public Set<StoreOrder> getAllOrders() {
+    public Map<Integer, StoreOrder> getAllOrders() {
         return allOrders;
     }
     @XmlTransient
-    public void setAllOrders(Set<StoreOrder> allOrders) {
+    public void setAllOrders(Map<Integer, StoreOrder> allOrders) {
         this.allOrders = allOrders;
     }
 
@@ -134,23 +141,23 @@ public class Store {
         this.totalPayment = totalPayment;
     }
 
-    public HashMap<Integer, DtoItem> getDtoInventory() {
-        HashMap<Integer, DtoItem> dtoInventory = new HashMap<>();
+   /* public HashMap<Integer, Item> getDtoInventory() {
+        HashMap<Integer, Item> dtoInventory = new HashMap<>();
         for (Map.Entry<Integer, Item> item : inventory.entrySet()) {
             Item currentItem = item.getValue();
-            dtoInventory.put(item.getKey(), DtoConvertor.itemToDtoItem(currentItem));
+            dtoInventory.put(item.getKey(), currentItem);
         }
         return dtoInventory;
-    }
+    }*/
 
-    public Set<DtoStoreOrder> getDtoStoreOrders(){
+/*    public Set<DStoreOrder> getDtoStoreOrders(){
         Set<DtoStoreOrder> dtoStoreOrders = new HashSet<>();
-        for(StoreOrder order : allOrders){
+        for(StoreOrder order : allOrders.values()){
             dtoStoreOrders.add(DtoConvertor.storeOrderToDtoStoreOrder(order));
         }
 
         return dtoStoreOrders;
-    }
+    }*/
 
     public String toString() {
         String itemDetails = "";

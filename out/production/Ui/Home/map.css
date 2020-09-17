@@ -1,0 +1,6 @@
+#map{
+	 -fx-background-image: url("jaffaMap.jpg");
+}
+#noScrollPane{
+-fx-background-color : #fffffc;
+}

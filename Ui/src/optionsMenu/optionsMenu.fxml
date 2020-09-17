@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="800.0" prefWidth="200.0" style="-fx-background-color: #61ddff;" stylesheets="@../optionsStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="optionsMenu.OptionsMenuController">
+<VBox alignment="CENTER" prefHeight="635.0" prefWidth="200.0" style="-fx-background-color: #61ddff;" stylesheets="@../optionsStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="optionsMenu.OptionsMenuController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="192.0" text="SDM" textFill="#00aaff">
          <font>
             <Font name="System Bold Italic" size="60.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="200.0">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="711.0" prefWidth="200.0">
          <children>
             <Button fx:id="homeButton" mnemonicParsing="false" onAction="#homeButtonAction" prefWidth="90.0" text="Home">
                <padding>
@@ -23,7 +23,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="showStoresButton" mnemonicParsing="false" onAction="#showStoresAction" prefWidth="90.0" text="Show stores">
+            <Button fx:id="placeOrderButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#placeOrderAction" prefWidth="90.0" text="Place order">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -31,7 +31,12 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </Button>
-            <Button fx:id="placeOrderButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#placeOrderAction" prefWidth="90.0" text="Place order">
+            <Button fx:id="addStoreButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addStoreAction" prefWidth="90.0" text="Add store">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Button>
+            <Button fx:id="showStoresButton" mnemonicParsing="false" onAction="#showStoresAction" prefWidth="90.0" text="Show stores">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -47,12 +52,12 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="addStoreButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addStoreAction" prefWidth="90.0" text="Add store">
+            <Button fx:id="showCustomersBtn" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showCustomersBtnAction" prefHeight="39.0" prefWidth="115.0" text="Show customers">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </Button>
-            <Button fx:id="showOrderHistory" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showOrderHistoryAction" prefHeight="39.0" prefWidth="105.0" text="Order history">
+            <Button fx:id="showOrderHistory" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showOrderHistoryAction" prefHeight="39.0" prefWidth="105.0" text="Show orders">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>

@@ -20,27 +20,30 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public class JaxbClassToStoreManager extends Task<Boolean> {
+public class JaxbClassToStoreManager extends Task<StoreManager> {
     private File file;
     private BooleanProperty xmlLoaded;
+    private StoreManager storeManager;
 
-    private final int SLEEP_TIME = 50;
+    private final int SLEEP_TIME = 5;
 
-    public JaxbClassToStoreManager(File file, BooleanProperty xmlLoaded){
+    public JaxbClassToStoreManager(StoreManager storeManager, File file, BooleanProperty xmlLoaded){
         this.file = file;
         this.xmlLoaded = xmlLoaded;
+        this.storeManager = storeManager;
     }
 
     @Override
-    protected Boolean call() throws Exception {
+    protected StoreManager call() throws Exception {
         updateMessage("Loading file...");
         for (int i = 0 ; i < 10 ; i++){
             updateProgress(i,100);
             TimeUnit.MILLISECONDS.sleep(SLEEP_TIME);
         }
-        StoreManager storeManager = convertJaxbClassToStoreManager(Objects.requireNonNull(XmlToObject.fromXmlFileToObject(file)));
+
+        this.storeManager = convertJaxbClassToStoreManager(Objects.requireNonNull(XmlToObject.fromXmlFileToObject(file)));
         xmlLoaded.setValue(false);
-        return true;
+        return this.storeManager;
 
     }
 
@@ -200,5 +203,26 @@ public class JaxbClassToStoreManager extends Task<Boolean> {
         allItems.keySet().stream().filter(key -> !allItems.get(key).getIsSold()).forEach(notSoldItems::add);
         return notSoldItems;
     }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public boolean isXmlLoaded() {
+        return xmlLoaded.get();
+    }
+
+    public BooleanProperty xmlLoadedProperty() {
+        return xmlLoaded;
+    }
+
+    public void setXmlLoaded(boolean xmlLoaded) {
+        this.xmlLoaded.set(xmlLoaded);
+    }
+
 
 }

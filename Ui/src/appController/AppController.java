@@ -1,6 +1,7 @@
 package appController;
 
 import Home.HomeController;
+import ShowCustomer.ShowCustomerController;
 import ShowHistory.ShowOrdersController;
 import StoreManager.StoreManager;
 import addStore.AddStoreController;
@@ -8,9 +9,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import optionsMenu.OptionsMenuController;
 import orderScreen.OrderScreenController;
 import showItems.ShowItemsController;
@@ -27,14 +26,16 @@ public class AppController {
     @FXML private ShowStoresController showStoresComponentController;
     @FXML private SplitPane ShowOrdersScreenComponent;
     @FXML private ShowOrdersController ShowOrdersScreenComponentController;
-    @FXML private AnchorPane homeComponent;
+    @FXML private Pane homeComponent;
     @FXML private HomeController homeComponentController;
     @FXML private StackPane orderScreen;
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
     @FXML private VBox showItems;
-    @FXML private AnchorPane addStoreComponent;
+    @FXML private GridPane addStoreComponent;
     @FXML private AddStoreController addStoreComponentController;
+    @FXML private VBox showCostumerScreen;
+    @FXML private ShowCustomerController showCostumerScreenController;
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
 
     @FXML
@@ -42,11 +43,26 @@ public class AppController {
         optionsMenuComponentController.setAppController(this);
         homeComponentController.setAppController(this);
         ShowOrdersScreenComponentController.setAppController(this);
+        showCostumerScreenController.setAppController(this);
         optionsMenuComponentController.getShowItemsButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getPlaceOrderButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowStoresButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getAddStoreButton().disableProperty().bind(getXmlLoaded());
         optionsMenuComponentController.getShowOrderHistory().disableProperty().bind(getXmlLoaded());
+        optionsMenuComponentController.getShowCustomersBtn().disableProperty().bind(getXmlLoaded());
+    }
+
+
+    public VBox getShowCostumerScreen() { return showCostumerScreen; }
+
+    public void setShowCostumerScreen(VBox showCostumerScreen) { this.showCostumerScreen = showCostumerScreen; }
+
+    public ShowCustomerController getShowCostumerScreenController() { return showCostumerScreenController; }
+
+    public void setShowCostumerScreenController(ShowCustomerController showCostumerScreenController) { this.showCostumerScreenController = showCostumerScreenController; }
+
+    public HomeController getHomeComponentController() {
+        return homeComponentController;
     }
 
     public VBox getShowItems() {
@@ -109,11 +125,11 @@ public class AppController {
         this.showStoresComponent = showStoresComponent;
     }
 
-    public AnchorPane getAddStoreComponent() {
+    public GridPane getAddStoreComponent() {
         return addStoreComponent;
     }
 
-    public void setAddStoreComponent(AnchorPane addStoreComponent) {
+    public void setAddStoreComponent(GridPane addStoreComponent) {
         this.addStoreComponent = addStoreComponent;
     }
 
@@ -125,7 +141,7 @@ public class AppController {
         this.addStoreComponentController = addStoreComponentController;
     }
 
-    public AnchorPane getHomeComponent() {
+    public Pane getHomeComponent() {
         return homeComponent;
     }
 
@@ -137,7 +153,7 @@ public class AppController {
         this.optionsMenuComponentController = optionsMenuComponentController;
     }
 
-    public void setHomeComponent(AnchorPane homeComponent) {
+    public void setHomeComponent(VBox homeComponent) {
         this.homeComponent = homeComponent;
     }
 
@@ -153,4 +169,5 @@ public class AppController {
     public void setStoreManager(StoreManager storeManager) {
         this.storeManager = storeManager;
     }
+
 }

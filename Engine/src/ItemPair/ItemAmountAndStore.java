@@ -1,6 +1,6 @@
 package ItemPair;
 
-import DtoObjects.DtoItem;
+import Item.Item;
 import Store.Store;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class ItemAmountAndStore {
     private float amount;
-    private DtoItem item;
+    private Item item;
     private int itemId;
     private String itemName;
     private int itemStore;
@@ -22,22 +22,22 @@ public class ItemAmountAndStore {
 
 
 
-    public ItemAmountAndStore(DtoItem item, float amount, Store store) {
+    public ItemAmountAndStore(Item item, float amount, Store store) {
         this.item = item;
         this.amount = amount;
         this.store = store;
-        this.itemId = item.getSerialNumber();
+        this.itemId = item.getId();
         this.itemName = item.getName();
         this.itemStore = store.getSerialNumber();
         this.discountItemAmount =amount;
     }
 
 
-    public ItemAmountAndStore(DtoItem item, Store store) {
+    public ItemAmountAndStore(Item item, Store store) {
         this.item = item;
         this.store = store;
         this.itemName = item.getName();
-        this.itemId = item.getSerialNumber();
+        this.itemId = item.getId();
         this.itemStore = store.getSerialNumber();
         this.discountItemAmount =amount;
     }
@@ -82,7 +82,7 @@ public class ItemAmountAndStore {
         this.itemStore = itemStore;
     }
 
-    public ItemAmountAndStore(float amount, DtoItem item) {
+    public ItemAmountAndStore(float amount, Item item) {
         this.amount = amount;
         this.item = item;
     }
@@ -95,7 +95,7 @@ public class ItemAmountAndStore {
         return amount;
     }
 
-    public DtoItem getItem() {
+    public Item getItem() {
         return item;
     }
 
@@ -103,11 +103,11 @@ public class ItemAmountAndStore {
         return store;
     }
 
-    public boolean containsItem(DtoItem item) {
+    public boolean containsItem(Item item) {
         return (item == this.item);
     }
 
-    public DtoItem item() {
+    public Item item() {
         return item;
     }
 
@@ -119,5 +119,5 @@ public class ItemAmountAndStore {
         this.amount = amount;
     }
     @XmlTransient
-    public void setItem(DtoItem item){ this.item =item;}
+    public void setItem(Item item){ this.item =item;}
 }

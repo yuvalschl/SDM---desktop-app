@@ -8,13 +8,13 @@
    <children>
       <HBox>
          <children>
-            <Label text="Date:" />
+            <Label text="Date of porder:" />
             <Label fx:id="orderDateLabel" />
          </children>
       </HBox>
       <HBox>
          <children>
-            <Label text="ID:" />
+            <Label text="Order ID:" />
             <Label fx:id="orderIdLabel" />
          </children>
       </HBox>

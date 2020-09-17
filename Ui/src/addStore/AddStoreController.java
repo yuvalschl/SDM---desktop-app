@@ -100,6 +100,7 @@ public class AddStoreController {
 
     public void setData(AppController appController){
         this.appController = appController;
+        availableItemsTable.getItems().clear();
         availableItemsTable.getItems().addAll(appController.getStoreManager().getAllItems().values());
     }
 

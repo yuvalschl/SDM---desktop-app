@@ -1,48 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="870.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowHistory.DisplaySingleOrderController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="789.0" prefWidth="708.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowHistory.DisplaySingleOrderController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="870.0" spacing="5.0">
+      <Label text="Items">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <HBox spacing="25.0">
          <children>
-            <Label text="Items">
+            <Label text="Name">
                <font>
-                  <Font size="30.0" />
+                  <Font size="17.0" />
                </font>
             </Label>
-            <TableView fx:id="itemsTable" prefHeight="284.0" prefWidth="750.0">
-               <columns>
-                  <TableColumn fx:id="itemIdCol" prefWidth="75.0" text="Id" />
-                  <TableColumn fx:id="itemNameCol" prefWidth="75.0" text="Name" />
-                  <TableColumn fx:id="itemSellByCol" prefWidth="96.0" text="Sell by" />
-                  <TableColumn fx:id="itemAmountSoldCol" prefWidth="120.0" text="Amont sold" />
-                  <TableColumn fx:id="itemPriceCol" prefWidth="101.0" text="Price" />
-                  <TableColumn fx:id="itemTotalPriceCol" prefWidth="148.0" text="Total Price" />
-                  <TableColumn fx:id="itemPartOfDiscountCol" prefWidth="132.0" text="part of disccount" />
-               </columns>
-            </TableView>
-            <Label text="Stores">
+            <Label text="ID">
                <font>
-                  <Font size="30.0" />
+                  <Font size="17.0" />
                </font>
             </Label>
-            <TableView fx:id="storesTable" prefHeight="412.0" prefWidth="750.0">
-               <columns>
-                  <TableColumn fx:id="storeIdCol" prefWidth="75.0" text="Id" />
-                  <TableColumn fx:id="storeNameCol" prefWidth="145.0" text="Name" />
-                  <TableColumn fx:id="storePkkCol" prefWidth="137.0" text="price per KM" />
-                  <TableColumn fx:id="storeDistanceToClientcol" prefWidth="215.0" text="distance to client" />
-                  <TableColumn fx:id="storeShippingCostCol" prefWidth="176.0" text="Shipping cost" />
-               </columns>
-            </TableView>
+            <Label text="Sell by">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label text="Amount">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label text="Price Per unit">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label text="Total item price">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label prefHeight="25.0" prefWidth="129.0" text="Part of Discount">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
          </children>
-      </VBox>
+      </HBox>
+      <ListView fx:id="itemsListView" prefHeight="244.0" prefWidth="731.0" />
+      <Label text="Stores">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <TableView fx:id="storesTable" prefHeight="206.0" prefWidth="706.0">
+         <columns>
+            <TableColumn fx:id="storeIdCol" prefWidth="75.0" text="Id" />
+            <TableColumn fx:id="storeNameCol" prefWidth="145.0" text="Name" />
+            <TableColumn fx:id="storePkkCol" prefWidth="137.0" text="price per KM" />
+            <TableColumn fx:id="storeDistanceToClientcol" prefWidth="215.0" text="distance to client" />
+            <TableColumn fx:id="storeShippingCostCol" prefWidth="145.0" text="Shipping cost" />
+         </columns>
+      </TableView>
    </children>
-</Pane>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</VBox>

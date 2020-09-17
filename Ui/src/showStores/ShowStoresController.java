@@ -49,13 +49,13 @@ public class ShowStoresController {
     public TableView<Item> getItemsTable() {
         return itemsTable;
     }
-
     public ListView<Store> getStoresListView() {
         return storesListView;
     }
 
     public void setData(AppController appController){
         this.appController = appController;
+        storesListView.getItems().clear();
         //set listener to the map of stores so the list view updates dynamically
         storesObservableMap = FXCollections.observableMap(appController.getStoreManager().getAllStores());
         storesObservableMap.addListener(new MapChangeListener<Integer, Store>() {
@@ -96,6 +96,7 @@ public class ShowStoresController {
         shippingCostCol.setCellValueFactory(new PropertyValueFactory<>("shippingCost"));
         itemsCostCol.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfItems"));
 
+        storesListView.getItems().clear();
         storesListView.getItems().addAll(appController.getStoreManager().getAllStores().values());
         storesListView.setCellFactory(e -> new StoreListViewCell());
 
@@ -113,7 +114,7 @@ public class ShowStoresController {
                 //set the order list view
                 //TODO: this may not work, check when place order is done
                 ordersTable.getItems().clear();
-                ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders()));
+                ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders().values()));
                 itemsTable.scrollTo(0);
 
 

@@ -1,17 +1,10 @@
 package optionsMenu;
 
 import appController.AppController;
-import appController.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import orderScreen.OrderScreenController;
-import showItems.ShowItemsController;
 
 import java.io.IOException;
 
@@ -28,6 +21,11 @@ public class OptionsMenuController {
     @FXML private Button showItemsButton;
     @FXML private Button addStoreButton;
     @FXML private Button showOrderHistory;
+    @FXML private  Button homeButton;
+    @FXML private  Button showCustomersBtn;
+
+
+
     public Button getShowOrderHistory() { return showOrderHistory; }
 
     public void setShowOrderHistory(Button showOrderHistory) { this.showOrderHistory = showOrderHistory; }
@@ -55,6 +53,10 @@ public class OptionsMenuController {
     public void setPlaceOrderButton(Button placeOrderButton) {
         this.placeOrderButton = placeOrderButton;
     }
+
+    public Button getShowCustomersBtn() { return showCustomersBtn;}
+
+    public void setShowCustomersBtn(Button showCustomersBtn) { this.showCustomersBtn = showCustomersBtn;}
 
     @FXML
     public void showStoresAction() throws IOException {
@@ -101,7 +103,6 @@ public class OptionsMenuController {
     @FXML
     public void showOrderHistoryAction(ActionEvent actionEvent) {
         disablePanes();
-        //showOrderHistory.
         appController.getShowOrdersScreen().setVisible(true);
 
     }
@@ -112,4 +113,8 @@ public class OptionsMenuController {
     }
 
 
+    public void showCustomersBtnAction(ActionEvent actionEvent) {
+        disablePanes();
+        appController.getShowCostumerScreen().setVisible(true);
+    }
 }
