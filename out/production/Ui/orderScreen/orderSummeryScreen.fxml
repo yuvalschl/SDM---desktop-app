@@ -2,32 +2,42 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.07268170426065163" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="800.0" prefWidth="870.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="orderScreen.OrderSummeryController">
-  <items>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="106.0" prefWidth="598.0">
+
+<VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="708.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="orderScreen.OrderSummeryController">
+   <children>
+      <Label text="Order summery">
+         <font>
+            <Font size="41.0" />
+         </font>
+      </Label>
+      <fx:include fx:id="singleOrderComponent" source="../ShowHistory/displaySinglOrder.fxml" />
+      <VBox alignment="TOP_CENTER" prefHeight="144.0" prefWidth="708.0" spacing="25.0">
          <children>
-            <Label layoutX="300.0" text="Order summery">
-               <font>
-                  <Font size="41.0" />
-               </font>
-            </Label>
-         </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="718.0" prefWidth="868.0">
-         <children>
-            <fx:include fx:id="singleOrderComponent" source="../ShowHistory/displaySinglOrder.fxml" />
-            <Button layoutX="94.0" layoutY="674.0" mnemonicParsing="false" onAction="#approveOrderAction" prefHeight="31.0" prefWidth="266.0" text="approve order" />
-            <Button layoutX="508.0" layoutY="674.0" mnemonicParsing="false" onAction="#cancelOrderAction" prefHeight="31.0" prefWidth="266.0" text="cancel order" />
-            <Label layoutX="104.0" layoutY="613.0" prefHeight="21.0" prefWidth="101.0" text="All items price:" textFill="#1611f5" />
-            <Label fx:id="allItemsPriceLabel" layoutX="137.0" layoutY="641.0" text="Label" />
-            <Label layoutX="370.0" layoutY="613.0" prefHeight="21.0" prefWidth="129.0" text="Total shipping cost:" textFill="#1611f5" />
-            <Label fx:id="totalShippingCostLabel" layoutX="417.0" layoutY="641.0" text="Label" />
-            <Label layoutX="625.0" layoutY="613.0" prefHeight="21.0" prefWidth="129.0" text="Total order cost:" textFill="#1611f5" />
-            <Label fx:id="totalOrderCostLabel" layoutX="662.0" layoutY="641.0" text="Label" />
+            <HBox alignment="TOP_CENTER" spacing="30.0">
+               <children>
+                  <Label prefHeight="21.0" prefWidth="101.0" text="All items price:" textFill="#1611f5" />
+                  <Label prefHeight="21.0" prefWidth="129.0" text="Total shipping cost:" textFill="#1611f5" />
+                  <Label prefHeight="21.0" prefWidth="129.0" text="Total order cost:" textFill="#1611f5" />
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" spacing="130.0">
+               <children>
+                  <Label fx:id="allItemsPriceLabel" text="Label" />
+                  <Label fx:id="totalShippingCostLabel" text="Label" />
+                  <Label fx:id="totalOrderCostLabel" text="Label" />
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" spacing="30.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#approveOrderAction" prefHeight="31.0" prefWidth="266.0" text="approve order" />
+                  <Button mnemonicParsing="false" onAction="#cancelOrderAction" prefHeight="31.0" prefWidth="266.0" text="cancel order" />
+               </children>
+            </HBox>
          </children>
-      </AnchorPane>
-  </items>
-</SplitPane>
+      </VBox>
+   </children>
+</VBox>

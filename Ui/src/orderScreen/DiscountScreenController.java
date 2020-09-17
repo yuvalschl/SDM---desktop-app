@@ -1,20 +1,17 @@
 package orderScreen;
 
-import Item.Item;
 import ItemPair.ItemAmountAndStore;
 import Order.Order;
 import Store.Discount;
 import Store.Offer;
 import appController.AppController;
-import com.sun.org.apache.xpath.internal.operations.Or;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import listCells.discountCell.discountCell;
 import listCells.discountCell.offerCell;
 import Store.DiscountOperator;
@@ -23,8 +20,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import Store.MyThenYouGet;
 
 
 public class DiscountScreenController {
@@ -41,11 +36,11 @@ public class DiscountScreenController {
     private ArrayList<Discount> discounts;
     private OrderSummeryController orderSummeryScreenController;
     private Point costumerLocation;
-    private SplitPane orderSummeryScreen;
+    private VBox orderSummeryScreen;
     private SplitPane orderScreenSplitPane;
     private OrderScreenController orderScreenController;
 
-    public void setData(ArrayList<Discount> discounts, AppController appController, Order order, SplitPane discountScreen, Point location, SplitPane orderSummeryScreen, OrderSummeryController orderSummeryScreenController, SplitPane orderScreenSplitPane, OrderScreenController orderScreenController) {
+    public void setData(ArrayList<Discount> discounts, AppController appController, Order order, SplitPane discountScreen, Point location, VBox orderSummeryScreen, OrderSummeryController orderSummeryScreenController, SplitPane orderScreenSplitPane, OrderScreenController orderScreenController) {
         this.appController = appController;
         this.discounts = discounts;
         this.orderSummeryScreenController = orderSummeryScreenController;

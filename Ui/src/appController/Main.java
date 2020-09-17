@@ -20,7 +20,7 @@ public class Main extends Application {
     public void start(Stage startPrimaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("app.fxml"));
         startPrimaryStage.setTitle("SDM");
-        startPrimaryStage.setScene(new Scene(root, 1200, 800));
+        startPrimaryStage.setScene(new Scene(root, 1280, 801));
         primaryStage = startPrimaryStage;
         mainMenu = startPrimaryStage.getScene();
         startPrimaryStage.show();

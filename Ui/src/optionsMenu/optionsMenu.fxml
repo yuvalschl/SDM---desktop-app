@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="800.0" prefWidth="200.0" style="-fx-background-color: #61ddff;" stylesheets="@../optionsStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="optionsMenu.OptionsMenuController">
+<VBox alignment="CENTER" prefHeight="635.0" prefWidth="200.0" style="-fx-background-color: #61ddff;" stylesheets="@../optionsStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="optionsMenu.OptionsMenuController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="192.0" text="SDM" textFill="#00aaff">
          <font>
             <Font name="System Bold Italic" size="60.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="200.0">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="711.0" prefWidth="200.0">
          <children>
             <Button fx:id="homeButton" mnemonicParsing="false" onAction="#homeButtonAction" prefWidth="90.0" text="Home">
                <padding>

@@ -5,21 +5,19 @@ import Costumer.Customer;
 import Order.Order;
 import ShowHistory.DisplaySingleOrderController;
 import appController.AppController;
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
+import javafx.scene.layout.VBox;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.util.concurrent.TimeUnit;
+
 //TODO: add a label that reflects the user choice for a dew seconds and desapear
 public class OrderSummeryController {
     private Order order;
     private AppController appController;
-    private SplitPane orderSummeryScreen;
+    private VBox orderSummeryScreen;
     private SplitPane orderScreen;
     private OrderScreenController orderScreenController;
     @FXML private DisplaySingleOrderController singleOrderComponentController;
@@ -28,7 +26,7 @@ public class OrderSummeryController {
     @FXML private  Label totalShippingCostLabel;
     @FXML private  Label totalOrderCostLabel;
 
-    public void setData( AppController appController, Order order, Point costumerLocation, SplitPane summeryScreen, SplitPane orderScreen, OrderScreenController orderScreenController){
+    public void setData(AppController appController, Order order, Point costumerLocation, VBox summeryScreen, SplitPane orderScreen, OrderScreenController orderScreenController){
         this.order = order;
         this.appController = appController;
         this.orderSummeryScreen = summeryScreen;

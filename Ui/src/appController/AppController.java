@@ -9,9 +9,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import optionsMenu.OptionsMenuController;
 import orderScreen.OrderScreenController;
 import showItems.ShowItemsController;
@@ -28,15 +26,15 @@ public class AppController {
     @FXML private ShowStoresController showStoresComponentController;
     @FXML private SplitPane ShowOrdersScreenComponent;
     @FXML private ShowOrdersController ShowOrdersScreenComponentController;
-    @FXML private AnchorPane homeComponent;
+    @FXML private Pane homeComponent;
     @FXML private HomeController homeComponentController;
     @FXML private StackPane orderScreen;
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
     @FXML private VBox showItems;
-    @FXML private AnchorPane addStoreComponent;
+    @FXML private SplitPane addStoreComponent;
     @FXML private AddStoreController addStoreComponentController;
-    @FXML private SplitPane showCostumerScreen;
+    @FXML private VBox showCostumerScreen;
     @FXML private ShowCustomerController showCostumerScreenController;
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
 
@@ -55,9 +53,9 @@ public class AppController {
     }
 
 
-    public SplitPane getShowCostumerScreen() { return showCostumerScreen; }
+    public VBox getShowCostumerScreen() { return showCostumerScreen; }
 
-    public void setShowCostumerScreen(SplitPane showCostumerScreen) { this.showCostumerScreen = showCostumerScreen; }
+    public void setShowCostumerScreen(VBox showCostumerScreen) { this.showCostumerScreen = showCostumerScreen; }
 
     public ShowCustomerController getShowCostumerScreenController() { return showCostumerScreenController; }
 
@@ -127,11 +125,11 @@ public class AppController {
         this.showStoresComponent = showStoresComponent;
     }
 
-    public AnchorPane getAddStoreComponent() {
+    public SplitPane getAddStoreComponent() {
         return addStoreComponent;
     }
 
-    public void setAddStoreComponent(AnchorPane addStoreComponent) {
+    public void setAddStoreComponent(SplitPane addStoreComponent) {
         this.addStoreComponent = addStoreComponent;
     }
 
@@ -143,7 +141,7 @@ public class AppController {
         this.addStoreComponentController = addStoreComponentController;
     }
 
-    public AnchorPane getHomeComponent() {
+    public Pane getHomeComponent() {
         return homeComponent;
     }
 
@@ -155,7 +153,7 @@ public class AppController {
         this.optionsMenuComponentController = optionsMenuComponentController;
     }
 
-    public void setHomeComponent(AnchorPane homeComponent) {
+    public void setHomeComponent(VBox homeComponent) {
         this.homeComponent = homeComponent;
     }
 
