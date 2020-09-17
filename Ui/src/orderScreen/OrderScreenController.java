@@ -142,6 +142,7 @@ public class OrderScreenController {
         orderItems.clear();
         orderSummaryTable.getItems().clear();
         orderItems.clear();
+        interestedInDiscount = true;
         dynamicOrderCB.setSelected(false);
         datePicker.setValue(null);
         storeCB.setValue(null);

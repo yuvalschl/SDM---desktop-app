@@ -19,28 +19,12 @@ public class Order {
     private float shippingCost;
     private HashMap<Integer, Float> shippingCostByStore;
     private float totalCost;
-    private float distance;//TODO: delete this attribute
     private HashMap<Integer, Store> stores = new HashMap<>();
     private int orderId;
     private static int staticId = 0;
     private Customer customer;
     private HashMap<Integer, ItemAmountAndStore> itemAmountAndStores;
     private HashMap<Integer,String> storeIdAndName = new HashMap<>();
-
-    public Order(Date dateOfOrder, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, HashMap<Integer, ItemAmountAndStore> itemAmountAndStores, float distance, HashMap<Integer, Store> store, Customer customer) {
-        this.dateOfOrder = dateOfOrder;
-        this.amountOfItems = amountOfItems;
-        this.totalPriceOfItems = totalPriceOfItems;
-        this.shippingCost = shippingCost;
-        this.totalCost = totalCost;
-        this.itemAmountAndStores = itemAmountAndStores;
-        this.distance = distance;
-        this.orderId = ++staticId;
-        this.stores = store;
-        this.shippingCostByStore = new HashMap<>();
-
-        updateStoreIdAndName(itemAmountAndStores);
-    }
 
     //Constructor for an order loaded from file
     public Order(int ID, Date date, int amountOfItems, float totalPriceOfItems, float shippingCost, float totalCost, HashMap<Integer, ItemAmountAndStore> itemAmountAndStores)
@@ -96,10 +80,6 @@ public class Order {
     public void setShippingCostByStore(HashMap<Integer, Float> shippingCostByStore) {
         this.shippingCostByStore = shippingCostByStore;
     }
-    @XmlTransient
-    public void setDistance(float distance) {
-        this.distance = distance;
-    }
 
     @XmlAttribute
     public void setOrderId(int orderId) {
@@ -132,9 +112,6 @@ public class Order {
         Order.staticId = staticId;
     }
 
-    public float getDistance() {
-        return distance;
-    }
 
     public HashMap<Integer, ItemAmountAndStore> getItemAmountAndStores() {
         return itemAmountAndStores;
