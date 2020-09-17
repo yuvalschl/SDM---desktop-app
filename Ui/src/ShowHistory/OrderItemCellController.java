@@ -1,7 +1,6 @@
 package ShowHistory;
 
-import DtoObjects.DtoUnitItem;
-import Item.*;
+import Item.UnitItem;
 import ItemPair.ItemAmountAndStore;
 import Store.Store;
 import appController.AppController;
@@ -60,7 +59,7 @@ public class OrderItemCellController extends ListCell<ItemAmountAndStore> {
 
             name.setText(item.getItemName());
             ID.setText(String.valueOf(item.getItemId()));
-            if(item.getItem() instanceof DtoUnitItem){
+            if(item.getItem() instanceof UnitItem){
                 sellBy.setText("Unit");
             }
             else {

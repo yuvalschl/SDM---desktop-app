@@ -1,6 +1,5 @@
 package Store;
 
-import DtoObjects.*;
 import Item.*;
 import Order.*;
 import StoreManager.StoreManager;
@@ -142,23 +141,23 @@ public class Store {
         this.totalPayment = totalPayment;
     }
 
-    public HashMap<Integer, DtoItem> getDtoInventory() {
-        HashMap<Integer, DtoItem> dtoInventory = new HashMap<>();
+   /* public HashMap<Integer, Item> getDtoInventory() {
+        HashMap<Integer, Item> dtoInventory = new HashMap<>();
         for (Map.Entry<Integer, Item> item : inventory.entrySet()) {
             Item currentItem = item.getValue();
-            dtoInventory.put(item.getKey(), DtoConvertor.itemToDtoItem(currentItem));
+            dtoInventory.put(item.getKey(), currentItem);
         }
         return dtoInventory;
-    }
+    }*/
 
-    public Set<DtoStoreOrder> getDtoStoreOrders(){
+/*    public Set<DStoreOrder> getDtoStoreOrders(){
         Set<DtoStoreOrder> dtoStoreOrders = new HashSet<>();
         for(StoreOrder order : allOrders.values()){
             dtoStoreOrders.add(DtoConvertor.storeOrderToDtoStoreOrder(order));
         }
 
         return dtoStoreOrders;
-    }
+    }*/
 
     public String toString() {
         String itemDetails = "";

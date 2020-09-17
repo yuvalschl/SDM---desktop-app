@@ -1,7 +1,6 @@
 package StoreManager;
 import Store.Offer;
 import Costumer.Customer;
-import DtoObjects.*;
 import Exceptions.InvalidValueException;
 import Item.*;
 import ItemPair.ItemAmountAndStore;
@@ -92,7 +91,7 @@ public class StoreManager {
             for (ItemAmountAndStore itemAmountAndStore: order.getItemAmountAndStores().values()) {//This loop recreates the lost data from the history load
                 int itemID = itemAmountAndStore.getItemId();
                 Store store = allStores.get(itemAmountAndStore.getItemStore());
-                itemAmountAndStore.setItem(DtoConvertor.itemToDtoItem(allItems.get(itemID)));
+                itemAmountAndStore.setItem(allItems.get(itemID));
                 itemAmountAndStore.setStore(store);
                 order.getStores().put(store.getSerialNumber(),store);
             }
@@ -138,20 +137,20 @@ public class StoreManager {
         return priceAccumulator / (float)NumberOfStoresSellingItem(item);
     }
 
-    public HashMap<Integer ,DtoStore> getAllDtoStores(){
-        HashMap<Integer ,DtoStore> allDtoStores = new HashMap<>();
-        Map<Integer, DtoItem> currentDtoInventory = new HashMap<>();
-        Set<DtoStoreOrder> currentDtoOrders = new HashSet<>();
+   /* public HashMap<Integer ,Store> getAllDtoStores(){
+        HashMap<Integer ,Store> allDtoStores = new HashMap<>();
+        Map<Integer, Item> currentDtoInventory = new HashMap<>();
+        Set<StoreOrder> currentDtoOrders = new HashSet<>();
         for(Integer key : allStores.keySet()){
             Store currentStore = allStores.get(key);
             currentDtoInventory = getDtoInventory(currentStore);
             currentDtoOrders = getDtoOrders(currentStore);
-            allDtoStores.put(key, DtoConvertor.storeToDtoStore(currentStore));
+            allDtoStores.put(key, currentStore);
         }
         return allDtoStores;
     }
-
-    public HashMap<Integer ,DtoOrder> getAllDtoOrders(){
+*/
+ /*   public HashMap<Integer ,DtoOrder> getAllDtoOrders(){
         HashMap<Integer ,DtoOrder> allDtoOrders = new HashMap<>();
         for (Order order: allOrders){
             DtoOrder dtoOrder = new DtoOrder(order.getDateOfOrder(),order.getAmountOfItems(),order.getTotalPriceOfItems()
@@ -159,29 +158,29 @@ public class StoreManager {
             allDtoOrders.put(order.getOrderId(), dtoOrder);
         }
         return allDtoOrders;
-    }
+    }*/
 
-    public void updateItemPrice(DtoItem item, float newPrice, DtoStore store) throws InvalidValueException {
+    public void updateItemPrice(Item item, float newPrice, Store store) throws InvalidValueException {
         Store storeToUpdate = allStores.get(store.getSerialNumber());
-        storeToUpdate.getInventory().get(item.getSerialNumber()).setPrice(newPrice);
+        storeToUpdate.getInventory().get(item.getId()).setPrice(newPrice);
     }
 
-    private Map<Integer, DtoItem> getDtoInventory(Store store){
-        Map<Integer, DtoItem> currentDtoInventory = new HashMap<>();
+    /*private Map<Integer, Item> getDtoInventory(Store store){
+        Map<Integer, Item> currentDtoInventory = new HashMap<>();
         for(Integer key : store.getInventory().keySet()){
             Item currentItem = store.getInventory().get(key);
             if(currentItem instanceof UnitItem){
-                currentDtoInventory.put(key, new DtoUnitItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold()));
+                currentDtoInventory.put(key, new UnitItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold()));
             }
             else {
-                currentDtoInventory.put(key, new DtoWeightItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold()));
+                currentDtoInventory.put(key, new WeightItem(key, currentItem.getName(), currentItem.getPrice(), currentItem.getAmountSold()));
             }
         }
 
         return currentDtoInventory;
-    }
+    }*/
 
-    private Set<DtoStoreOrder> getDtoOrders(Store store){
+/*    private Set<DtoStoreOrder> getDtoOrders(Store store){
         Set<DtoStoreOrder> currentOrdersDtoSet = new HashSet<>();
         if(store.getAllOrders() != null){
             for(StoreOrder order : store.getAllOrders().values()){
@@ -191,9 +190,9 @@ public class StoreManager {
         }
 
         return currentOrdersDtoSet;
-    }
+    }*/
 
-    public Map<Integer, DtoItem> getAllDtoItems(){
+   /* public Map<Integer, DtoItem> getAllDtoItems(){
         Map<Integer, DtoItem> allDtoItems = new HashMap<Integer, DtoItem>();
         for(Integer key : allItems.keySet()){
             Item currentItem = allItems.get(key);
@@ -205,21 +204,21 @@ public class StoreManager {
             }
         }
         return allDtoItems;
-    }
+    }*/
 
-    public Order createOrder(Point customerLocation, Date date, HashMap<Integer, ItemAmountAndStore> items) {
+    public Order createOrder(Point customerLocation, Date date, HashMap<Integer, ItemAmountAndStore> items, Customer customer) {
         int totalPriceOfItems = 0;
         HashMap<Integer, Store> allStoresInOrder = getAllStoresInOrder(items);
         float shippingCost = calcShippingCost(items, customerLocation);
         HashMap<Integer, Float> shippingCostByStore = calcShippingCostByStore(items, customerLocation);
         for (ItemAmountAndStore pair: items.values()) {
-            if (pair.item() instanceof DtoUnitItem)
+            if (pair.item() instanceof UnitItem)
                 totalPriceOfItems += (int)pair.amount() * pair.getItem().getPrice();
             else
                 totalPriceOfItems += pair.amount() * pair.getItem().getPrice();
         }
         float totalCost = shippingCost + totalPriceOfItems;
-        return new Order(date, items.size(), totalPriceOfItems, shippingCost, totalCost, allStoresInOrder, items, shippingCostByStore);
+        return new Order(date, items.size(), totalPriceOfItems, shippingCost, totalCost, allStoresInOrder, items, shippingCostByStore, customer);
     }
 
 
@@ -260,7 +259,7 @@ public class StoreManager {
 
         allOrders.add(order);
         for (ItemAmountAndStore item : order.getItemAmountAndStores().values()) {
-            int itemID = item.item().getSerialNumber();
+            int itemID = item.item().getId();
             allItems.get(itemID).setAmountSold(item.getAmount()+ allItems.get(itemID).getAmountSold());
 
             Store currentStore = order.getStores().get(item.getStore().getSerialNumber());
@@ -274,7 +273,8 @@ public class StoreManager {
 
         for(Map.Entry<Integer, Store> store : order.getStores().entrySet()){
             float shippingCost = order.getShippingCostByStore().get(store.getKey());
-            StoreOrder ordersToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, order.getDistance(), store.getValue(), order.getOrderId(),store.getValue().getPPK());
+            float distance = distanceCalculator(order.getCustomer().getLocation(), store.getValue().getLocation()) ;
+            StoreOrder ordersToAdd = new StoreOrder(order.getDateOfOrder(), shippingCost, distance, store.getValue(), order.getOrderId(),store.getValue().getPPK());
             for(ItemAmountAndStore item : order.getItemAmountAndStores().values()){
                 if(item.getStore().getSerialNumber() == store.getValue().getSerialNumber()){
                     ordersToAdd.addItemToOrder(item);
@@ -287,7 +287,7 @@ public class StoreManager {
 
 
     private float calcTotalPayment(Store store, ItemAmountAndStore item){
-        return store.getTotalPayment() + store.getInventory().get(item.getItem().getSerialNumber()).getPrice();
+        return store.getTotalPayment() + store.getInventory().get(item.getItem().getId()).getPrice();
     }
 
     public float distanceCalculator(Point point1, Point point2){
@@ -324,13 +324,13 @@ public class StoreManager {
                 }
             }
         }
-        return new ItemAmountAndStore(DtoConvertor.itemToDtoItem(cheapestItem),cheapestStore);
+        return new ItemAmountAndStore(cheapestItem,cheapestStore);
     }
 
-    private int howManyStoresSellItem(DtoItem item) {
+    private int howManyStoresSellItem(Item item) {
         int numberOfStoreThatSell = 0;
         for (Map.Entry<Integer, Store> set : allStores.entrySet()) {
-            if (set.getValue().getInventory().containsKey(item.getSerialNumber()))
+            if (set.getValue().getInventory().containsKey(item.getId()))
                 numberOfStoreThatSell++;
         }
         return  numberOfStoreThatSell;
@@ -348,17 +348,17 @@ public class StoreManager {
         return  timesSold;
     }
 
-    public void addItemToStore(DtoStore store, DtoItem itemToUpdate, float price) throws InvalidValueException {
+    public void addItemToStore(Store store, Item itemToUpdate, float price) throws InvalidValueException {
         Store storeToUpdate = allStores.get(store.getSerialNumber());
-        storeToUpdate.getInventory().put(itemToUpdate.getSerialNumber(), DtoConvertor.dtoItemToItem(itemToUpdate));
-        storeToUpdate.getInventory().get(itemToUpdate.getSerialNumber()).setPrice(price);
+        storeToUpdate.getInventory().put(itemToUpdate.getId(), itemToUpdate);
+        storeToUpdate.getInventory().get(itemToUpdate.getId()).setPrice(price);
     }
 
     /**
      * deletes item from store
      * @return a string that will hold the information about whether the item to delete was a part of a discount, if not null is returned
      */
-    public String deleteItemFromStore(DtoStore storeToDeleteFrom, int itemId){
+    public String deleteItemFromStore(Store storeToDeleteFrom, int itemId){
         String stringToReturn = null;
         Store storeToUpdate = allStores.get(storeToDeleteFrom.getSerialNumber());
         Set<Discount> storeDiscounts = allStores.get(storeToDeleteFrom.getSerialNumber()).getAllDiscounts();//get the store discount
@@ -402,7 +402,7 @@ public class StoreManager {
     public Map<Integer,ItemAmountAndStore> addDiscountItemsToOrderAllOrNothing(Order order, Discount discount){
         Map<Integer, ItemAmountAndStore> itemsMap = new HashMap<Integer, ItemAmountAndStore>();
         for(Offer offer : discount.getThenYouGet().getAllOffers()){
-            itemsMap.put(offer.getItemId(), new ItemAmountAndStore(getAllDtoItems().get(offer.getItemId()), offer.getQuantity(), allStores.get(discount.getStoreId())));
+            itemsMap.put(offer.getItemId(), new ItemAmountAndStore(allItems.get(offer.getItemId()), offer.getQuantity(), allStores.get(discount.getStoreId())));
             itemsMap.get(offer.getItemId()).setPartOfDiscount(true);
         }
         discount.getThenYouGet().getAllOffers().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
@@ -417,7 +417,7 @@ public class StoreManager {
      */
     public ItemAmountAndStore addDiscountItemToOrder(int offerItemIDToAdd, Order order, Discount discount){ Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
         Store store = allStores.get(discount.getStoreId());
-        DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
+        Item item = allItems.get(offerItemIDToAdd);
         ItemAmountAndStore itemAmountAndStoreToreturn = null;
         //the if below checks if the offered item is already in the order inventory
         if(order.getItemAmountAndStores().values().stream().anyMatch(itemAmountAndStore -> itemAmountAndStore.getItemId() == offerItemIDToAdd && itemAmountAndStore.getIsPartOfDiscount())){
@@ -433,8 +433,10 @@ public class StoreManager {
              itemAmountAndStoreToreturn = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
             itemAmountAndStoreToreturn.setPartOfDiscount(true);
             int key ;
-            if (order.getItemAmountAndStores().containsKey(itemAmountAndStoreToreturn.getItemId()))//this if is to prevent the case that an item with the same id(it will only happen if on offer item has the same id as an item in item amount and store) is to be entered to the order item amount and store map
+            if (order.getItemAmountAndStores().containsKey(itemAmountAndStoreToreturn.getItemId())) {//this if is to prevent the case that an item with the same id(it will only happen if on offer item has the same id as an item in item amount and store) is to be entered to the order item amount and store map
                 key = allItems.get(itemAmountAndStoreToreturn.getItemId()).getMaxID();
+                allItems.get(itemAmountAndStoreToreturn.getItemId()).setMaxID(key+1);
+            }
             else
                 key = itemAmountAndStoreToreturn.getItemId();
             order.getItemAmountAndStores().put(key ,itemAmountAndStoreToreturn);
@@ -460,10 +462,10 @@ public class StoreManager {
         itemToUpdate.get().setAmount(itemToUpdate.get().getAmount()+ offer.getQuantity());
     }
 
-   
+
     private void updateItemDiscountAmount(int itemID,Order order,Discount discount){
         for (ItemAmountAndStore item: order.getItemAmountAndStores().values()){
-            if (item.getItem().getSerialNumber() == itemID ){
+            if (item.getItem().getId() == itemID ){
                 item.setDiscountItemAmount(item.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());
             }
         }

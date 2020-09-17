@@ -1,7 +1,6 @@
 package orderScreen;
 import Store.Discount;
 import Costumer.Customer;
-import DtoObjects.DtoConvertor;
 import Item.*;
 import ItemPair.ItemAmountAndStore;
 import Order.Order;
@@ -15,7 +14,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -91,7 +89,7 @@ public class OrderScreenController {
                     itemToAdd.setDiscountItemAmount(amount);
                     itemToAdd.setAmount(amount);
                 } else {
-                    itemToAdd = new ItemAmountAndStore(DtoConvertor.itemToDtoItem(item), amount, storeCB.getValue());
+                    itemToAdd = new ItemAmountAndStore(item, amount, storeCB.getValue());
                 }
 
                 if (orderItems.containsKey(item.getId())) {
@@ -120,7 +118,7 @@ public class OrderScreenController {
         if (orderItems.size() != 0) {
              customer = customerCB.getValue();
             Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new HashMap<Integer, ItemAmountAndStore>(orderItems));
+            Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new HashMap<Integer, ItemAmountAndStore>(orderItems), customer);
             ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
             appController.getShowItemsController().setData(appController);
             if (discounts.size() != 0 && interestedInDiscount != false) {
