@@ -53,6 +53,7 @@ public class OrderSummeryController {
         updateCustomerDetails();
         appController.getShowCostumerScreenController().updateCustomerToShow();
         appController.getShowItemsController().updateItemsToShow();
+        singleOrderComponentController.getStoresTable().getItems().clear();
     }
 
     private void updateCustomerDetails(){

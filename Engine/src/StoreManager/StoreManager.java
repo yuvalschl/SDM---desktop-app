@@ -406,8 +406,6 @@ public class StoreManager {
             itemsMap.get(offer.getItemId()).setPartOfDiscount(true);
         }
         discount.getThenYouGet().getAllOffers().forEach(offer -> addDiscountItemToOrder(offer.getItemId(), order, discount));
-    //    for (itemsMap.values())
-        //itemsMap.values().forEach(itemAmountAndStore -> itemAmountAndStore.setAmount(order.getItemAmountAndStores().);
         itemsMap.values().forEach(itemAmountAndStore -> itemAmountAndStore.setAmount(order.getItemAmountAndStores().get(itemAmountAndStore.getItemId()).getAmount()));
         return itemsMap;
 
@@ -421,6 +419,7 @@ public class StoreManager {
         Store store = allStores.get(discount.getStoreId());
         DtoItem item = getAllDtoItems().get(offerItemIDToAdd);
         ItemAmountAndStore itemAmountAndStoreToreturn = null;
+        //the if below checks if the offered item is already in the order inventory
         if(order.getItemAmountAndStores().values().stream().anyMatch(itemAmountAndStore -> itemAmountAndStore.getItemId() == offerItemIDToAdd && itemAmountAndStore.getIsPartOfDiscount())){
             updateDiscountItem(order, offerItemIDToAdd, offer);
             for (ItemAmountAndStore currItem: order.getItemAmountAndStores().values() ){
@@ -440,14 +439,18 @@ public class StoreManager {
                 key = itemAmountAndStoreToreturn.getItemId();
             order.getItemAmountAndStores().put(key ,itemAmountAndStoreToreturn);
         }
-
-        updateEntitledDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
+        updateItemDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
         order.setTotalCost(order.getTotalCost()+ offer.getForAdditional());
         return itemAmountAndStoreToreturn;
     }
-
+    /**
+     * updates an item amount. this method is used if a discount item already appears in the order
+     * @param offerItemIDToAdd an id of the offered item
+     * @param offer an offer to take details from
+     * @param order the order which the item is needed to be updated in
+     */
     private void updateDiscountItem(Order order, int offerItemIDToAdd, Offer offer) {
         AtomicReference<ItemAmountAndStore> itemToUpdate = new AtomicReference<ItemAmountAndStore>();
         order.getItemAmountAndStores().forEach((ID,currItem)-> {
@@ -457,7 +460,8 @@ public class StoreManager {
         itemToUpdate.get().setAmount(itemToUpdate.get().getAmount()+ offer.getQuantity());
     }
 
-    private void updateEntitledDiscountAmount(int itemID,Order order,Discount discount){
+   
+    private void updateItemDiscountAmount(int itemID,Order order,Discount discount){
         for (ItemAmountAndStore item: order.getItemAmountAndStores().values()){
             if (item.getItem().getSerialNumber() == itemID ){
                 item.setDiscountItemAmount(item.getDiscountItemAmount() - discount.getIfYouBuy().getQuantity());
