@@ -6,21 +6,21 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <SplitPane dividerPositions="0.251984126984127" prefWidth="1040.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="showStores.ShowStoresController">
    <items>
       <ListView fx:id="storesListView" maxWidth="250.0" prefHeight="800.0" prefWidth="250.0" />
-      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="500.0" prefHeight="800.0" prefWidth="790.0" spacing="5.0">
+      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="500.0" prefHeight="824.0" prefWidth="762.0" spacing="5.0">
          <children>
             <Label text="Items">
                <font>
                   <Font size="30.0" />
                </font>
             </Label>
-            <TableView fx:id="itemsTable" fixedCellSize="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="669.0" VBox.vgrow="ALWAYS">
+            <TableView fx:id="itemsTable" fixedCellSize="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="181.0" prefWidth="762.0" VBox.vgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="itemNameCol" maxWidth="305.0" minWidth="128.0" prefWidth="305.0" text="Name" />
                 <TableColumn fx:id="itemIdCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="455.0" text="Id" />
@@ -36,7 +36,7 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <TableView fx:id="ordersTable" prefHeight="173.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
+            <TableView fx:id="ordersTable" prefHeight="199.0" prefWidth="762.0" VBox.vgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="orderDateCol" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Date" />
                 <TableColumn fx:id="orderIdCol" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Id" />
@@ -46,12 +46,81 @@
                   <TableColumn fx:id="totalCostCol" maxWidth="1.7976931348623157E308" prefWidth="203.0" text="Total cost" />
               </columns>
             </TableView>
-            <Label text="discounts">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-            <FlowPane fx:id="discountsFlowPane" prefHeight="200.0" prefWidth="200.0" />
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="334.0" prefWidth="762.0">
+              <items>
+                  <Label prefHeight="38.0" prefWidth="130.0" text="Discounts">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0">
+                    <items>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label prefHeight="21.0" prefWidth="131.0" text="Discount name">
+                                 <VBox.margin>
+                                    <Insets left="95.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <ListView fx:id="discountNameListView" prefHeight="232.0" prefWidth="376.0">
+                                 <VBox.margin>
+                                    <Insets top="35.0" />
+                                 </VBox.margin>
+                              </ListView>
+                           </children>
+                        </VBox>
+                        <SplitPane dividerPositions="0.09025270758122744" orientation="VERTICAL" prefHeight="279.0" prefWidth="377.0">
+                          <items>
+                              <HBox prefHeight="21.0" prefWidth="369.0">
+                                 <children>
+                                    <Label text="Discount decreption">
+                                       <HBox.margin>
+                                          <Insets left="100.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox alignment="TOP_CENTER" prefHeight="250.0" prefWidth="137.0">
+                                       <children>
+                                          <Label prefHeight="21.0" prefWidth="83.0" text="If you buy:">
+                                             <VBox.margin>
+                                                <Insets left="30.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <Label fx:id="ifYouBuyItemLabel" prefHeight="21.0" prefWidth="126.0">
+                                             <VBox.margin>
+                                                <Insets left="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="TOP_CENTER" prefHeight="250.0" prefWidth="237.0">
+                                       <children>
+                                          <Label fx:id="youGetLabel" prefHeight="21.0" prefWidth="196.0">
+                                             <VBox.margin>
+                                                <Insets left="20.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <ListView fx:id="youGetListView" prefHeight="222.0" prefWidth="220.0">
+                                             <VBox.margin>
+                                                <Insets top="7.0" />
+                                             </VBox.margin>
+                                             <padding>
+                                                <Insets left="5.0" />
+                                             </padding>
+                                          </ListView>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                          </items>
+                        </SplitPane>
+                    </items>
+                  </SplitPane>
+              </items>
+            </SplitPane>
          </children>
       </VBox>
    </items>

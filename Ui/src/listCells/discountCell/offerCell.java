@@ -43,7 +43,7 @@ public class offerCell extends ListCell<Offer> {
                 }
 
             }
-            String offerString = offer.getQuantity() +" "+ storeManager.getAllItems().get(offer.getItemId()).getName()+"s";
+            String offerString = offer.getQuantity() +" "+ storeManager.getAllItems().get(offer.getItemId()).getName()+" for "+ offer.getForAdditional();
             offerLabel.setText(offerString);
 
             setText(null);
