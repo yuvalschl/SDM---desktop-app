@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="708.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="orderScreen.OrderSummeryController">
    <children>
       <Label text="Order summery">
@@ -14,8 +13,8 @@
             <Font size="41.0" />
          </font>
       </Label>
-      <fx:include fx:id="singleOrderComponent" source="../ShowHistory/displaySinglOrder.fxml" />
-      <VBox alignment="TOP_CENTER" prefHeight="144.0" prefWidth="708.0" spacing="25.0">
+      <fx:include fx:id="singleOrderComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="500.0" source="../ShowHistory/displaySinglOrder.fxml" VBox.vgrow="ALWAYS" />
+      <VBox alignment="TOP_CENTER" prefHeight="144.0" prefWidth="708.0" spacing="25.0" VBox.vgrow="ALWAYS">
          <children>
             <HBox alignment="TOP_CENTER" spacing="30.0">
                <children>
