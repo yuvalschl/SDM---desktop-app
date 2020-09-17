@@ -8,6 +8,7 @@ import addStore.AddStoreController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import optionsMenu.OptionsMenuController;
@@ -20,7 +21,7 @@ import java.io.IOException;
 public class AppController {
     private StoreManager storeManager;
 
-    @FXML private VBox optionsMenuComponent;
+    @FXML private ScrollPane optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
     @FXML private SplitPane showStoresComponent;
     @FXML private ShowStoresController showStoresComponentController;
