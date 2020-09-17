@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
+<?import java.net.URL?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
 <BorderPane minHeight="200.0" minWidth="300.0" prefHeight="800.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appController.AppController">
    <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="200.0" minWidth="300.0">
-         <content>
-            <StackPane minHeight="200.0" minWidth="300.0" prefHeight="798.0" prefWidth="1060.0">
-               <children>
-                  <fx:include fx:id="showCostumerScreen" minHeight="200.0" minWidth="300.0" source="../ShowCustomer/showCustomer.fxml" />
-                  <fx:include fx:id="addStoreComponent" minHeight="200.0" minWidth="300.0" source="../addStore/addStore.fxml" />
-                  <fx:include fx:id="ShowOrdersScreenComponent" minHeight="200.0" minWidth="300.0" source="../ShowHistory/showOrders.fxml" />
-                  <fx:include fx:id="showStoresComponent" minHeight="200.0" minWidth="300.0" source="../showStores/showStores.fxml" />
-                  <fx:include fx:id="orderScreen" minHeight="300.0" minWidth="200.0" source="../orderScreen/orderScreen.fxml" />
-                  <fx:include fx:id="showItems" minHeight="200.0" minWidth="300.0" source="../showItems/showItems.fxml" />
-                  <fx:include fx:id="homeComponent" minHeight="200.0" minWidth="200.0" source="../Home/home.fxml" />
-               </children>
-            </StackPane>
-         </content>
-      </ScrollPane>
+      <StackPane minHeight="200.0" minWidth="300.0" prefHeight="798.0" prefWidth="1060.0">
+         <children>
+            <fx:include fx:id="showCostumerScreen" minHeight="200.0" minWidth="300.0" source="../ShowCustomer/showCustomer.fxml" />
+            <fx:include fx:id="addStoreComponent" minHeight="200.0" minWidth="300.0" source="../addStore/addStore.fxml" />
+            <fx:include fx:id="ShowOrdersScreenComponent" minHeight="200.0" minWidth="300.0" source="../ShowHistory/showOrders.fxml" />
+            <fx:include fx:id="showStoresComponent" minHeight="200.0" minWidth="300.0" source="../showStores/showStores.fxml" />
+            <fx:include fx:id="orderScreen" minHeight="300.0" minWidth="200.0" source="../orderScreen/orderScreen.fxml" />
+            <fx:include fx:id="showItems" minHeight="200.0" minWidth="300.0" source="../showItems/showItems.fxml" />
+            <fx:include fx:id="homeComponent" minHeight="200.0" minWidth="200.0" source="../Home/home.fxml" />
+         </children>
+      </StackPane>
    </center>
    <left>
       <fx:include fx:id="optionsMenuComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="../optionsMenu/optionsMenu.fxml" />
    </left>
+   <stylesheets>
+      <URL value="@../style.css" />
+      <URL value="@../tableCss.css" />
+   </stylesheets>
 </BorderPane>
