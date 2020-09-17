@@ -104,29 +104,25 @@
                   <fx:include fx:id="discountScreen" source="discountScreen.fxml" />
                </children>
             </StackPane>
-              <AnchorPane prefHeight="200.0" prefWidth="227.0">
-                  <children>
-                      <VBox layoutX="61.0" layoutY="207.0" prefHeight="798.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <children>
-                              <Label text="Items in cart">
-                                  <font>
-                                      <Font size="41.0" />
-                                  </font>
-                           <VBox.margin>
-                              <Insets left="52.0" />
-                           </VBox.margin>
-                              </Label>
-                              <TableView fx:id="orderSummaryTable" prefHeight="515.0" prefWidth="290.0">
-                                  <columns>
-                                      <TableColumn fx:id="itemSummaryId" prefWidth="75.0" text="ID" />
-                                      <TableColumn fx:id="itemSummaryName" prefWidth="75.0" text="Name" />
-                                      <TableColumn fx:id="itemSummaryAmount" prefWidth="75.0" text="Amount" />
-                                  </columns>
-                              </TableView>
-                          </children>
-                      </VBox>
-                  </children>
-            </AnchorPane>
+                <VBox prefHeight="798.0" prefWidth="290.0">
+                    <children>
+                        <Label text="Items in cart">
+                            <font>
+                                <Font size="41.0" />
+                            </font>
+                     <VBox.margin>
+                        <Insets left="52.0" />
+                     </VBox.margin>
+                        </Label>
+                        <TableView fx:id="orderSummaryTable" prefHeight="515.0" prefWidth="290.0">
+                            <columns>
+                                <TableColumn fx:id="itemSummaryId" prefWidth="75.0" text="ID" />
+                                <TableColumn fx:id="itemSummaryName" prefWidth="75.0" text="Name" />
+                                <TableColumn fx:id="itemSummaryAmount" prefWidth="75.0" text="Amount" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </VBox>
           </items>
       </SplitPane>
    </children>
