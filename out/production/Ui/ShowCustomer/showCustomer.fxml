@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowCustomer.ShowCustomerController">
+<VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowCustomer.ShowCustomerController">
    <children>
       <Label prefHeight="45.0" prefWidth="321.0" text="Our lovely customers ">
          <font>

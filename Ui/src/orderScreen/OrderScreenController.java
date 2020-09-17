@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
 import textFieldFilters.FloatFilter;
@@ -40,7 +41,7 @@ public class OrderScreenController {
     private boolean interestedInDiscount = true;
     private Customer customer;
     @FXML private  Label zeroAmountLabel;
-    @FXML private SplitPane orderSummeryScreen;
+    @FXML private VBox orderSummeryScreen;
     @FXML private OrderSummeryController orderSummeryScreenController;
     @FXML  private SplitPane orderScreenSplitPane;
     @FXML private SplitPane discountScreen;

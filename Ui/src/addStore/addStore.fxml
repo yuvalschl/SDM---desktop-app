@@ -3,29 +3,18 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 
-<GridPane prefWidth="1020.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="addStore.AddStoreController">
-   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="447.0" minWidth="10.0" prefWidth="410.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="332.0" minWidth="10.0" prefWidth="332.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-   </rowConstraints>
-   <children>
-      <VBox alignment="TOP_CENTER" prefHeight="769.0" prefWidth="287.0" spacing="20.0">
+<SplitPane dividerPositions="0.3198458574181118, 0.5703275529865125" prefHeight="800.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="addStore.AddStoreController">
+   <items>
+      <VBox alignment="TOP_CENTER" prefHeight="798.0" prefWidth="469.0" spacing="20.0">
          <children>
             <Label text="Name">
                <font>
@@ -73,7 +62,7 @@
             <Label fx:id="storeInfoErrorLabel" textFill="RED" />
          </children>
       </VBox>
-      <VBox alignment="TOP_CENTER" maxWidth="200.0" spacing="5.0" GridPane.columnIndex="1">
+      <VBox alignment="TOP_CENTER" maxWidth="252.0" prefHeight="798.0" prefWidth="252.0" spacing="5.0">
          <children>
             <Label alignment="TOP_CENTER" text="Available items">
                <font>
@@ -100,23 +89,23 @@
             <Label fx:id="itemInInventoryErrorLabel" textFill="RED" />
          </children>
       </VBox>
-      <VBox alignment="TOP_CENTER" prefHeight="682.0" prefWidth="227.0" spacing="5.0" GridPane.columnIndex="2">
+      <VBox alignment="TOP_CENTER" prefHeight="798.0" prefWidth="401.0" spacing="5.0">
          <children>
             <Label text="Store inventory">
                <font>
                   <Font size="30.0" />
                </font>
             </Label>
-            <TableView fx:id="storeInventoryTable" prefHeight="692.0" prefWidth="227.0">
+            <TableView fx:id="storeInventoryTable" prefHeight="686.0" prefWidth="303.0">
                <columns>
-                  <TableColumn fx:id="storeInventoryItemId" prefWidth="75.0" text="Id" />
-                  <TableColumn fx:id="storeInventoryItemName" prefWidth="75.0" text="Name" />
-                  <TableColumn fx:id="storeInventoryItemPrice" prefWidth="75.0" text="Price" />
+                  <TableColumn fx:id="storeInventoryItemId" prefWidth="112.0" text="Id" />
+                  <TableColumn fx:id="storeInventoryItemName" prefWidth="92.0" text="Name" />
+                  <TableColumn fx:id="storeInventoryItemPrice" prefWidth="95.0" text="Price" />
                </columns>
             </TableView>
             <Label fx:id="noItemsInInventoryErrorLabel" textFill="RED" />
+            <Button fx:id="addStoreButton" mnemonicParsing="false" onAction="#addStoreAction" prefHeight="31.0" prefWidth="103.0" text="Add store" />
          </children>
       </VBox>
-      <Button fx:id="addStoreButton" mnemonicParsing="false" onAction="#addStoreAction" prefHeight="30.0" prefWidth="70.0" text="Add store" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-   </children>
-</GridPane>
+   </items>
+</SplitPane>
