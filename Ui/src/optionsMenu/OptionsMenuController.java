@@ -1,17 +1,10 @@
 package optionsMenu;
 
 import appController.AppController;
-import appController.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import orderScreen.OrderScreenController;
-import showItems.ShowItemsController;
 
 import java.io.IOException;
 
