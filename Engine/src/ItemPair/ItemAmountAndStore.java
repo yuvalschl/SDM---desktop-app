@@ -16,6 +16,7 @@ public class ItemAmountAndStore {
     private int itemStore;
     private Store store;
     private float discountItemAmount;//this represents the amount of the item bought in order to check if a discount is entitled for this amount
+    private float offerPrice;// if an item is part of an offer this will represents the additional cost for the item
     boolean isPartOfDiscount = false;
 
 
@@ -41,6 +42,10 @@ public class ItemAmountAndStore {
         this.itemStore = store.getSerialNumber();
         this.discountItemAmount =amount;
     }
+
+    public float getOfferPrice() { return offerPrice; }
+
+    public void setOfferPrice(float offerPrice) { this.offerPrice = offerPrice; }
 
     public ItemAmountAndStore(){}
 

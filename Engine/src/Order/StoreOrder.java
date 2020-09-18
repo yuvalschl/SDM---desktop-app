@@ -41,8 +41,18 @@ public class StoreOrder {
 
     public void addItemToOrder(ItemAmountAndStore item){
         this.items.add(item);
-        totalCost += item.getStore().getInventory().get(item.getItemId()).getPrice() * item.getAmount();
-        totalPriceOfItems += item.getStore().getInventory().get(item.getItemId()).getPrice() * item.getAmount();
+        float priceToAddToTotalCost;
+        float priceToAddToTotalItemCost;
+        if (item.getIsPartOfDiscount()){
+            priceToAddToTotalCost = item.getOfferPrice();
+            priceToAddToTotalItemCost = item.getOfferPrice();
+        }
+        else{
+            priceToAddToTotalCost = item.getStore().getInventory().get(item.getItemId()).getPrice() * item.getAmount();
+            priceToAddToTotalItemCost = item.getStore().getInventory().get(item.getItemId()).getPrice() * item.getAmount();
+        }
+        totalCost += priceToAddToTotalCost;
+        totalPriceOfItems += priceToAddToTotalItemCost;
         if(item.getItem() instanceof UnitItem){
             amountOfItems += item.getAmount();
         }

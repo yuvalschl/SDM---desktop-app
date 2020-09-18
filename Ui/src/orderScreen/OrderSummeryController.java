@@ -41,7 +41,6 @@ public class OrderSummeryController {
     }
 
     public void approveOrderAction(javafx.event.ActionEvent actionEvent) throws InterruptedException {
-        //approvedOrCanceledLabel.textProperty().set("Order was made successfully");
         orderSummeryScreen.setVisible(false);
         orderScreenController.clearAction();
         orderScreen.setVisible(true);

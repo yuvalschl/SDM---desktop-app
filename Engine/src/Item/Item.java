@@ -71,10 +71,6 @@ public abstract class Item {
         return price;
     }
 
-    public String toString(Boolean isInShowStores){
-        return "*   Item ID: " + id +"\n"+
-                "\tItem name: " + name+"\n";
-    }
 
 
     public void setPrice(float price) throws InvalidValueException {

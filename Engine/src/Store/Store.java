@@ -159,17 +159,7 @@ public class Store {
         return dtoStoreOrders;
     }*/
 
-    public String toString() {
-        String itemDetails = "";
-        String storeDetails =
-                "* Store.Store ID: " + serialNumber +
-                        "\n\tStore.Store name: " + name +
-                        "\n\tThe Items in these store are: \n";
-        for (Map.Entry<Integer, Item> set : inventory.entrySet()) {
-            itemDetails += set.getValue().toString(true);
-        }
-        return storeDetails + itemDetails;
-    }
+
 
     @Override
     public boolean equals(Object o) {

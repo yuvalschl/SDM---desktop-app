@@ -93,6 +93,7 @@ public class ShowStoresController {
 
                     return cell;
                 });
+
         orderIdCol.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         amountOfItemsCol.setCellValueFactory(new PropertyValueFactory<>("amountOfItems"));
         totalCostCol.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
@@ -118,8 +119,6 @@ public class ShowStoresController {
                     discountNameListView.getItems().addAll(newValue.getAllDiscounts());
                     discountNameListView.setCellFactory(e -> new discountCell());
 
-                    //set the order list view
-                    //TODO: this may not work, check when place order is done
                     ordersTable.getItems().clear();
                     ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders().values()));
                     itemsTable.scrollTo(0);

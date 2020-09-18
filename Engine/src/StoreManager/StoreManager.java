@@ -433,8 +433,9 @@ public class StoreManager {
             }
         }
         else{
-             itemAmountAndStoreToreturn = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
+            itemAmountAndStoreToreturn = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
             itemAmountAndStoreToreturn.setPartOfDiscount(true);
+            itemAmountAndStoreToreturn.setOfferPrice(offer.getForAdditional());
             int key ;
             if (order.getItemAmountAndStores().containsKey(itemAmountAndStoreToreturn.getItemId())) {//this if is to prevent the case that an item with the same id(it will only happen if on offer item has the same id as an item in item amount and store) is to be entered to the order item amount and store map
                 key = allItems.get(itemAmountAndStoreToreturn.getItemId()).getMaxID();
