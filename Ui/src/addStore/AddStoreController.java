@@ -124,17 +124,17 @@ public class AddStoreController {
         }
 
         if(appController.getStoreManager().getAllStores().containsKey(storeId.getValue())){
-            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + "store with id " + storeId + " already in the system");
+            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + "store with id " + storeId.get() + " already in the system");
             validInfo = false;
         }
 
         if(Integer.parseInt(xTextField.getText()) > 50 ||Integer.parseInt(xTextField.getText()) < 0){
-            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + xTextField.getText() + "X location is invalid");
+            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + xTextField.getText() + " X location is invalid");
             validInfo = false;
         }
 
         if(Integer.parseInt(yTextField.getText()) > 50 ||Integer.parseInt(yTextField.getText()) < 0){
-            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + yTextField.getText() + "Y location is invalid");
+            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + yTextField.getText() + " Y location is invalid");
             validInfo = false;
         }
 
