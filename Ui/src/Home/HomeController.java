@@ -37,8 +37,12 @@ public class HomeController {
     @FXML private Label progressPercentText;
     @FXML private GridPane mapGrid;
     @FXML private ScrollPane mapScrollPane;
-    @FXML private AnchorPane mapAnchorPane;
     @FXML private MapController mapGridController;
+
+
+    public void setMapScrollPane(ScrollPane mapScrollPane) {
+        this.mapScrollPane = mapScrollPane;
+    }
 
     public ProgressBar getFileProgressBar() {
         return fileProgressBar;
@@ -71,6 +75,8 @@ public class HomeController {
 
     public void loadXmlAction() throws InterruptedException {
         StoreManager storeManager = new StoreManager();
+        mapScrollPane.setVisible(false);
+        mapGrid.visibleProperty().setValue(false);
         Task<StoreManager> jaxbClassToStoreManager = new JaxbClassToStoreManager(storeManager,file, appController.getXmlLoaded());
         jaxbClassToStoreManager.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
