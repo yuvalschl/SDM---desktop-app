@@ -7,7 +7,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import textFieldFilters.EnglishFilter;
 import textFieldFilters.FloatFilter;
 import textFieldFilters.IntFilter;
 
@@ -56,6 +56,8 @@ public class AddStoreController {
 
     @FXML
     public void initialize(){
+        nameTextField.setTextFormatter(new EnglishFilter().getEnglishTextFormatter());
+        nameTextField.setText(" ");
         idTextField.setTextFormatter(new IntFilter().getIntegerTextFormatter());
         idTextField.textProperty().set(" ");
         ppkTextField.setTextFormatter(new IntFilter().getIntegerTextFormatter());
