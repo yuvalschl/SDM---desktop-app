@@ -8,10 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowHistory.ShowOrdersController">
+<ScrollPane fitToHeight="true" fitToWidth="true" minWidth="1020.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowHistory.ShowOrdersController">
    <content>
-      <SplitPane dividerPositions="0.03066914498141264" minHeight="600.0" minWidth="700.0" prefHeight="800.0" prefWidth="1040.0">
+      <SplitPane dividerPositions="0.03066914498141264" minHeight="600.0" minWidth="-Infinity" prefHeight="800.0" prefWidth="1040.0">
          <items>
             <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="300.0" prefHeight="800.0" prefWidth="89.0">
                <children>
@@ -26,9 +25,9 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="300.0" prefHeight="800.0" prefWidth="767.0" spacing="5.0">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" prefHeight="800.0" prefWidth="767.0" spacing="5.0">
                <children>
-                  <fx:include fx:id="displaySingleOrderComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="displaySinglOrder.fxml" />
+                  <fx:include fx:id="displaySingleOrderComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="displaySinglOrder.fxml" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </items>

@@ -44,51 +44,20 @@ public class MapController {
                 Customer customer = null;
                 Store store = null;
                 int progress = 85;
-                for (int i = 0; i < mapWidth + 1; i++) {
+                for (int i = 0; i < mapWidth + 2; i++) {
                     if(((i + 1) % ((mapWidth / 15) + 1) == 0)){
                         updateProgress(progress++, 100);
                     }
-                    for (int j = 0; j < mapHeight + 1; j++) {
+                    for (int j = 0; j < mapHeight + 2; j++) {
                         customer = customerInLocation(appController.getStoreManager(), i, j);
                         store = storeInLocation(appController.getStoreManager(), i, j);
                         int finalI = i;
                         int finalJ = j;
+
                         if (customer != null) {
-                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/Customer/customer.fxml"));
-                            Pane pane = fxmlLoader.load();
-                            String customerToolTipInfo = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n Total orders: %5$s",
-                                    customer.getName(), customer.getId(), customer.getX(), customer.getY(), customer.getNumberOfOrdersMade());
-                            Tooltip tooltip = new Tooltip(customerToolTipInfo);
-                            Tooltip.install(pane, tooltip);
-                            Customer finalCustomer = customer;
-                            pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent event) {
-                                    String customerToolTipInfo = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n Total orders: %5$s",
-                                            finalCustomer.getName(), finalCustomer.getId(), finalCustomer.getX(), finalCustomer.getY(), finalCustomer.getNumberOfOrdersMade());
-                                    tooltip.textProperty().set(customerToolTipInfo);
-                                    showToolTip(pane, tooltip);
-                                }
-                            });
-                            Platform.runLater(() -> mapGrid.add(pane, finalI, finalJ));
+                            addCustomerToMap(customer, finalI, finalJ);
                         } else if (store != null) {
-                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/Store/store.fxml"));
-                            Pane pane = fxmlLoader.load();
-                            String storeToolTipInfo = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n PPK: %5$s \n Total orders %6$s",
-                                    store.getName(), store.getSerialNumber(), store.getX(), store.getY(), store.getPPK(), store.getAllOrders().size());
-                            Tooltip tooltip = new Tooltip(storeToolTipInfo);
-                            Tooltip.install(pane, tooltip);
-                            Store finalStore = store;
-                            pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent event) {
-                                    String storeToolTipInfo = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n PPK: %5$s \n Total orders %6$s",
-                                            finalStore.getName(), finalStore.getSerialNumber(), finalStore.getX(), finalStore.getY(), finalStore.getPPK(), finalStore.getAllOrders().size());
-                                    tooltip.textProperty().set(storeToolTipInfo);
-                                    showToolTip(pane, tooltip);
-                                }
-                            });
-                            Platform.runLater(() -> mapGrid.add(pane, finalI, finalJ));
+                            addStoreToMap(store, finalI, finalJ);
                         } else {
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/empty.fxml"));
                             Pane pane = fxmlLoader.load();
@@ -113,6 +82,7 @@ public class MapController {
                                 task.progressProperty(),
                                 100)),
                 " %"));
+
         mapThread.start();
     }
 
@@ -159,5 +129,45 @@ public class MapController {
     private int calcMapHeight(StoreManager storeManager){
         return Math.max(storeManager.getAllStores().values().stream().max(Comparator.comparing(Store::getY)).get().getY(),
                 storeManager.getAllCustomers().values().stream().max(Comparator.comparing(Customer::getY)).get().getY());
+    }
+
+    public void addStoreToMap(Store store, int i, int j) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/Store/store.fxml"));
+        Pane pane = fxmlLoader.load();
+        String storeToolTipInfo = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n PPK: %5$s \n Total orders %6$s",
+                store.getName(), store.getSerialNumber(), store.getX(), store.getY(), store.getPPK(), store.getAllOrders().size());
+        Tooltip tooltip = new Tooltip(storeToolTipInfo);
+        Tooltip.install(pane, tooltip);
+        Store finalStore = store;
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                String storeToolTipInfo = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n PPK: %5$s \n Total orders %6$s",
+                        finalStore.getName(), finalStore.getSerialNumber(), finalStore.getX(), finalStore.getY(), finalStore.getPPK(), finalStore.getAllOrders().size());
+                tooltip.textProperty().set(storeToolTipInfo);
+                showToolTip(pane, tooltip);
+            }
+        });
+        Platform.runLater(() -> mapGrid.add(pane, i, j));
+    }
+
+    public void addCustomerToMap(Customer customer, int i, int j) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Home/Map/MapCell/Customer/customer.fxml"));
+        Pane pane = fxmlLoader.load();
+        String customerToolTipInfo = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n Total orders: %5$s",
+                customer.getName(), customer.getId(), customer.getX(), customer.getY(), customer.getNumberOfOrdersMade());
+        Tooltip tooltip = new Tooltip(customerToolTipInfo);
+        Tooltip.install(pane, tooltip);
+        Customer finalCustomer = customer;
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                String customerToolTipInfo = String.format("%1$s \n %2$s \n Location: (%3$s,%4$s) \n Total orders: %5$s",
+                        finalCustomer.getName(), finalCustomer.getId(), finalCustomer.getX(), finalCustomer.getY(), finalCustomer.getNumberOfOrdersMade());
+                tooltip.textProperty().set(customerToolTipInfo);
+                showToolTip(pane, tooltip);
+            }
+        });
+        Platform.runLater(() -> mapGrid.add(pane, i, j));
     }
 }

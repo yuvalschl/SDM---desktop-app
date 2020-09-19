@@ -1,6 +1,7 @@
 package addStore;
 
 import Item.*;
+import Store.Store;
 import appController.AppController;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -14,10 +15,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import textFieldFilters.FloatFilter;
 import textFieldFilters.IntFilter;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,13 +30,14 @@ public class AddStoreController {
     private StringProperty storeName = new SimpleStringProperty();
     private IntegerProperty storeId = new SimpleIntegerProperty();
     private IntegerProperty storePPK = new SimpleIntegerProperty();
-    private Point storeLocation = new Point();
+    private IntegerProperty storeX = new SimpleIntegerProperty();
+    private IntegerProperty storeY = new SimpleIntegerProperty();
     private Map<Integer, Item> storeInventory = new HashMap<Integer, Item>();
 
     @FXML private TextField nameTextField;
     @FXML private TextField idTextField;
-    @FXML private Spinner<Integer> xSpinner;
-    @FXML private Spinner<Integer> ySpinner;
+    @FXML private TextField xTextField;
+    @FXML private TextField yTextField;
     @FXML private TextField ppkTextField;
     @FXML private TableView<Item>  availableItemsTable;
     @FXML private TableColumn<Item, Integer> availableItemsItemId;
@@ -57,6 +62,8 @@ public class AddStoreController {
         ppkTextField.textProperty().set(" ");
         itemPriceField.setTextFormatter(new FloatFilter().getTextFormatter());
         idTextField.textProperty().set(" ");
+        xTextField.setTextFormatter(new IntFilter().getIntegerTextFormatter());
+        yTextField.setTextFormatter(new IntFilter().getIntegerTextFormatter());
 
         storeName.bind(nameTextField.textProperty());
 
@@ -68,18 +75,14 @@ public class AddStoreController {
             return Integer.parseInt(ppkTextField.getText());
         }, ppkTextField.textProperty()));
 
-        xSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50));
-        xSpinner.setEditable(true);
-        ySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50));
-        ySpinner.setEditable(true);
+        storeX.bind(Bindings.createIntegerBinding(() -> {
+            return Integer.parseInt(xTextField.getText());
+        }, xTextField.textProperty()));
 
-        xSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
-            storeLocation.x = newValue;
-        });
+        storeY.bind(Bindings.createIntegerBinding(() -> {
+            return Integer.parseInt(yTextField.getText());
+        }, yTextField.textProperty()));
 
-        ySpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
-            storeLocation.y = newValue;
-        });
 
         availableItemsItemName.setCellValueFactory(new PropertyValueFactory<>("name"));
         availableItemsItemId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -93,9 +96,16 @@ public class AddStoreController {
             @Override
             public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
                 itemNameLabel.setText(newValue.getName());
+                itemPriceField.clear();
             }
         });
+    }
 
+    @FXML
+    public void textFieldOnEnter(KeyEvent keyEvent){
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            addItemAction();
+        }
     }
 
     public void setData(AppController appController){
@@ -118,32 +128,45 @@ public class AddStoreController {
             validInfo = false;
         }
 
-        if(xSpinner.getValue() > 50 || xSpinner.getValue() < 0){
-            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + xSpinner.getValue() + "X location is invalid");
+        if(Integer.parseInt(xTextField.getText()) > 50 ||Integer.parseInt(xTextField.getText()) < 0){
+            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + xTextField.getText() + "X location is invalid");
             validInfo = false;
         }
 
-        if(ySpinner.getValue() > 50 || ySpinner.getValue() < 0){
-            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + ySpinner.getValue() + "Y location is invalid");
+        if(Integer.parseInt(yTextField.getText()) > 50 ||Integer.parseInt(yTextField.getText()) < 0){
+            storeInfoErrorLabel.setText(storeInfoErrorLabel.getText() + "\n" + yTextField.getText() + "Y location is invalid");
             validInfo = false;
         }
 
         if (validInfo){
-            appController.getStoreManager().addNewStore(storeId.getValue(), storeName.getValue(), storeLocation, storeInventory, storePPK.getValue());
+            Store newStore = new Store(storeName.getValue(), new Point(storeX.get(), storeY.get()), storeInventory, storePPK.getValue(),storeId.getValue());
+            appController.getStoreManager().addNewStore(newStore);
             storeInfoErrorLabel.setVisible(false);
-            xSpinner.getValueFactory().setValue(0);
-            ySpinner.getValueFactory().setValue(0);
             nameTextField.clear();
             idTextField.clear();
             ppkTextField.clear();
-            appController.getShowStoresComponentController().setData(appController);
+            xTextField.clear();
+            yTextField.clear();
+            itemPriceField.clear();
             appController.getOptionsMenuComponentController().homeButtonAction();
+            updateAppControllerToNewStore(newStore);
+        }
+    }
+
+    private void updateAppControllerToNewStore(Store store){
+        appController.getShowStoresComponentController().getStoresListView().getItems().add(store);
+        appController.getOrderScreenComponentController().setData(appController);
+        appController.getShowItemsController().updateItemsToShow();
+        try {
+            appController.getHomeComponentController().getMapGridController().setSize(appController);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
 
     @FXML
-    void addItemAction(ActionEvent event) {
+    void addItemAction() {
         Item itemToAdd = availableItemsTable.getSelectionModel().getSelectedItem();
         float price = Float.parseFloat(itemPriceField.getText());
         if(storeInventory.containsKey(itemToAdd.getId())){

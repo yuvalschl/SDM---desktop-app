@@ -5,7 +5,9 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -16,11 +18,23 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER">
+      <VBox alignment="CENTER" fillWidth="false">
          <children>
-            <HBox alignment="CENTER" spacing="25.0" VBox.vgrow="ALWAYS">
+            <GridPane prefHeight="26.0" prefWidth="683.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="56.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="92.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0" prefWidth="73.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="77.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.0" minWidth="10.0" prefWidth="117.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="126.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="145.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <Label text="Name">
+                  <Label text="Name" GridPane.columnIndex="1">
                      <font>
                         <Font size="17.0" />
                      </font>
@@ -30,33 +44,33 @@
                         <Font size="17.0" />
                      </font>
                   </Label>
-                  <Label text="Sell by">
+                  <Label text="Sell by" GridPane.columnIndex="2">
                      <font>
                         <Font size="17.0" />
                      </font>
                   </Label>
-                  <Label text="Amount">
+                  <Label text="Amount" GridPane.columnIndex="3">
                      <font>
                         <Font size="17.0" />
                      </font>
                   </Label>
-                  <Label text="Price Per unit">
+                  <Label text="Price Per unit" GridPane.columnIndex="4">
                      <font>
                         <Font size="17.0" />
                      </font>
                   </Label>
-                  <Label text="Total item price">
+                  <Label prefWidth="126.0" text="Total item price" GridPane.columnIndex="5">
                      <font>
                         <Font size="17.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="25.0" prefWidth="129.0" text="Part of Discount">
+                  <Label prefHeight="25.0" prefWidth="129.0" text="Part of Discount" GridPane.columnIndex="6">
                      <font>
                         <Font size="17.0" />
                      </font>
                   </Label>
                </children>
-            </HBox>
+            </GridPane>
             <ListView fx:id="itemsListView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="244.0" prefWidth="731.0" />
          </children>
       </VBox>

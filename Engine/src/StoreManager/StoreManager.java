@@ -425,36 +425,36 @@ public class StoreManager {
         Offer offer = discount.getThenYouGet().getOfferByID(offerItemIDToAdd);
         Store store = allStores.get(discount.getStoreId());
         Item item = allItems.get(offerItemIDToAdd);
-        ItemAmountAndStore itemAmountAndStoreToreturn = null;
+        ItemAmountAndStore itemAmountAndStoreToReturn = null;
         //the if below checks if the offered item is already in the order inventory
         if(order.getItemAmountAndStores().values().stream().anyMatch(itemAmountAndStore -> itemAmountAndStore.getItemId() == offerItemIDToAdd && itemAmountAndStore.getIsPartOfDiscount())){
             updateDiscountItem(order, offerItemIDToAdd, offer);
             for (ItemAmountAndStore currItem: order.getItemAmountAndStores().values() ){
                 if(currItem.getItemId() == offerItemIDToAdd && currItem.getIsPartOfDiscount()){
-                    itemAmountAndStoreToreturn = currItem;
+                    itemAmountAndStoreToReturn = currItem;
                     break;
                 }
             }
         }
         else{
-            itemAmountAndStoreToreturn = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
-            itemAmountAndStoreToreturn.setPartOfDiscount(true);
-            itemAmountAndStoreToreturn.setOfferPrice(offer.getForAdditional());
+            itemAmountAndStoreToReturn = new ItemAmountAndStore(item, offer.getQuantity(),store);//create the item to be added
+            itemAmountAndStoreToReturn.setPartOfDiscount(true);
+            itemAmountAndStoreToReturn.setOfferPrice(offer.getForAdditional());
             int key ;
-            if (order.getItemAmountAndStores().containsKey(itemAmountAndStoreToreturn.getItemId())) {//this if is to prevent the case that an item with the same id(it will only happen if on offer item has the same id as an item in item amount and store) is to be entered to the order item amount and store map
-                key = allItems.get(itemAmountAndStoreToreturn.getItemId()).getMaxID();
-                allItems.get(itemAmountAndStoreToreturn.getItemId()).setMaxID(key+1);
+            if (order.getItemAmountAndStores().containsKey(itemAmountAndStoreToReturn.getItemId())) {//this if is to prevent the case that an item with the same id(it will only happen if on offer item has the same id as an item in item amount and store) is to be entered to the order item amount and store map
+                key = allItems.get(itemAmountAndStoreToReturn.getItemId()).getMaxID();
+                allItems.get(itemAmountAndStoreToReturn.getItemId()).setMaxID(key+1);
             }
             else
-                key = itemAmountAndStoreToreturn.getItemId();
-            order.getItemAmountAndStores().put(key ,itemAmountAndStoreToreturn);
+                key = itemAmountAndStoreToReturn.getItemId();
+            order.getItemAmountAndStores().put(key ,itemAmountAndStoreToReturn);
         }
         if(isOneOf)
             updateItemDiscountAmount(discount.getIfYouBuy().getItemId(), order, discount);
         order.setAmountOfItems(order.getAmountOfItems()+1);//increase amount of items by one
         order.setTotalPriceOfItems(order.getTotalPriceOfItems()+offer.getForAdditional());//add the cost of the offer to the total cost of items
         order.setTotalCost(order.getTotalCost()+ offer.getForAdditional());
-        return itemAmountAndStoreToreturn;
+        return itemAmountAndStoreToReturn;
     }
     /**
      * updates an item amount. this method is used if a discount item already appears in the order
@@ -488,14 +488,9 @@ public class StoreManager {
 
     /**
      * used to add a new store from user input
-     * @param storeId new store id
-     * @param storeName new store name
-     * @param storeLocation new store location
-     * @param storeInventory new store inventory
-     * @param PPK new store PPK
      */
-    public void addNewStore(int storeId, String storeName, Point storeLocation, Map<Integer, Item> storeInventory, int PPK){
-        allStores.put(storeId, new Store(storeName, storeLocation, storeInventory,PPK, storeId));
+    public void addNewStore(Store storeToAdd){
+        allStores.put(storeToAdd.getSerialNumber(), storeToAdd);
     }
 
 }

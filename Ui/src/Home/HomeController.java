@@ -13,6 +13,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -39,6 +40,13 @@ public class HomeController {
     @FXML private ScrollPane mapScrollPane;
     @FXML private MapController mapGridController;
 
+    public MapController getMapGridController() {
+        return mapGridController;
+    }
+
+    public GridPane getMapGrid() {
+        return mapGrid;
+    }
 
     public void setMapScrollPane(ScrollPane mapScrollPane) {
         this.mapScrollPane = mapScrollPane;
@@ -128,6 +136,7 @@ public class HomeController {
         appController.getShowOrdersController().setData(appController);
         appController.getShowCostumerScreenController().setData(appController);
         try {
+            mapGrid = FXMLLoader.load(getClass().getResource("Map/map.fxml"));
             mapGridController.setSize(appController);
         } catch (IOException e) {
             e.printStackTrace();
