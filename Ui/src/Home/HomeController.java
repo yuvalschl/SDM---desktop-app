@@ -75,8 +75,10 @@ public class HomeController {
         jaxbClassToStoreManager.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                appController.setStoreManager(jaxbClassToStoreManager.getValue());
-                updateData();
+                if(jaxbClassToStoreManager.getValue() != null){
+                    appController.setStoreManager(jaxbClassToStoreManager.getValue());
+                    updateData();
+                }
             }
         });
 

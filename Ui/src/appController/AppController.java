@@ -23,7 +23,7 @@ public class AppController {
 
     @FXML private GridPane optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
-    @FXML private SplitPane showStoresComponent;
+    @FXML private ScrollPane showStoresComponent;
     @FXML private ShowStoresController showStoresComponentController;
     @FXML private ScrollPane ShowOrdersScreenComponent;
     @FXML private ShowOrdersController ShowOrdersScreenComponentController;
@@ -114,7 +114,7 @@ public class AppController {
         this.orderScreenController = orderScreenComponentController;
     }
 
-    public SplitPane getShowStoresComponent() {
+    public ScrollPane getShowStoresComponent() {
         return showStoresComponent;
     }
 
@@ -122,7 +122,7 @@ public class AppController {
         return showStoresComponentController;
     }
 
-    public void setShowStoresComponent(SplitPane showStoresComponent) {
+    public void setShowStoresComponent(ScrollPane showStoresComponent) {
         this.showStoresComponent = showStoresComponent;
     }
 

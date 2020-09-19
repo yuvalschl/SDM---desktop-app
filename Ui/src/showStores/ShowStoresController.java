@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import listCells.discountCell.discountCell;
 import listCells.discountCell.offerCell;
+import listCells.itemCell.ItemListViewCell;
 import listCells.storeCell.StoreListViewCell;
 import showStores.tableCellFactory.AmountSoldCell;
 
@@ -45,10 +46,13 @@ public class ShowStoresController {
     @FXML private TableColumn<StoreOrder, Float> shippingCostCol;
     @FXML private TableColumn<StoreOrder, Float> totalCostCol;
     @FXML private ListView<Store> storesListView;
-    @FXML private ListView<Discount> discountNameListView;
+    @FXML private ListView<Discount> discountsList;
     @FXML private Label ifYouBuyItemLabel;
+    @FXML private ListView<Item> discountItemsList;
     @FXML private Label youGetLabel;
-    @FXML private ListView<Offer> youGetListView;
+    @FXML private Label forAdditionalLabel;
+
+
     public TableView<Item> getItemsTable() {
         return itemsTable;
     }
@@ -114,101 +118,41 @@ public class ShowStoresController {
                     itemsTable.getItems().addAll(newValue.getInventory().values());
                     itemsTable.scrollTo(0);
 
-                    // this sets the discount information
-                    discountNameListView.getItems().clear();
-                    discountNameListView.getItems().addAll(newValue.getAllDiscounts());
-                    discountNameListView.setCellFactory(e -> new discountCell());
-
                     ordersTable.getItems().clear();
                     ordersTable.setItems(FXCollections.observableArrayList(newValue.getAllOrders().values()));
                     itemsTable.scrollTo(0);
+
+                    // this sets the discount information
+                    discountsList.getItems().clear();
+                    if (newValue.getAllDiscounts() != null){
+                        discountsList.getItems().addAll(newValue.getAllDiscounts());
+                        discountsList.setCellFactory(e -> new discountCell());
+                    }
                 }
-
-
-
-
-
-
-
             }
         });
-        discountNameListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Discount>() {
+
+        discountsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Discount>() {
             @Override
             public void changed(ObservableValue<? extends Discount> observable, Discount oldValue, Discount newValue) {
-                youGetListView.getItems().clear();
-                if (newValue != null) {
-                    youGetListView.getItems().addAll(newValue.getThenYouGet().getAllOffers());
-                    youGetListView.setCellFactory(e -> new offerCell(appController.getStoreManager()));
-
-                    ifYouBuyItemLabel.textProperty().set(appController.getStoreManager().getAllItems().get(newValue.getIfYouBuy().getItemId()).getName());
-                    if (newValue.getThenYouGet().getDiscountOperator() == DiscountOperator.oneOf)
-                        youGetLabel.textProperty().set("You get one of:");
-                    else
-                        youGetLabel.textProperty().set("You get all these items:");
-
+                if(newValue != null){
+                    youGetLabel.setText(newValue.getThenYouGet().getDiscountOperator().name());
+                    ifYouBuyItemLabel.setText(appController.getStoreManager().getAllItems().get(newValue.getIfYouBuy().getItemId()).toString());
+                    discountItemsList.getItems().clear();
+                    for(Offer offer : newValue.getThenYouGet().getAllOffers()){
+                        discountItemsList.getItems().add(appController.getStoreManager().getAllItems().get(offer.getItemId()));
+                    }
+                    discountItemsList.setCellFactory(e ->  new ItemListViewCell());
                 }
             }
         });
+
+        discountItemsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Item>() {
+            @Override
+            public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
+                forAdditionalLabel.setText(String.valueOf(discountsList.getSelectionModel().getSelectedItem().getThenYouGet().getOfferByID(newValue.getId()).getForAdditional()));
+            }
+        });
+
     }
 }
-
-
-
-
-/*
-package showStores;
-
-import Order.*;
-import Store.Store;
-import appController.AppController;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableMap;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
-import listCells.storeCell.StoreListViewCell;
-import listCells.itemCell.ItemListViewCell;
-import listCells.orderCell.OrderListViewCell;
-import showStores.storeInfo.StoreInfoController;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.ResourceBundle;
-
-public class ShowStoresController implements Initializable {
-
-    private AppController appController;
-    private ObservableMap<Integer, Store> storesObservableMap;
-
-    @FXML
-    private SplitPane storeInfo;
-    @FXML
-    private StoreInfoController storeInfoComponentController;
-    @FXML
-    private ListView<Store> storesLV;
-
-    public AppController getAppController() {
-        return appController;
-    }
-
-    public ShowStoresController(AppController appController) {
-        this.appController = appController;
-    }
-
-
-
-
-
-        //set the stores list view
-        for(Map.Entry<Integer, Store> store : appController.getStoreManager().getAllStores().entrySet()){
-            storesLV.getItems().add(store.getValue());
-        }
-        storesLV.setCellFactory(storeListView -> new StoreListViewCell());
-    }
-}
-*/
