@@ -42,9 +42,10 @@ public class JaxbClassToStoreManager extends Task<StoreManager> {
         }
 
         this.storeManager = convertJaxbClassToStoreManager(Objects.requireNonNull(XmlToObject.fromXmlFileToObject(file)));
-        xmlLoaded.setValue(false);
+        if(storeManager != null){
+            xmlLoaded.setValue(false);
+        }
         return this.storeManager;
-
     }
 
     //TODO: do all the new testing
