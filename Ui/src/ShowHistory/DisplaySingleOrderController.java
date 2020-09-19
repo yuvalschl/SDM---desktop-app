@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import showItems.ItemListCellController;
 
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class DisplaySingleOrderController {
     @FXML private TableColumn<StoreOrder, Float> storePkkCol;
     @FXML private TableColumn<StoreOrder, Float> storeShippingCostCol;
     private AppController appController;
+    private DecimalFormat decimalFormat;
 
     public ListView<ItemAmountAndStore> getItemsListView() {
         return itemsListView;
@@ -43,7 +45,6 @@ public class DisplaySingleOrderController {
 
     @FXML
     public void initialize(){
-
         //set the StoreTable
         storeNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         storeIdCol.setCellValueFactory(new PropertyValueFactory<>("storeID"));
@@ -54,6 +55,9 @@ public class DisplaySingleOrderController {
        }
 
     public void setData(AppController appController, HashMap<Integer, ItemAmountAndStore> itemAmountAndStore, Order order, Point costumerLocation) {
+
+        decimalFormat = appController.getStoreManager().getDecimalFormat();
+
         //set the item list\
         itemsListView.getItems().clear();
         itemsListView.getItems().addAll( itemAmountAndStore.values());
@@ -62,10 +66,12 @@ public class DisplaySingleOrderController {
         //goes through the shippingCostByStore and for every store takes the needed values and puts them in the store table
         order.getShippingCostByStore().forEach((storeID,shippingCost)->{
             Store store = appController.getStoreManager().getAllStores().get(storeID);
-            float distance = appController.getStoreManager().distanceCalculator(costumerLocation, store.getLocation());
-            StoreOrder orderToPresent = new StoreOrder(order.getDateOfOrder(), shippingCost, distance, store, order.getOrderId(),store.getPPK());
+            float distance =  Float.parseFloat(decimalFormat.format(appController.getStoreManager().distanceCalculator(costumerLocation, store.getLocation())));
+            float decimalShippingCost = Float.parseFloat(decimalFormat.format(shippingCost));
+            StoreOrder orderToPresent = new StoreOrder(order.getDateOfOrder(), decimalShippingCost, distance, store, order.getOrderId(),store.getPPK());
             storesTable.getItems().removeIf(currOrder-> currOrder.getStoreID() == orderToPresent.getStoreID());
             storesTable.getItems().add(orderToPresent);
+
         });
 
 

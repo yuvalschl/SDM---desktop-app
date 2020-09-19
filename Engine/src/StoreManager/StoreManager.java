@@ -15,6 +15,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.awt.*;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -26,6 +27,8 @@ public class StoreManager {
     private Map<Integer, Customer> allCustomers;//
     private Task<Boolean> currentTask;
 
+
+    private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     public StoreManager(Map<Integer, Store> allStores, Map<Integer, Item> allItems, Map<Integer, Customer> allCustomers) {
         this.allStores = allStores;
@@ -41,6 +44,7 @@ public class StoreManager {
     }
 
 
+    public DecimalFormat getDecimalFormat() { return decimalFormat; }
     public Task<Boolean> getCurrentTask() {
         return currentTask;
     }
