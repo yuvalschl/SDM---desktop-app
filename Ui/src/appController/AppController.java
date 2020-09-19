@@ -32,7 +32,7 @@ public class AppController {
     @FXML private ScrollPane orderScreen;
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
-    @FXML private VBox showItems;
+    @FXML private ScrollPane showItems;
     @FXML private SplitPane addStoreComponent;
     @FXML private AddStoreController addStoreComponentController;
     @FXML private VBox showCostumerScreen;
@@ -66,7 +66,7 @@ public class AppController {
         return homeComponentController;
     }
 
-    public VBox getShowItems() {
+    public ScrollPane getShowItems() {
         return showItems;
     }
 
@@ -86,7 +86,7 @@ public class AppController {
         this.ShowOrdersScreenComponentController = showOrdersController;
     }
 
-    public void setShowItems(VBox showItems) {
+    public void setShowItems(ScrollPane showItems) {
         this.showItems = showItems;
     }
 
