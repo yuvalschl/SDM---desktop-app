@@ -19,7 +19,6 @@ import listCells.discountCell.discountCell;
 import listCells.discountCell.offerCell;
 import listCells.itemCell.ItemListViewCell;
 import listCells.storeCell.StoreListViewCell;
-import showStores.tableCellFactory.AmountSoldCell;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -36,12 +35,12 @@ public class ShowStoresController {
     @FXML private TableColumn<Item, String> itemNameCol;
     @FXML private TableColumn<Item, Integer> itemIdCol;
     @FXML private TableColumn<Item, Float> itemPriceCol;
-    @FXML private TableColumn<Item, Integer> itemAmountSoldCol;
+    @FXML private TableColumn<Item, Float> itemAmountSoldCol;
     @FXML private TableView<Item> itemsTable;
     @FXML private TableView<StoreOrder> ordersTable;
     @FXML private TableColumn<StoreOrder, Date> orderDateCol;
     @FXML private TableColumn<StoreOrder, Integer> orderIdCol;
-    @FXML private TableColumn<StoreOrder, Integer> amountOfItemsCol;
+    @FXML private TableColumn<StoreOrder, Float> amountOfItemsCol;
     @FXML private TableColumn<StoreOrder, Float> itemsCostCol;
     @FXML private TableColumn<StoreOrder, Float> shippingCostCol;
     @FXML private TableColumn<StoreOrder, Float> totalCostCol;
@@ -60,6 +59,113 @@ public class ShowStoresController {
         return storesListView;
     }
 
+    @FXML
+    public void initialize(){
+        //set the item table
+        itemNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        itemIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        itemPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        itemPriceCol.setCellFactory(tc -> new TableCell<Item, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setText(null);
+                }
+                else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+        itemAmountSoldCol.setCellValueFactory(new PropertyValueFactory<>("amountSold"));
+        itemAmountSoldCol.setCellFactory(tc -> new TableCell<Item, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setText(null);
+                }
+                else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+
+        orderDateCol.setCellValueFactory(new PropertyValueFactory<>("dateOfOrder"));
+        orderDateCol.setCellFactory(column -> {
+            TableCell<StoreOrder, Date> cell = new TableCell<StoreOrder, Date>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(format.format(item));
+                    }
+                }
+            };
+
+            return cell;
+        });
+
+        orderIdCol.setCellValueFactory(new PropertyValueFactory<>("orderId"));
+        amountOfItemsCol.setCellValueFactory(new PropertyValueFactory<>("amountOfItems"));
+        amountOfItemsCol.setCellFactory(tc -> new TableCell<StoreOrder, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setText(null);
+                }
+                else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+        amountOfItemsCol.setCellFactory(tc -> new TableCell<StoreOrder, Float>());
+        totalCostCol.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
+        totalCostCol.setCellFactory(tc -> new TableCell<StoreOrder, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setText(null);
+                }
+                else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+        shippingCostCol.setCellValueFactory(new PropertyValueFactory<>("shippingCost"));
+        shippingCostCol.setCellFactory(tc -> new TableCell<StoreOrder, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setText(null);
+                }
+                else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+        itemsCostCol.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfItems"));
+        itemsCostCol.setCellFactory(tc -> new TableCell<StoreOrder, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setText(null);
+                }
+                else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+    }
+
     public void setData(AppController appController){
         this.appController = appController;
         storesListView.getItems().clear();
@@ -72,37 +178,6 @@ public class ShowStoresController {
                 appController.getStoreManager().getAllStores().put(change.getKey(), change.getValueAdded());
             }
         });
-
-        //set the item table
-        itemNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        itemIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        itemPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        itemAmountSoldCol.setCellValueFactory(new PropertyValueFactory<>("amountSold"));
-
-        orderDateCol.setCellValueFactory(new PropertyValueFactory<>("dateOfOrder"));
-        orderDateCol.setCellFactory(column -> {
-                    TableCell<StoreOrder, Date> cell = new TableCell<StoreOrder, Date>() {
-                        private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-
-                        @Override
-                        protected void updateItem(Date item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty || item == null) {
-                                setText(null);
-                            } else {
-                                setText(format.format(item));
-                            }
-                        }
-                    };
-
-                    return cell;
-                });
-
-        orderIdCol.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-        amountOfItemsCol.setCellValueFactory(new PropertyValueFactory<>("amountOfItems"));
-        totalCostCol.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
-        shippingCostCol.setCellValueFactory(new PropertyValueFactory<>("shippingCost"));
-        itemsCostCol.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfItems"));
 
         storesListView.getItems().clear();
         storesListView.getItems().addAll(appController.getStoreManager().getAllStores().values());
@@ -153,6 +228,5 @@ public class ShowStoresController {
                 forAdditionalLabel.setText(String.valueOf(discountsList.getSelectionModel().getSelectedItem().getThenYouGet().getOfferByID(newValue.getId()).getForAdditional()));
             }
         });
-
     }
 }

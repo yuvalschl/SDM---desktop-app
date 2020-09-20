@@ -1,3 +1,4 @@
+/*
 package showStores.tableCellFactory;
 
 import Costumer.Customer;
@@ -7,7 +8,7 @@ import javafx.scene.control.TableCell;
 
 import java.io.IOException;
 
-public class AmountSoldCell extends TableCell<Item, Integer> {
+public class AmountSoldCell extends TableCell<Item, Float> {
     private Item item;
 
     public AmountSoldCell(Item item){
@@ -15,7 +16,7 @@ public class AmountSoldCell extends TableCell<Item, Integer> {
     }
 
     @Override
-    protected void updateItem(Integer val, boolean empty) {
+    protected void updateItem(Float val, boolean empty) {
         super.updateItem(val, empty);
 
         if(empty || val == null) {
@@ -24,8 +25,9 @@ public class AmountSoldCell extends TableCell<Item, Integer> {
             setGraphic(null);
         }
         else {
-            setText(String.valueOf(item.getAmountSold()));
+            setText(String.format("%.2f", item.getAmountSold()));
         }
 
     }
 }
+*/

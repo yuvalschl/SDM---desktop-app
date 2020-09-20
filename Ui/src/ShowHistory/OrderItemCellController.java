@@ -65,7 +65,7 @@ public class OrderItemCellController extends ListCell<ItemAmountAndStore> {
             else {
                 sellBy.setText("Weight");
             }
-            amount.setText(Float.toString(item.getAmount()));
+            amount.setText(String.format("%.2f", item.amount()));
             Float price = appController.getStoreManager().getAllStores().get(item.getStore().getSerialNumber()).getInventory().get(item.getItemId()).getPrice();
             float totalPrice;
             String partOfDiscount;
@@ -79,8 +79,8 @@ public class OrderItemCellController extends ListCell<ItemAmountAndStore> {
                 partOfDiscount = "No";
                 totalPrice = item.getAmount() * price;
             }
-            itemPrice.setText(String.valueOf(price));
-            totalItemPrice.setText(Float.toString(totalPrice));
+            itemPrice.setText(String.format("%.2f", price));
+            totalItemPrice.setText(String.format("%.2f", totalPrice));
 
             isPartOfDiscount.setText(partOfDiscount);
             setText(null);

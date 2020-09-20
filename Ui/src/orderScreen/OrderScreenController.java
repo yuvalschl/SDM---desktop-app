@@ -21,12 +21,14 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import javafx.util.converter.FloatStringConverter;
 import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
 import textFieldFilters.FloatFilter;
 import textFieldFilters.IntFilter;
 
+import java.beans.EventHandler;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,10 +44,12 @@ public class OrderScreenController {
     private final IntFilter intFilter = new IntFilter();
     private boolean interestedInDiscount = true;
     private Customer customer;
-    @FXML private  Label zeroAmountLabel;
+    @FXML private ProgressBar dynamicOrderProgressBar;
+    @FXML private Label progressBarPrecentText;
+    @FXML private Label zeroAmountLabel;
     @FXML private VBox orderSummeryScreen;
     @FXML private OrderSummeryController orderSummeryScreenController;
-    @FXML  private SplitPane orderScreenSplitPane;
+    @FXML private SplitPane orderScreenSplitPane;
     @FXML private SplitPane discountScreen;
     @FXML private DiscountScreenController discountScreenController;
     @FXML private DatePicker datePicker;
@@ -124,13 +128,12 @@ public class OrderScreenController {
             Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new HashMap<Integer, ItemAmountAndStore>(orderItems), customer);
             ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
             appController.getShowItemsController().setData(appController);
-            if (discounts.size() != 0 && interestedInDiscount != false) {
+            if (discounts.size() != 0 && interestedInDiscount) {
                 discountScreenController.setData(discounts, appController, order, discountScreen, customerCB.getValue().getLocation(), orderSummeryScreen, orderSummeryScreenController, orderScreenSplitPane, this);
             } else
                 orderScreenSplitPane.setVisible(false);
             orderSummeryScreenController.setData(appController, order, customerCB.getValue().getLocation(), orderSummeryScreen, orderScreenSplitPane, this);
         }
-
     }
 
     @FXML
@@ -173,12 +176,37 @@ public class OrderScreenController {
         nameCol.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         idCol.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));
         priceCol.setCellValueFactory(new PropertyValueFactory<Item, Float>("price"));
+        priceCol.setCellFactory(e -> new TableCell<Item, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setText(null);
+                }
+                else {
+                    setText(appController.getDecimalFormat().format(item));
+                }
+            }
+        });
+
 
         //set column for the summary
         itemSummaryName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         itemSummaryAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        itemSummaryAmount.setCellFactory(e -> new TableCell<ItemAmountAndStore, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setText(null);
+                }
+                else {
+                    setText(appController.getDecimalFormat().format(item));
+                }
+            }
+        });
         itemSummaryId.setCellValueFactory(new PropertyValueFactory<>("itemId"));
-        itemSummaryAmount.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
+
 
         //set combobox selection of store
         storeCB.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Store>() {

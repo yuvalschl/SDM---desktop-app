@@ -51,8 +51,19 @@ public class DisplaySingleOrderController {
         storeDistanceToClientcol.setCellValueFactory(new PropertyValueFactory<>("distance"));
         storePkkCol.setCellValueFactory(new PropertyValueFactory<>("pkk"));
         storeShippingCostCol.setCellValueFactory(new PropertyValueFactory<>("shippingCost"));
-
-       }
+        storeShippingCostCol.setCellFactory(tc -> new TableCell<StoreOrder, Float>(){
+            @Override
+            protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty || item == null){
+                    setText(null);
+                }
+                else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+    }
 
     public void setData(AppController appController, HashMap<Integer, ItemAmountAndStore> itemAmountAndStore, Order order, Point costumerLocation) {
 

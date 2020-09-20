@@ -16,9 +16,11 @@ import showItems.ShowItemsController;
 import showStores.ShowStoresController;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class AppController {
     private StoreManager storeManager;
+    private final DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @FXML private GridPane optionsMenuComponent;
     @FXML private OptionsMenuController optionsMenuComponentController;
@@ -37,6 +39,10 @@ public class AppController {
     @FXML private VBox showCostumerScreen;
     @FXML private ShowCustomerController showCostumerScreenController;
     private BooleanProperty xmlLoaded = new SimpleBooleanProperty(true);
+
+    public DecimalFormat getDecimalFormat() {
+        return decimalFormat;
+    }
 
     @FXML
     public void initialize() throws IOException {
