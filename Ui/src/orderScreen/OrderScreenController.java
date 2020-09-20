@@ -146,6 +146,9 @@ public class OrderScreenController {
         if((float)cellEditEvent.getNewValue() < 0){
             orderSummaryTable.getItems().set(cellEditEvent.getTablePosition().getRow(), itemAmountAndStore);
         }
+        else if(itemAmountAndStore.getItem() instanceof UnitItem &&  (float)cellEditEvent.getNewValue() % 1 != 0){
+            orderSummaryTable.getItems().set(cellEditEvent.getTablePosition().getRow(), itemAmountAndStore);
+        }
         else {
             orderSummaryTable.getSelectionModel().selectedItemProperty().getValue().setAmount((Float) cellEditEvent.getNewValue());
         }
