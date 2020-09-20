@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-@XmlRootElement
 public class ItemAmountAndStore {
     private float amount;
     private Item item;
@@ -33,7 +32,6 @@ public class ItemAmountAndStore {
         this.discountItemAmount =amount;
     }
 
-
     public ItemAmountAndStore(Item item, Store store) {
         this.item = item;
         this.store = store;
@@ -41,6 +39,14 @@ public class ItemAmountAndStore {
         this.itemId = item.getId();
         this.itemStore = store.getSerialNumber();
         this.discountItemAmount =amount;
+    }
+
+    public ItemAmountAndStore(Item item, float amount){
+        this.item = item;
+        this.amount = amount;
+        this.itemId = item.getId();
+        this.itemName = item.getName();
+        this.discountItemAmount = amount;
     }
 
     public float getOfferPrice() { return offerPrice; }

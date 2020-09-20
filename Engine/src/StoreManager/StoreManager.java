@@ -220,6 +220,7 @@ public class StoreManager {
         return allStores;
     }
 
+
     public void placeOrder(Order order) {//finilaize the order after final approval, in this method we add the order to the order set and update the amount sold in allitems
 
         allOrders.add(order);

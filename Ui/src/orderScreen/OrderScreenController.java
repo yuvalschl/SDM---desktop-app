@@ -14,6 +14,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,11 +31,11 @@ import listCells.storeCell.StoreListViewCell;
 import textFieldFilters.FloatFilter;
 import textFieldFilters.IntFilter;
 
-import java.beans.EventHandler;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class OrderScreenController {
@@ -46,6 +49,7 @@ public class OrderScreenController {
     private Customer customer;
     @FXML private ProgressBar dynamicOrderProgressBar;
     @FXML private Label progressBarPrecentText;
+    @FXML private Label progressMsg;
     @FXML private Label zeroAmountLabel;
     @FXML private VBox orderSummeryScreen;
     @FXML private OrderSummeryController orderSummeryScreenController;
@@ -92,7 +96,7 @@ public class OrderScreenController {
                 zeroAmountLabel.setVisible(false);
                 ItemAmountAndStore itemToAdd;
                 if (dynamicOrderCB.isSelected()) {
-                    itemToAdd = appController.getStoreManager().getCheapestItem(item.getId());
+                    itemToAdd = new ItemAmountAndStore(item, amount);
                     itemToAdd.setDiscountItemAmount(amount);
                     itemToAdd.setAmount(amount);
                 } else {
@@ -123,17 +127,73 @@ public class OrderScreenController {
     @FXML
     public void placeOrderAction(){
         if (orderItems.size() != 0) {
-             customer = customerCB.getValue();
+            HashMap<Integer, ItemAmountAndStore> itemsToAdd = new HashMap<Integer, ItemAmountAndStore>();
+            customer = customerCB.getValue();
             Date orderDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate, new HashMap<Integer, ItemAmountAndStore>(orderItems), customer);
-            ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
-            appController.getShowItemsController().setData(appController);
-            if (discounts.size() != 0 && interestedInDiscount) {
-                discountScreenController.setData(discounts, appController, order, discountScreen, customerCB.getValue().getLocation(), orderSummeryScreen, orderSummeryScreenController, orderScreenSplitPane, this);
-            } else
-                orderScreenSplitPane.setVisible(false);
-            orderSummeryScreenController.setData(appController, order, customerCB.getValue().getLocation(), orderSummeryScreen, orderScreenSplitPane, this);
+            if(dynamicOrderCB.selectedProperty().getValue()){
+                Task<Boolean> dynamicOrderTask = new Task<Boolean>() {
+                    @Override
+                    protected Boolean call() throws Exception {
+                        int progressJump = 100 / orderItems.size();
+                        int currentProgress = 0;
+                        for(ItemAmountAndStore item : orderItems.values()){
+                            updateMessage("finding the best price for " + item.getItemName());
+                            for(int i = currentProgress; i < currentProgress + progressJump; i++){
+                                updateProgress(i, 100);
+                                TimeUnit.MILLISECONDS.sleep(1000/progressJump);
+                            }
+                            currentProgress += progressJump;
+                            float amount = item.getAmount();
+                            itemsToAdd.put(item.getItemId(),appController.getStoreManager().getCheapestItem(item.getItemId()));
+                            itemsToAdd.get(item.getItemId()).setDiscountItemAmount(amount);
+                            itemsToAdd.get(item.getItemId()).setAmount(amount);
+                        }
+                        for(int i = currentProgress; i <= 100; i++){
+                            updateProgress(i,100);
+                            TimeUnit.MILLISECONDS.sleep(50);
+                        }
+                        return true;
+                    }
+                };
+                dynamicOrderTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        progressBarPrecentText.textProperty().unbind();
+                        dynamicOrderProgressBar.progressProperty().unbind();
+                        progressMsg.textProperty().unbind();
+                        progressBarPrecentText.setText(" ");
+                        dynamicOrderProgressBar.progressProperty().setValue(0);
+                        progressMsg.setText(" ");
+                        finishOrder(orderDate, itemsToAdd);
+                    }
+                });
+                progressBarPrecentText.textProperty().bind(Bindings.concat(
+                        Bindings.format(
+                                "%.0f",
+                                Bindings.multiply(
+                                        dynamicOrderTask.progressProperty(),
+                                        100)),
+                        " %"));
+                dynamicOrderProgressBar.progressProperty().bind(dynamicOrderTask.progressProperty());
+                progressMsg.textProperty().bind(dynamicOrderTask.messageProperty());
+                Thread dynamicOrderThread = new Thread(dynamicOrderTask);
+                dynamicOrderThread.start();
+            }
+            else {
+                finishOrder(orderDate, new HashMap<>(orderItems));
+            }
         }
+    }
+
+    public void finishOrder(Date orderDate, HashMap<Integer, ItemAmountAndStore> itemsToAdd ){
+        Order order = appController.getStoreManager().createOrder(customerCB.getValue().getLocation(), orderDate,itemsToAdd , customer);
+        ArrayList<Discount> discounts = appController.getStoreManager().getEntitledDiscounts(order);
+        appController.getShowItemsController().setData(appController);
+        if (discounts.size() != 0 && interestedInDiscount) {
+            discountScreenController.setData(discounts, appController, order, discountScreen, customerCB.getValue().getLocation(), orderSummeryScreen, orderSummeryScreenController, orderScreenSplitPane, this);
+        } else
+            orderScreenSplitPane.setVisible(false);
+        orderSummeryScreenController.setData(appController, order, customerCB.getValue().getLocation(), orderSummeryScreen, orderScreenSplitPane, this);
     }
 
     @FXML
@@ -172,6 +232,8 @@ public class OrderScreenController {
     @FXML
     public void initialize(){
         zeroAmountLabel.setVisible(false);
+        dynamicOrderProgressBar.visibleProperty().bind(dynamicOrderCB.selectedProperty());
+        progressBarPrecentText.visibleProperty().bind(dynamicOrderCB.selectedProperty());
         //set the columns from the items
         nameCol.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         idCol.setCellValueFactory(new PropertyValueFactory<Item, Integer>("id"));

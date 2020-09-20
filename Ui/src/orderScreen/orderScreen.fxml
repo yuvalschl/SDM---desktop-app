@@ -26,7 +26,6 @@
                 <items>
                   <StackPane minHeight="200.0" minWidth="300.0" prefHeight="798.0" prefWidth="760.0">
                      <children>
-                        <fx:include fx:id="discountScreen" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="300.0" source="discountScreen.fxml" />
                         <SplitPane fx:id="dateNitemSplitPane" dividerPositions="0.3786407766990291" minHeight="200.0" minWidth="500.0" prefHeight="200.0" prefWidth="200.0">
                            <items>
                                     <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="200.0" prefHeight="477.0" prefWidth="268.0" spacing="80.0">
@@ -117,12 +116,14 @@
                                                 <Label fx:id="progressBarPrecentText" />
                                              </children>
                                           </StackPane>
+                                          <Label fx:id="progressMsg" />
                                                 </children>
                                             </VBox>
                                         </children>
                                     </VBox>
                            </items>
                         </SplitPane>
+                        <fx:include fx:id="discountScreen" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="300.0" source="discountScreen.fxml" />
                      </children>
                   </StackPane>
                       <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="250.0" prefHeight="798.0" prefWidth="283.0" spacing="10.0">
