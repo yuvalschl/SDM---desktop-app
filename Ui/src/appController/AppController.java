@@ -9,7 +9,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import optionsMenu.OptionsMenuController;
 import orderScreen.OrderScreenController;
@@ -33,7 +32,7 @@ public class AppController {
     @FXML private OrderScreenController orderScreenController;
     @FXML private ShowItemsController showItemsController;
     @FXML private ScrollPane showItems;
-    @FXML private SplitPane addStoreComponent;
+    @FXML private ScrollPane addStoreComponent;
     @FXML private AddStoreController addStoreComponentController;
     @FXML private VBox showCostumerScreen;
     @FXML private ShowCustomerController showCostumerScreenController;
@@ -126,11 +125,11 @@ public class AppController {
         this.showStoresComponent = showStoresComponent;
     }
 
-    public SplitPane getAddStoreComponent() {
+    public ScrollPane getAddStoreComponent() {
         return addStoreComponent;
     }
 
-    public void setAddStoreComponent(SplitPane addStoreComponent) {
+    public void setAddStoreComponent(ScrollPane addStoreComponent) {
         this.addStoreComponent = addStoreComponent;
     }
 

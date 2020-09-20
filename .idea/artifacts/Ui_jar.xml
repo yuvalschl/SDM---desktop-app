@@ -1,8 +1,8 @@
 <component name="ArtifactManager">
-  <artifact name="Console_Ui:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Console_Ui_jar</output-path>
+  <artifact name="Ui:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Ui_jar</output-path>
     <root id="root">
-      <element id="archive" name="Console_Ui.jar">
+      <element id="archive" name="Ui.jar">
         <element id="module-output" name="Ui" />
         <element id="module-output" name="Engine" />
       </element>
