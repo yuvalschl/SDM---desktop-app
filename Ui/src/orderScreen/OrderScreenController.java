@@ -17,9 +17,11 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.FloatStringConverter;
 import listCells.customerCell.CustomerListViewCell;
 import listCells.storeCell.StoreListViewCell;
 import textFieldFilters.FloatFilter;
@@ -139,6 +141,17 @@ public class OrderScreenController {
     }
 
     @FXML
+    public void editAmountOnTable(TableColumn.CellEditEvent cellEditEvent){
+        ItemAmountAndStore itemAmountAndStore = (ItemAmountAndStore) cellEditEvent.getTableView().getItems().get(cellEditEvent.getTablePosition().getRow());
+        if((float)cellEditEvent.getNewValue() < 0){
+            orderSummaryTable.getItems().set(cellEditEvent.getTablePosition().getRow(), itemAmountAndStore);
+        }
+        else {
+            orderSummaryTable.getSelectionModel().selectedItemProperty().getValue().setAmount((Float) cellEditEvent.getNewValue());
+        }
+    }
+
+    @FXML
     public void clearAction() {
         orderItems.clear();
         orderSummaryTable.getItems().clear();
@@ -162,6 +175,7 @@ public class OrderScreenController {
         itemSummaryName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         itemSummaryAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         itemSummaryId.setCellValueFactory(new PropertyValueFactory<>("itemId"));
+        itemSummaryAmount.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
 
         //set combobox selection of store
         storeCB.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Store>() {

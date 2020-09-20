@@ -56,6 +56,7 @@ public class AddStoreController {
 
     @FXML
     public void initialize(){
+        itemPriceField.disableProperty().set(true);
         nameTextField.setTextFormatter(new EnglishFilter().getEnglishTextFormatter());
         nameTextField.setText(" ");
         idTextField.setTextFormatter(new IntFilter().getIntegerTextFormatter());
@@ -98,6 +99,7 @@ public class AddStoreController {
             @Override
             public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
                 itemNameLabel.setText(newValue.getName());
+                itemPriceField.disableProperty().set(false);
                 itemPriceField.clear();
             }
         });
@@ -115,6 +117,7 @@ public class AddStoreController {
         availableItemsTable.getItems().clear();
         availableItemsTable.getItems().addAll(appController.getStoreManager().getAllItems().values());
     }
+
 
     @FXML
     void addStoreAction(ActionEvent event) {
@@ -184,6 +187,9 @@ public class AddStoreController {
                 storeInventoryTable.getItems().add(new WeightItem(itemToAdd, price));
                 storeInventory.put(itemToAdd.getId(), new WeightItem(itemToAdd, price));
             }
+            itemPriceField.clear();
+            itemPriceField.disableProperty().setValue(true);
+            availableItemsTable.scrollTo(0);
 
         }
 
