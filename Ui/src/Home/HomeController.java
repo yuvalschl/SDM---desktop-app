@@ -153,7 +153,7 @@ public class HomeController {
             fileProgressBar.progressProperty().unbind();
             progressPercentText.setText(" ");
             fileProgressBar.setProgress(0);
-            loadActionText.setText("File: "+file.getAbsolutePath());//TODO: move this into initlaize with bind
+            loadActionText.setText("File: "+file.getAbsolutePath());
             this.fileChosen.setValue(true);
         }
     }

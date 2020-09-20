@@ -16,7 +16,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="200.0" minWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="orderScreen.OrderScreenController">
    <content>
       <StackPane minHeight="600.0" minWidth="750.0" prefHeight="800.0" prefWidth="1043.0">
@@ -129,11 +128,11 @@
                               <Insets left="52.0" />
                            </VBox.margin>
                               </Label>
-                              <TableView fx:id="orderSummaryTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="300.0" prefHeight="515.0" prefWidth="290.0" VBox.vgrow="ALWAYS">
+                              <TableView fx:id="orderSummaryTable" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="300.0" prefHeight="515.0" prefWidth="290.0" VBox.vgrow="ALWAYS">
                                   <columns>
                                       <TableColumn fx:id="itemSummaryId" prefWidth="75.0" text="ID" />
                                       <TableColumn fx:id="itemSummaryName" prefWidth="75.0" text="Name" />
-                                      <TableColumn fx:id="itemSummaryAmount" prefWidth="75.0" text="Amount" />
+                                      <TableColumn fx:id="itemSummaryAmount" onEditCommit="#editAmountOnTable" prefWidth="75.0" text="Amount" />
                                   </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

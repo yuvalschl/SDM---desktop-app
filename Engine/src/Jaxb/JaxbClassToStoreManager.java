@@ -84,6 +84,14 @@ public class JaxbClassToStoreManager extends Task<StoreManager> {
             TimeUnit.MILLISECONDS.sleep(SLEEP_TIME);
             HashSet<Integer> notSoldItems = checkIfAllTheItemsFromTheFileAreSold(allItems);
 
+            for(Customer customer : allCustomers.values()){
+                for(Store store : allStores.values()){
+                    if(customer.getLocation().equals(store.getLocation())){
+                        throw new DuplicateValueException(customer.getName() + " and " + store.getName() + " are in the same location");
+                    }
+                }
+            }
+
             if(!notSoldItems.isEmpty()){
                 throw new ItemNotSoldException("Items with id: " + notSoldItems.toString() + " are not sold by any store");
             }
@@ -97,11 +105,14 @@ public class JaxbClassToStoreManager extends Task<StoreManager> {
         }
     }
 
-    private Map<Integer, Customer> createAllCustomersMap(List<SDMCustomer> sdmCustomers) throws DuplicateValueException {
+    private Map<Integer, Customer> createAllCustomersMap(List<SDMCustomer> sdmCustomers) throws DuplicateValueException, InvalidValueException {
         Map<Integer, Customer> allCustomers = new HashMap<>();
         for (SDMCustomer customer : sdmCustomers){
             if(allCustomers.containsKey(customer.getId())){
                 throw new DuplicateValueException("Customer with id: " + customer.getId() + " already exists in the system");
+            }
+            else if(!isLocationValid(new Point(customer.getLocation().getX(), customer.getLocation().getY()))){
+                throw new InvalidValueException(customer.getName() + " has invalid location");
             }
             else {
                 allCustomers.put(customer.getId(), new Customer(customer.getId(), customer.getName(), new Point(customer.getLocation().getX(), customer.getLocation().getY())));
@@ -137,7 +148,7 @@ public class JaxbClassToStoreManager extends Task<StoreManager> {
             Map<Integer, Item> currentStoreInventory = createCurrentStoreInventory(allItems, store, allItems);
             Set<Discount> currentStoreDiscount = new HashSet<Discount>();
             if(store.getSDMDiscounts() != null){
-                currentStoreDiscount = createCurrentStoreDiscount(store.getSDMDiscounts().getSDMDiscount());
+                currentStoreDiscount = createCurrentStoreDiscount(store.getSDMDiscounts().getSDMDiscount(), currentStoreInventory, store.getName());
             }
             Point currentStoreLocation = new Point(store.getLocation().getX(), store.getLocation().getY());
             if(!isLocationValid(currentStoreLocation)){
@@ -149,11 +160,22 @@ public class JaxbClassToStoreManager extends Task<StoreManager> {
         return allStores;
     }
 
-    private Set<Discount> createCurrentStoreDiscount(List<SDMDiscount> allDiscounts){
+    private Set<Discount> createCurrentStoreDiscount(List<SDMDiscount> allDiscounts, Map<Integer, Item> currentStoreInventory, String storeName) throws InvalidValueException {
         Set<Discount> currentStoreDiscounts = new HashSet<Discount>();
         for(SDMDiscount sdmDiscount : allDiscounts){
             MyIfYouBuy myIfYouBuy = new MyIfYouBuy(sdmDiscount.getIfYouBuy().getItemId(), (float) sdmDiscount.getIfYouBuy().getQuantity());
-            MyThenYouGet thenYouGet = createThenYouGet(sdmDiscount.getThenYouGet());
+            MyThenYouGet thenYouGet;
+            if(currentStoreInventory.containsKey(myIfYouBuy.getItemId())){
+                thenYouGet = createThenYouGet(sdmDiscount.getThenYouGet());
+                for(Offer offer : thenYouGet.getAllOffers()){
+                    if(!currentStoreInventory.containsKey(offer.getItemId())){
+                        throw new InvalidValueException(storeName + " dose not sell item with id: " + offer.getItemId());
+                    }
+                }
+            }
+            else {
+                throw new InvalidValueException(storeName + " dose not sell item with id: " + myIfYouBuy.getItemId());
+            }
             currentStoreDiscounts.add(new Discount(sdmDiscount.getName(), myIfYouBuy, thenYouGet));
         }
 
