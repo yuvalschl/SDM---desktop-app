@@ -124,7 +124,6 @@ public class ShowStoresController {
                 }
             }
         });
-        amountOfItemsCol.setCellFactory(tc -> new TableCell<StoreOrder, Float>());
         totalCostCol.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
         totalCostCol.setCellFactory(tc -> new TableCell<StoreOrder, Float>(){
             @Override
@@ -225,7 +224,9 @@ public class ShowStoresController {
         discountItemsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Item>() {
             @Override
             public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
-                forAdditionalLabel.setText(String.valueOf(discountsList.getSelectionModel().getSelectedItem().getThenYouGet().getOfferByID(newValue.getId()).getForAdditional()));
+                if(newValue != null){
+                    forAdditionalLabel.setText(String.valueOf(discountsList.getSelectionModel().getSelectedItem().getThenYouGet().getOfferByID(newValue.getId()).getForAdditional()));
+                }
             }
         });
     }

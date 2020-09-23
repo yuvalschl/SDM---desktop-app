@@ -31,12 +31,15 @@ public class ShowOrdersController {
                 public void changed(ObservableValue<? extends Order> observable, Order oldValue, Order newValue) {
                     displaySingleOrderComponentController.getStoresTable().getItems().clear();
                     ArrayList<StoreOrder> storesToAdd = new ArrayList<>();
-                    for(Store store : newValue.getStores().values()){
-                        if(store.getAllOrders().containsKey(newValue.getOrderId())){
-                            storesToAdd.add(store.getAllOrders().get(newValue.getOrderId()));
+                    if(newValue != null){
+                        for(Store store : newValue.getStores().values()){
+                            if(store.getAllOrders().containsKey(newValue.getOrderId())){
+                                storesToAdd.add(store.getAllOrders().get(newValue.getOrderId()));
+                            }
                         }
+                        displaySingleOrderComponentController.setData(appController, newValue.getItemAmountAndStores(), newValue,newValue.getCustomer().getLocation());
                     }
-                    displaySingleOrderComponentController.setData(appController, newValue.getItemAmountAndStores(), newValue,newValue.getCustomer().getLocation());
+
       /*              displaySingleOrderComponentController.getStoresTable().getItems().addAll(storesToAdd);
                     displaySingleOrderComponentController.getItemsListView().getItems().clear();
                     displaySingleOrderComponentController.getItemsListView().getItems().addAll(newValue.getItemAmountAndStores().values());

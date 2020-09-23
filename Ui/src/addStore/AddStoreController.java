@@ -57,7 +57,6 @@ public class AddStoreController {
     @FXML
     public void initialize(){
         itemPriceField.disableProperty().set(true);
-        nameTextField.setTextFormatter(new EnglishFilter().getEnglishTextFormatter());
         nameTextField.setText(" ");
         idTextField.setTextFormatter(new IntFilter().getIntegerTextFormatter());
         idTextField.textProperty().set(" ");
@@ -122,6 +121,7 @@ public class AddStoreController {
     @FXML
     void addStoreAction(ActionEvent event) {
         boolean validInfo = true;
+        storeInfoErrorLabel.setText(" ");
         noItemsInInventoryErrorLabel.setText(" ");
         if(storeInventoryTable.getItems().isEmpty()){
             noItemsInInventoryErrorLabel.setText("add item to the store inventory");

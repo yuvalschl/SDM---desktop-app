@@ -11,32 +11,32 @@
             <Font size="17.0" />
          </font>
       </Label>
-      <Label fx:id="name" layoutX="51.0" layoutY="3.0" maxWidth="114.0" prefHeight="30.0" prefWidth="114.0" text="Name">
+      <Label fx:id="name" layoutX="51.0" layoutY="3.0" maxWidth="114.0" prefHeight="30.0" prefWidth="91.0" text="Name">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
-      <Label fx:id="sellBy" layoutX="175.0" layoutY="3.0" text="SellBy">
+      <Label fx:id="sellBy" layoutX="155.0" layoutY="3.0" text="SellBy">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
-      <Label fx:id="amount" layoutX="268.0" layoutY="3.0" text="Amount">
+      <Label fx:id="amount" layoutX="235.0" layoutY="3.0" text="Amount">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
-      <Label fx:id="itemPrice" layoutX="380.0" layoutY="3.0" text="price">
+      <Label fx:id="itemPrice" layoutX="344.0" layoutY="3.0" text="price">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
-      <Label fx:id="totalItemPrice" layoutX="459.0" layoutY="3.0" text="totalprice">
+      <Label fx:id="totalItemPrice" layoutX="431.0" layoutY="3.0" text="totalprice">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
-      <Label fx:id="isPartOfDiscount" layoutX="590.0" layoutY="3.0" text="partDiscount">
+      <Label fx:id="isPartOfDiscount" layoutX="547.0" layoutY="3.0" text="partDiscount">
          <font>
             <Font size="17.0" />
          </font>

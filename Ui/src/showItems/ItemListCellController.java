@@ -54,7 +54,7 @@ public class ItemListCellController extends ListCell<Item> {
 
         } else {
             if (fxmlLoader == null) {
-                fxmlLoader = new FXMLLoader(getClass().getResource("/showItems/ItemListCell.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource("/showItems/itemListCell.fxml"));
                 fxmlLoader.setController(this);
 
                 try {

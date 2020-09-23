@@ -136,7 +136,7 @@ public class HomeController {
         appController.getShowOrdersController().setData(appController);
         appController.getShowCostumerScreenController().setData(appController);
         try {
-            mapGrid = FXMLLoader.load(getClass().getResource("Map/map.fxml"));
+            mapGrid = FXMLLoader.load(getClass().getResource("/Home/Map/map.fxml"));
             mapGridController.setSize(appController);
         } catch (IOException e) {
             e.printStackTrace();

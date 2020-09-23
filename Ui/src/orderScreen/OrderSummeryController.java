@@ -76,6 +76,7 @@ public class OrderSummeryController {
         updateCustomerDetails();
         appController.getShowCostumerScreenController().updateCustomerToShow();
         appController.getShowItemsController().updateItemsToShow();
+        itemsListView.getItems().clear();
        // singleOrderComponentController.getStoresTable().getItems().clear();
     }
 
