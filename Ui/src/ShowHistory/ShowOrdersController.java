@@ -19,29 +19,31 @@ public class ShowOrdersController {
     @FXML private DisplaySingleOrderController displaySingleOrderComponentController;
     private AppController appController;
 
+
     public void setData(AppController appController){
         this.appController = appController ;
         orderView.getItems().clear();
         orderView.getItems().addAll(appController.getStoreManager().getAllOrders());
         orderView.setCellFactory(e -> new OrderHistoryListViewCell());
-
-        orderView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Order>() {
-            @Override
-            public void changed(ObservableValue<? extends Order> observable, Order oldValue, Order newValue) {
-                displaySingleOrderComponentController.getStoresTable().getItems().clear();
-                ArrayList<StoreOrder> storesToAdd = new ArrayList<>();
-                for(Store store : newValue.getStores().values()){
-                    if(store.getAllOrders().containsKey(newValue.getOrderId())){
-                        storesToAdd.add(store.getAllOrders().get(newValue.getOrderId()));
+        if (orderView.getSelectionModel().selectedItemProperty() != null)  ;
+            orderView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Order>() {
+                @Override
+                public void changed(ObservableValue<? extends Order> observable, Order oldValue, Order newValue) {
+                    displaySingleOrderComponentController.getStoresTable().getItems().clear();
+                    ArrayList<StoreOrder> storesToAdd = new ArrayList<>();
+                    for(Store store : newValue.getStores().values()){
+                        if(store.getAllOrders().containsKey(newValue.getOrderId())){
+                            storesToAdd.add(store.getAllOrders().get(newValue.getOrderId()));
+                        }
                     }
-                }
-                displaySingleOrderComponentController.getStoresTable().getItems().addAll(storesToAdd);
-                displaySingleOrderComponentController.getItemsListView().getItems().clear();
-                displaySingleOrderComponentController.getItemsListView().getItems().addAll(newValue.getItemAmountAndStores().values());
-                displaySingleOrderComponentController.getItemsListView().setCellFactory(e -> new OrderItemCellController(appController));
-                }
+                    displaySingleOrderComponentController.setData(appController, newValue.getItemAmountAndStores(), newValue,newValue.getCustomer().getLocation());
+      /*              displaySingleOrderComponentController.getStoresTable().getItems().addAll(storesToAdd);
+                    displaySingleOrderComponentController.getItemsListView().getItems().clear();
+                    displaySingleOrderComponentController.getItemsListView().getItems().addAll(newValue.getItemAmountAndStores().values());
+                    displaySingleOrderComponentController.getItemsListView().setCellFactory(e -> new OrderItemCellController(appController));*/
+                    }
 
-            });
+                });
 
 /*        displaySingleOrderComponentController.getStoresTable().getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StoreOrder>() {
             @Override
@@ -50,6 +52,9 @@ public class ShowOrdersController {
             }
         });*/
     }
+
+
+    public DisplaySingleOrderController getDisplaySingleOrderComponentController() { return displaySingleOrderComponentController; }
 
     public ListView<Order> getOrderView() {
         return orderView;

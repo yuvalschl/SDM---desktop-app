@@ -14,6 +14,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import showItems.ItemListCellController;
 
 import java.awt.*;
@@ -34,6 +35,7 @@ public class DisplaySingleOrderController {
     @FXML private TableColumn<StoreOrder, Float> storeShippingCostCol;
     private AppController appController;
     private DecimalFormat decimalFormat;
+    private Order order;
 
     public ListView<ItemAmountAndStore> getItemsListView() {
         return itemsListView;
@@ -45,7 +47,36 @@ public class DisplaySingleOrderController {
 
     @FXML
     public void initialize(){
+    }
+
+
+    public void setData(AppController appController, HashMap<Integer, ItemAmountAndStore> itemAmountAndStore, Order order, Point costumerLocation) {
+        this.appController = appController;
+        decimalFormat = appController.getStoreManager().getDecimalFormat();
+        this.order = order ;
+        itemsListView.getItems().clear();
+
         //set the StoreTable
+        setStoresTable(order.getCustomer().getLocation());
+    }
+    public void displayItems(MouseEvent mouseEvent) {
+        itemsListView.getItems().clear();
+        if (storesTable.getSelectionModel().getSelectedItem() != null) {
+            int storeID = storesTable.getSelectionModel().getSelectedItem().getStoreID();
+            itemsListView.getItems().clear();
+            HashMap<Integer, ItemAmountAndStore> itemsOfStore = new HashMap<>();
+            order.getItemAmountAndStores().forEach((key, itemAmountAndStore)->{
+                if(itemAmountAndStore.getStore().getSerialNumber() == storeID) {
+                    itemsOfStore.put(key, itemAmountAndStore);
+                    itemsListView.getItems().add(itemAmountAndStore);
+                }
+            });
+            itemsListView.setCellFactory(e -> new OrderItemCellController(appController));
+
+        }
+    }
+
+    public void  setStoresTable(Point costumerLocation){
         storeNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         storeIdCol.setCellValueFactory(new PropertyValueFactory<>("storeID"));
         storeDistanceToClientcol.setCellValueFactory(new PropertyValueFactory<>("distance"));
@@ -63,18 +94,8 @@ public class DisplaySingleOrderController {
                 }
             }
         });
-    }
 
-    public void setData(AppController appController, HashMap<Integer, ItemAmountAndStore> itemAmountAndStore, Order order, Point costumerLocation) {
-
-        decimalFormat = appController.getStoreManager().getDecimalFormat();
-
-        //set the item list\
-        itemsListView.getItems().clear();
-        itemsListView.getItems().addAll( itemAmountAndStore.values());
-        itemsListView.setCellFactory(e -> new OrderItemCellController(appController));
-
-        //goes through the shippingCostByStore and for every store takes the needed values and puts them in the store table
+        storesTable.getItems().clear();
         order.getShippingCostByStore().forEach((storeID,shippingCost)->{
             Store store = appController.getStoreManager().getAllStores().get(storeID);
             float distance =  Float.parseFloat(decimalFormat.format(appController.getStoreManager().distanceCalculator(costumerLocation, store.getLocation())));
@@ -84,7 +105,6 @@ public class DisplaySingleOrderController {
             storesTable.getItems().add(orderToPresent);
 
         });
-
-
+        storesTable.refresh();
     }
 }
