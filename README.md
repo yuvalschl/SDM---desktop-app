@@ -6,7 +6,7 @@ This app loads stores and coustomers from XML file and allows to buy items, watc
 
 ## Screenshots
 
-! [Main menu](
+! [Main menu](Screen Shots/mainMenu.PNG)
 
 ## how to use
 
