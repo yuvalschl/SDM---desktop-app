@@ -4,6 +4,10 @@ a JavaFX desktop app of SDM
 This is a basic eCommers app build for a collage course.
 This app loads stores and coustomers from XML file and allows to buy items, watch history and some other functionalities.
 
+## Screenshots
+
+! [Main menu](
+
 ## how to use
 
 Download the jar files and run the run.bat file.
