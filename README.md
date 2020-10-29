@@ -26,7 +26,7 @@ You will need a JVM installs on your machine
 ## Authors
 
 * **daniel zion** - [danizion](https://github.com/danizion)
-* **yuval schlossser* - [yuvalschl](https://github.com/yuvalschl)
+* **yuval schlossser** - [yuvalschl](https://github.com/yuvalschl)
 
 ## License
 
