@@ -6,7 +6,7 @@ This app loads stores and coustomers from XML file and allows to buy items, watc
 
 ## Screenshots
 
-! [Main menu](
+![Mainmenu](https://github.com/yuvalschl/SDM---desktop-app/blob/master/Screen%20Shots/mainMenu.PNG)
 
 ## how to use
 
