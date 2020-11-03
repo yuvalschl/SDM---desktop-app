@@ -8,6 +8,18 @@ This app loads stores and coustomers from XML file and allows to buy items, watc
 
 ![Mainmenu](https://github.com/yuvalschl/SDM---desktop-app/blob/master/Screen%20Shots/mainMenu.PNG)
 
+## Main Features
+
+- [x] Add stores
+- [x] Add new items to the store
+- [x] Perform static/dynamic orders
+- [x] Load data from an XML file
+- [x] Full web-application
+- [x] Users transaction system
+- [x] Users notifications system for various events
+- [x] Chat between the system users
+- [x] Stores feedback and rating system
+
 ## how to use
 
 Download the jar files and run the run.bat file.
